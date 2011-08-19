@@ -1,0 +1,38 @@
+
+a.?run  # same as a.run() if a.can?('run')
+a b c   # same as a.b.c
+a.b c   # same as a.b.c
+a < b < c   # a < b && b < c
+a <= b <= c # a <= b && b <= c
+
+# Plugins
+# Literals
+a = %map {   # or %m Map Literals
+    'Rhode Island':'Providence'
+    'Utah':'Salt Lake City'
+}
+
+a = %html   # or %h
+<div id="content">
+    <p class="heading">#{title}</p>
+    <br/>
+</div>
+
+a = %xml   # or %x
+<person name="George Harrison">
+    <salary period="annual">#{@salary}</salary>
+    <phone>321-245-2345</phone>
+</person>
+
+a = /[A-Z_]+/i  # regular expressions
+a = %re([A-Z_]+)
+a = %a[1, 2, 3, 5, 8, 13, 21] # Array literals
+
+plugin RegularExpression
+    def name
+        're'
+    end
+
+    def match plugin, chars
+    end
+end

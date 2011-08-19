@@ -1,0 +1,36 @@
+Goals
+1. Simple
+2. Extensible
+3. Multiple back ends: Java, JVM, JavaScript?, C#?
+
+Features
+* everything is an object (Ruby, Scala)
+* optional semicolons (Ruby, Scala)
+* optional parentheses (Ruby)
+* compile-time types preferred
+* infix notation (Scala)
+* operator overloading (C++, Ruby)
+* multi-character operators (Scala)
+* braces or do ... end (Ruby)
+* easy DSLs
+* standard library optional
+* collection literals (Ruby)
+* actors (Scala)
+* xml embedding (Scala)
+* matching (Scala-ish)
+* threading (Java)
+* singleton Declaration (Scala)
+* auto-close (Java 7)
+* nil object (no nulls) (Ruby)
+* self (not this)
+* default arguments (not-Java)
+* optimized auto-boxing (Java, Scala)
+* async-io preferred
+
+Common Problem Prevention
+* no assumed state (must assign value when declared)
+* must declare variables (val or var)
+* no static functions (object instead)
+* no static members (object instead)
+* common api for collections and arrays (Ruby)
+* duck-typing (Ruby, Scala)

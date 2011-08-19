@@ -1,0 +1,36 @@
+root| (statement eos)*
+    ;
+term| EOL
+    | ';'
+    ;
+statement
+    | call doEnd
+    | alias functionName functionName
+    | statement 'if' expression
+    | statement 'unless' expression
+    | statement 'while' expression
+    | statement 'until' expression
+    | assignment
+    ;
+expression
+    | assignment
+    | addition
+    ;
+assignment
+    | accessor OPERATOR_ASSIGN expression
+    ;
+accessor
+    | arrayReference
+    | symbol
+    ;
+arrayReference
+    | symbol '[' expression (',' expression)* ']'
+    ;
+symbol
+    |
+    | SYMBOL
+    | SYMBOL_QUOTED
+    ;
+declaration
+    | ('val'|'var') accessor '=' expression
+    ;

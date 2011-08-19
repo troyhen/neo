@@ -1,0 +1,2 @@
+use dia.io.console.println
+println "hello world"
