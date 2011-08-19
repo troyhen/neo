@@ -7,7 +7,7 @@ import org.dia.Plugin;
  *
  * @author Troy Hheninger
  */
-public class LexerString extends LexerTool {
+public class LexerString extends LexerBase {
 
     public final String string;
 

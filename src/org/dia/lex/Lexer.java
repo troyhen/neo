@@ -1,13 +1,14 @@
 package org.dia.lex;
 
+import org.dia.Named;
+
 /**
  *
  * @author Troy Heninger
  */
-public interface Lexer {
+public interface Lexer extends Named {
 
-    String getName();
-    boolean isIgnored();
+//    boolean isIgnored();
     Token nextToken();
 
 }

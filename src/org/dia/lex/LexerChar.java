@@ -7,7 +7,7 @@ import org.dia.Plugin;
  *
  * @author Troy Heninger
  */
-public class LexerChar extends LexerTool {
+public class LexerChar extends LexerBase {
 
     private char ch;
 
@@ -19,7 +19,7 @@ public class LexerChar extends LexerTool {
     @Override
     public Token nextToken() {
         CharSequence buffer = Compiler.buffer();
-        if (buffer.charAt(0) == ch) {
+        if (buffer.length() > 0 && buffer.charAt(0) == ch) {
             return consume(1);
         }
         return null;

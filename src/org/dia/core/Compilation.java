@@ -1,18 +1,18 @@
 package org.dia.core;
 
-import org.dia.Compiler;
 import org.dia.Plugin;
-import org.dia.lex.Token;
+import org.dia.lex.LexerEof;
 
 /**
  *
  * @author Troy Heninger
  */
 public class Compilation extends Plugin {
-    public static final String EOF = "eof";
+//    public static final String EOF = "eof";
 
     @Override
     public void open() {
+        add(new LexerEof(this));
         addParser("compilation", "!statements");
         addParser("statements", "!terminator* statement+");
         addParser("statements", "!terminator+");
@@ -31,7 +31,7 @@ public class Compilation extends Plugin {
 //        addParser("statementWhile", "statement while expression");
 //        addParser("statementUntil", "statement until expression");
 //        addParser("callWithBlock", "call");
-        Compiler.compiler().literals.add(EOF);
+//        Compiler.compiler().literals.add(EOF);
     }
 
 //    public static Node call(Node node) {
@@ -91,13 +91,5 @@ public class Compilation extends Plugin {
 //    public void compile(Node node, Backend back) {
 //        throw new UnsupportedOperationException("Not supported yet.");
 //    }
-
-    @Override
-    public Token nextToken() {
-        if (Compiler.buffer().length() == 0) {
-            return consume(EOF, 0);
-        }
-        return null;
-    }
 
 }

@@ -2,10 +2,9 @@ package org.dia.parse;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
-import org.dia.Compiler;
 import org.dia.Log;
+import org.dia.Named;
 import org.dia.Node;
 import org.dia.Plugin;
 
@@ -13,20 +12,24 @@ import org.dia.Plugin;
  *
  * @author Troy Heninger
  */
-public class Production extends RuleGroup {
+public class Production extends RuleGroup implements Named {
 
     public final Plugin plugin;
     public final String name;
-    public final String structure;
     public final int complexity;
 
-    public Production(Plugin plugin, String name, String definition, String structure) {
+    public Production(Plugin plugin, String name, String definition) {
         super(parseRules(definition));
         this.plugin = plugin;
         this.name = name;
-        this.structure = structure;
         this.complexity = complexity();
     }
+
+    @Override
+    public String getName() { return name; }
+
+    @Override
+    public Plugin getPlugin() { return plugin; }
 
     private static void addIdent(StringBuilder ident, List<Rule> local) {
         if (ident.length() > 0) {

@@ -1,3 +1,4 @@
+import org.dia.lex.LexerEof;
 import org.dia.lex.Token;
 import java.util.List;
 import org.dia.core.Compilation;
@@ -44,7 +45,7 @@ public class CommentTest {
         lang.load(single);
         List<Token> tokens = lang.tokenize();
         assertEquals(1, lang.getLine());
-        assertEquals(Compilation.EOF, tokens.get(0).getName());
+        assertEquals(LexerEof.EOF, tokens.get(0).getName());
     }
 
     @Test
@@ -61,7 +62,7 @@ public class CommentTest {
         final String slashstar = "/*This is a comment*/";
         lang.load(slashstar);
         List<Token> tokens = lang.tokenize();
-        assertEquals(Compilation.EOF, tokens.get(0).getName());
+        assertEquals(LexerEof.EOF, tokens.get(0).getName());
     }
 
     @Test
@@ -70,7 +71,7 @@ public class CommentTest {
         lang.load(multiline);
         List<Token> tokens = lang.tokenize();
         assertEquals(lang.getLine(), 4);
-        assertEquals(Compilation.EOF, tokens.get(0).getName());
+        assertEquals(LexerEof.EOF, tokens.get(0).getName());
     }
 
     @Test
@@ -81,7 +82,7 @@ public class CommentTest {
         assertEquals(EOL, tokens.get(0).getName());
         assertEquals(EOL, tokens.get(1).getName());
         assertEquals(EOL, tokens.get(2).getName());
-        assertEquals(Compilation.EOF, tokens.get(3).getName());
+        assertEquals(LexerEof.EOF, tokens.get(3).getName());
     }
 
 }

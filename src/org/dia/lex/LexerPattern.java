@@ -13,7 +13,7 @@ import org.dia.Plugin;
  *
  * @author Troy Hheninger
  */
-public class LexerPattern extends LexerTool {
+public class LexerPattern extends LexerBase {
 
     public final Pattern pattern;
     public final int group;

@@ -6,29 +6,28 @@ package org.dia;
  */
 public class Node {
     private final CharSequence text;
-    private final int line;
-    private final Plugin plugin;
-    private final String name;
+    private final Named named;
     private final boolean ignore;
     private final boolean root;
+    private final boolean subsume;
     private final Object value;
     private Node parent;
     private Node first;
     private Node last;
     private Node next;
 
-    public Node(Plugin plugin, String name, CharSequence text, int line) {
-        this(plugin, name, text, line, null);
+    public Node(Named named, CharSequence text) {
+        this(named, text, null);
     }
     
-    public Node(Plugin plugin, String name, CharSequence text, int line, Object value) {
-        this.plugin = plugin;
+    public Node(Named named, CharSequence text, Object value) {
+        this.named = named;
+        String name = named.getName();
         this.ignore = name.startsWith("!");
         this.root = name.startsWith("^");
-        this.name = ignore || root ? name.substring(1) : name;
+        this.subsume = name.startsWith("@");
         this.value = value;
         this.text = text;
-        this.line = line;
     }
 
     public void add(Node child) {
@@ -79,20 +78,20 @@ public class Node {
         }
     }
 
-    public void append(Node lastNode) {
-        if (lastNode == null) throw new NullPointerException();
-        Node last;
+    public void append(Node node) {
+        if (node == null) throw new NullPointerException();
+        Node lastNode;
         if (parent != null) {
-            last = parent.last;
-            parent.last = lastNode;
+            lastNode = parent.last;
+            parent.last = node;
         } else {
-            last = this;
-            while (last.next != null) {
-                last = last.next;
+            lastNode = this;
+            while (lastNode.next != null) {
+                lastNode = lastNode.next;
             }
         }
-        last.next = lastNode;
-        lastNode.parent = parent;
+        lastNode.next = node;
+        node.parent = parent;
     }
 
     public String childNames() {
@@ -119,10 +118,20 @@ public class Node {
 
     public Node getFirst() { return first; }
     public Node getLast() { return last; }
-    public String getName() { return name; }
+
+    public int getLine() {
+        if (first != null) return first.getLine();
+        return 0;
+    }
+
+    public String getName() {
+        String name = named.getName();
+        return ignore || root || subsume ? name.substring(1) : name;
+    }
+    
     public Node getNext() { return next; }
     public Node getParent() { return parent; }
-    public Plugin getPlugin() { return plugin; }
+    public Plugin getPlugin() { return named.getPlugin(); }
     public CharSequence getText() { return text; }
     public Object getValue() { return value; }
     public boolean isIgnored() { return ignore; }
@@ -130,7 +139,7 @@ public class Node {
 
     @Override
     public String toString() {
-        return name + (text != null ? "(" + text + ')' : "");
+        return getName() + (text != null ? "(" + text + ')' : "");
     }
 
 }

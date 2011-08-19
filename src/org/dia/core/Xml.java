@@ -43,11 +43,11 @@ public class Xml extends Plugin {
             String found = matcher.group();
             String tag = matcher.group(1);
             boolean slash = found.endsWith("/>");
-            if (slash) return consume(NAME, matcher.end());
+            if (slash) return consume(this, matcher.end());
             int offset = matcher.end();
             int end = matchEnd(buffer.subSequence(offset, buffer.length()), tag);
             if (end > 0) {
-                return consume(NAME, offset + end);
+                return consume(this, offset + end);
             }
         }
         return null;

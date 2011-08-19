@@ -26,32 +26,35 @@ public abstract class Plugin implements Lexer {
         return names.get(0);
     }
 
+    @Override
+    public Plugin getPlugin() { return this; }
+
     public void add(Lexer lexer) {
         lexers.add(lexer);
         Compiler.compiler().literals.add(lexer.getName());
     }
 
-    protected void addParser(String name, String definition) {
-        Compiler.compiler().add(name, new Production(this, name, definition, ""));
+    protected void addParser(String name) {
+        Compiler.compiler().add(name, new Production(this, name, ""));
     }
 
-    protected void addParser(String name, String definition, String structure) {
-        Compiler.compiler().add(name, new Production(this, name, definition, structure));
+    protected void addParser(String name, String structure) {
+        Compiler.compiler().add(name, new Production(this, name, structure));
     }
 
     public void close() {
     }
 
-    public Token consume(String name, int chars) {
-        return Compiler.compiler().consume(this, name, chars);
+    public Token consume(Lexer lexer, int chars) {
+        return Compiler.compiler().consume(lexer, chars);
     }
 
-    public Token consume(String name, int chars, Object value) {
-        return Compiler.compiler().consume(this, name, chars, value);
+    public Token consume(Lexer lexer, int chars, Object value) {
+        return Compiler.compiler().consume(lexer, chars, value);
     }
 
-    @Override
-    public boolean isIgnored() { return false; }
+//    @Override
+//    public boolean isIgnored() { return false; }
 
 
     private static final Class<?>[] matchedSig = new Class<?>[] {
@@ -82,8 +85,8 @@ public abstract class Plugin implements Lexer {
     
     @Override
     public Token nextToken() {
-        for (Lexer matcher : lexers) {
-            Token token = matcher.nextToken();
+        for (Lexer lexer : lexers) {
+            Token token = lexer.nextToken();
             if (token != null) return token;
         }
         return null;

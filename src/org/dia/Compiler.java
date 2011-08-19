@@ -5,17 +5,15 @@ import java.io.File;
 import java.io.FileReader;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
-import java.util.logging.Level;
 
-import org.dia.core.Compilation;
 import org.dia.lex.LexException;
+import org.dia.lex.Lexer;
+import org.dia.lex.LexerEof;
 import org.dia.lex.Token;
 import org.dia.parse.Missing;
 import org.dia.parse.ParseException;
@@ -35,19 +33,10 @@ public abstract class Compiler {
     private int line, offset;
     private CharBuffer buffer;
     private boolean closed = true;
-//    private Map<String, List<Production>> parsers = new HashMap<String, List<Production>>();
     private List<Production> grammar = new LinkedList<Production>();
-//    private List<String> stack;
     private List<Token> tokens;
     
     public void add(String name, Production parser) {
-//        List<Production> list = parsers.get(name);
-//        if (list == null) {
-//            list = new ArrayList<Production>();
-//            parsers.put(name, list);
-//        }
-//        list.add(parser);
-//        grammar.add(parser);
         int complexity = parser.complexity;
         int index = 0;
         for (Production prod : grammar) {
@@ -71,19 +60,20 @@ public abstract class Compiler {
 
     public static Compiler compiler() { return (Compiler) compiler.get(); }
 
-    public Token consume(Plugin plugin, String name, int chars) {
-        Token token = new Token(plugin, name, buffer.subSequence(0, chars), line);
+    public Token consume(Lexer lexer, int chars) {
+        Token token = new Token(lexer, buffer.subSequence(0, chars), line);
         buffer.position(buffer.position() + chars);
         return token;
     }
 
-    public Token consume(Plugin plugin, String name, int chars, Object value) {
-        Token token = new Token(plugin, name, buffer.subSequence(0, chars), line, value);
+    public Token consume(Lexer lexer, int chars, Object value) {
+        Token token = new Token(lexer, buffer.subSequence(0, chars), line, value);
         buffer.position(buffer.position() + chars);
         return token;
     }
 
     public CharSequence limit(CharSequence text, int limit) {
+        limit = Math.min(text.length(), limit);
         int index = 0;
         for (; index < limit; index++) {
             char ch = text.charAt(index);
@@ -150,67 +140,25 @@ public abstract class Compiler {
         if (stack.size() != 1) throw new ParseException("Syntax error");
         return stack.pop();
     }
-//        return parse("root", true);
-//    }
-
-//    public Node parse(String name, boolean first) throws Missing, ParseException {
-//        boolean root = name.startsWith("^"),
-//                ignore = name.startsWith("!");
-//        if (root || ignore) name = name.substring(1);
-//        Log.logger.log(Level.INFO, "parser: matching {0}", name);
-//        Token token = tokens.get(offset);
-//        if (token.getName().equals(name)) {// || node.getName().startsWith(name + '.')) {
-//            Log.logger.log(Level.INFO, "parser: matched {0}", name);
-//            offset++;
-//            return token;
-//        }
-//        List<Parser> list = parsers.get(name);
-//        if (list == null) {
-//            if (literals.contains(name)) throw new Missing(name);
-//            throw new ParseException("Invalid plugin grammar: can't find " + name);
-//        }
-//        if (first && stack.contains(name)) throw new Missing(name);  // don't allow left recursion
-//        stack.add(name);
-//        try {
-//            int offset = this.offset;
-//            for (Parser parser : list) {
-//                try {
-//                    Node child = parser.match(first);
-//                    if (ignore) return null;
-//                    Node parent = new Node(parser.plugin, parser.name, null, line);
-//                    parent.addAll(child);
-//                    return parent;
-//                } catch (Missing e) {
-//                    this.offset = offset;
-//                }
-//            }
-//            throw new Missing(name);
-//        } finally {
-//            stack.remove(stack.size() - 1);
-//        }
-//    }
 
     public void reduce(Stack<Node> stack) {
     loop:
         for (;;) {
-//            for (Map.Entry<String, List<Production>> entry : parsers.entrySet()) {
-//                List<Production> list = entry.getValue();
-//                for (Production parser : list) {
                 for (Production parser : grammar) {
                     for (int index = 0, end = stack.size(); index < end; index++) {
                         int last = parser.match(stack, index);
                         if (last == end) {
-                            Node node = new Node(parser.plugin, parser.name, null, 0);
+                            Node node = new Node(parser, null, 0);
                             while (stack.size() > index) {
                                 node.addFirst(stack.pop());
                             }
                             stack.push(node);
-                            Log.logger.log(Level.INFO, "parser: matched {0} with {1}", new Object[] {parser.name, node.childNames()});
+                            Log.logger.info("parser: matched " + parser.name
+                                    + " with " + node.childNames());
                             continue loop;
                         }
                     }
                 }
-//            }
             return;
         }
     }
@@ -220,7 +168,7 @@ public abstract class Compiler {
         for(;;) {
             Token token = nextToken();
             tokens.add(token);
-            if (token.getName() == Compilation.EOF) break;
+            if (token.getName().equals(LexerEof.EOF)) break;
         }
         return tokens;
     }

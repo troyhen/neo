@@ -2,6 +2,7 @@ package org.dia.core;
 
 import org.dia.Compiler;
 import org.dia.Plugin;
+import org.dia.lex.Lexer;
 import org.dia.lex.LexerPattern;
 import org.dia.lex.Token;
 
@@ -16,17 +17,17 @@ public class Numbers extends Plugin {
     public static final String REAL_FORCED = "number.real.forced";
 
     @Override
-    public Token consume(String name, int chars) {
+    public Token consume(Lexer lexer, int chars) {
         String text = Compiler.buffer().subSequence(0, chars).toString();
         Number value;
-        if (name == INTEGER) {
+        if (lexer.getName().equals(INTEGER)) {
             value = new Integer(text);
         } else {
 //Not needed since Java will ignore the trailing 'd'
 //            if (name == REAL_FORCED) text = text.substring(0, text.length() - 1);
             value = new Double(text);
         }
-        return super.consume(name, chars, value);
+        return super.consume(this, chars, value);
     }
 
     @Override

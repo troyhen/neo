@@ -2,7 +2,6 @@ package org.dia.lex;
 
 import java.util.regex.Pattern;
 import org.dia.Node;
-import org.dia.Plugin;
 
 /**
  *
@@ -11,13 +10,18 @@ import org.dia.Plugin;
 public class Token extends Node {
 
     private static final Pattern linePat = Pattern.compile("\\r\\n|\\r|\\n");
+    
+    private final int line;
+    private final Lexer lexer;
 
-    public Token(Plugin plugin, String name, CharSequence text, int line) {
-        this(plugin, name, text, line, text);
+    public Token(Lexer lexer, CharSequence text, int line) {
+        this(lexer, text, line, text);
     }
     
-    public Token(Plugin plugin, String name, CharSequence text, int line, Object value) {
-        super(plugin, name, text, line, value);
+    public Token(Lexer lexer, CharSequence text, int line, Object value) {
+        super(lexer, text, value);
+        this.lexer = lexer;
+        this.line = line;
     }
 
     public int countLines() {
@@ -28,4 +32,10 @@ public class Token extends Node {
         }
         return lines;
     }
+
+    @Override
+    public int getLine() { return line; }
+
+    @Override
+    public String getName() { return lexer.getName(); }
 }
