@@ -1,9 +1,10 @@
 Goals
 1. Simple
 2. Extensible
-3. Multiple back ends: Java, JVM, JavaScript?, C#?
+3. Leveraging
 
 Features
+* multiple back ends: Java, JVM, JavaScript?, .NET?, C#?
 * everything is an object (Ruby, Scala)
 * optional semicolons (Ruby, Scala)
 * optional parentheses (Ruby)

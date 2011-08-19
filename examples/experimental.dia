@@ -1,9 +1,20 @@
+# The stuff in here is not part of the language yet.
+# These are ideas we are tossing around. Let us know if you like
+# or hate any of them.
 
-a.?run  # same as a.run() if a.can?('run')
-a b c   # same as a.b.c
-a.b c   # same as a.b.c
-a < b < c   # a < b && b < c
-a <= b <= c # a <= b && b <= c
+a.?run  # same as `a.run() if a.can?('run')`
+a.?run  # or does it mean `a.run() unless a.nil?`
+
+a b c   # same as `a.b.c` (ala Scala)
+a b c   # or does it mean a(b, c)
+a b c   # or does is it an error
+a b c d e f # what does this mean???
+
+a.b c   # same as a.b.c (ala Scala)
+a.b c   # or does it mean a.b(c) (ala Ruby)
+
+a < b < c   # `a < b && b < c`
+a <= b <= c # `a <= b && b <= c`
 
 # Plugins
 # Literals

@@ -1,3 +1,6 @@
+# This was a very early draft and incomplete.
+# See org.dia.core.* classes for the actual grammar.
+
 root| (statement eos)*
     ;
 term| EOL
