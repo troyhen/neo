@@ -13,8 +13,9 @@ public class Compilation extends Plugin {
 
     @Override
     public void open() {
-        addParser("root", "statements");
-        addParser("statements", "!terminator* statement*");
+        addParser("compilation", "!statements");
+        addParser("statements", "!terminator* statement+");
+        addParser("statements", "!terminator+");
         addParser("terminator", "semi");
         addParser("terminator", "eol");
         addParser("terminator", "eof");
@@ -24,7 +25,7 @@ public class Compilation extends Plugin {
 //        addParser("statement", "statementUnless");
 //        addParser("statement", "statementWhile");
 //        addParser("statement", "statementUntil");
-        addParser("statement", "expression !terminator+");
+        addParser("statement", "@expression !terminator+");
 //        addParser("statementIf", "statement if expression");
 //        addParser("statementUnless", "statement unless expression");
 //        addParser("statementWhile", "statement while expression");

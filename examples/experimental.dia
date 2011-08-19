@@ -39,11 +39,14 @@ a = /[A-Z_]+/i  # regular expressions
 a = %re([A-Z_]+)
 a = %a[1, 2, 3, 5, 8, 13, 21] # Array literals
 
-plugin RegularExpression
-    def name
-        're'
-    end
+# Plugin implementation
+use java.util.regex.Pattern
 
-    def match plugin, chars
-    end
+plugin RegularExpression
+    def name -> 'regex'
+    def abrev -> 're'
+
+    regex: /\/((\[(\\\]|[^\]])+|\/|[^/])+)\/[iop]?/ -> (text) {
+        Pattern.new text
+    }
 end

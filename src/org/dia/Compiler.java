@@ -7,6 +7,7 @@ import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,17 +35,29 @@ public abstract class Compiler {
     private int line, offset;
     private CharBuffer buffer;
     private boolean closed = true;
-    private Map<String, List<Production>> parsers = new HashMap<String, List<Production>>();
+//    private Map<String, List<Production>> parsers = new HashMap<String, List<Production>>();
+    private List<Production> grammar = new LinkedList<Production>();
 //    private List<String> stack;
     private List<Token> tokens;
     
     public void add(String name, Production parser) {
-        List<Production> list = parsers.get(name);
-        if (list == null) {
-            list = new ArrayList<Production>();
-            parsers.put(name, list);
+//        List<Production> list = parsers.get(name);
+//        if (list == null) {
+//            list = new ArrayList<Production>();
+//            parsers.put(name, list);
+//        }
+//        list.add(parser);
+//        grammar.add(parser);
+        int complexity = parser.complexity;
+        int index = 0;
+        for (Production prod : grammar) {
+            if (prod.complexity < complexity) {
+                grammar.add(index, parser);
+                return;
+            }
+            index++;
         }
-        list.add(parser);
+        grammar.add(parser);
     }
 
     public static CharSequence buffer() { return compiler().buffer; }
@@ -128,13 +141,13 @@ public abstract class Compiler {
         }
     }
 
-    public Node parse(String goal) throws Missing, ParseException {
+    public Node parse() throws Missing, ParseException {
         Stack<Node> stack = new Stack<Node>();
         for (Token token : tokens) {
             stack.push(token);
             reduce(stack);
         }
-        if (stack.size() != 1) throw new Missing(goal);
+        if (stack.size() != 1) throw new ParseException("Syntax error");
         return stack.pop();
     }
 //        return parse("root", true);
@@ -180,9 +193,10 @@ public abstract class Compiler {
     public void reduce(Stack<Node> stack) {
     loop:
         for (;;) {
-            for (Map.Entry<String, List<Production>> entry : parsers.entrySet()) {
-                List<Production> list = entry.getValue();
-                for (Production parser : list) {
+//            for (Map.Entry<String, List<Production>> entry : parsers.entrySet()) {
+//                List<Production> list = entry.getValue();
+//                for (Production parser : list) {
+                for (Production parser : grammar) {
                     for (int index = 0, end = stack.size(); index < end; index++) {
                         int last = parser.match(stack, index);
                         if (last == end) {
@@ -196,7 +210,7 @@ public abstract class Compiler {
                         }
                     }
                 }
-            }
+//            }
             return;
         }
     }

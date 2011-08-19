@@ -45,7 +45,7 @@ public class ExpressionParseTest {
         final String expr = "1+2";
         lang.load(expr);
         List<Token> tokens = lang.tokenize();
-        Node root = lang.parse("expression");
+        Node root = lang.parse();
         assertNotNull(root);
     }
 

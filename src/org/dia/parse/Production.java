@@ -17,11 +17,15 @@ public class Production extends RuleGroup {
 
     public final Plugin plugin;
     public final String name;
+    public final String structure;
+    public final int complexity;
 
-    public Production(Plugin plugin, String name, String definition) {
+    public Production(Plugin plugin, String name, String definition, String structure) {
         super(parseRules(definition));
         this.plugin = plugin;
         this.name = name;
+        this.structure = structure;
+        this.complexity = complexity();
     }
 
     private static void addIdent(StringBuilder ident, List<Rule> local) {

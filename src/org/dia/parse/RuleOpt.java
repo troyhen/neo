@@ -11,6 +11,11 @@ class RuleOpt implements Rule {
         this.child = child;
     }
 
+    @Override
+    public int complexity() {
+        return child.complexity();
+    }
+
 //    @Override
 //    public Node match(boolean first) {
 //        Node node = null;

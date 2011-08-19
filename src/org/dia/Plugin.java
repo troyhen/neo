@@ -32,7 +32,11 @@ public abstract class Plugin implements Lexer {
     }
 
     protected void addParser(String name, String definition) {
-        Compiler.compiler().add(name, new Production(this, name, definition));
+        Compiler.compiler().add(name, new Production(this, name, definition, ""));
+    }
+
+    protected void addParser(String name, String definition, String structure) {
+        Compiler.compiler().add(name, new Production(this, name, definition, structure));
     }
 
     public void close() {

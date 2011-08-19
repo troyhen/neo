@@ -5,5 +5,6 @@ import org.dia.Node;
 
 interface Rule {
 //    public Node match(boolean first);
-    public int match(Stack<Node> stack, int start);
+    int complexity();
+    int match(Stack<Node> stack, int start);
 }

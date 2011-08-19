@@ -11,6 +11,15 @@ class RuleGroup implements Rule {
         this.rules = rules;
     }
 
+    @Override
+    public int complexity() {
+        int result = 0;
+        for (Rule rule : rules) {
+            result += rule.complexity();
+        }
+        return result;
+    }
+
 //    @Override
 //    public Node match(boolean first) {
 //        Node firstNode = null;
