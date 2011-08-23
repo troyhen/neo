@@ -16,6 +16,10 @@ public class Node {
     private Node last;
     private Node next;
 
+    public Node(Named named) {
+        this(named, null, null);
+    }
+    
     public Node(Named named, CharSequence text) {
         this(named, text, null);
     }

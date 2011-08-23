@@ -1,22 +1,25 @@
 package org.dia.parse;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import org.dia.Node;
 
-class RuleGroup implements Rule {
+class RuleOr implements Rule {
     
-    protected List<Rule> rules;
+    private List<Rule> rules = new ArrayList<Rule>();
 
-    RuleGroup(List<Rule> rules) {
-        this.rules = rules;
+    RuleOr(List<List<Rule>> lists) {
+        for (List<Rule> list : lists) {
+            rules.add(new RuleGroup(list));
+        }
     }
 
     @Override
     public int complexity() {
         int result = 0;
         for (Rule rule : rules) {
-            result += rule.complexity();
+            return Math.max(rule.complexity(), result);
         }
         return result;
     }
@@ -24,12 +27,11 @@ class RuleGroup implements Rule {
     @Override
     public int match(Stack<Node> stack, int start) {
 //    public int match(List<Node> stack, int start, Byte[] found) {
-        int index = start;
         for (Rule rule : rules) {
-            index = rule.match(stack, index);//, found);
-            if (index < 0) return index;
+            int index = rule.match(stack, start);//, found);
+            if (index >= 0) return index;
         }
-        return index;
+        return -1;
     }
 
 }

@@ -8,24 +8,21 @@ import org.dia.lex.LexerEof;
  * @author Troy Heninger
  */
 public class Compilation extends Plugin {
-//    public static final String EOF = "eof";
 
     @Override
     public void open() {
         add(new LexerEof(this));
-        addParser("compilation", "!statements");
-        addParser("statements", "!terminator* statement+");
-        addParser("statements", "!terminator+");
+        addParser("compilation", "@statements @statement? !eof");
+        addParser("statements", "!terminator* (@statement !terminator)+");
         addParser("terminator", "semi");
         addParser("terminator", "eol");
-        addParser("terminator", "eof");
 //        addParser("statement", "callWithBlock");
 //        addParser("statement", "alias");
 //        addParser("statement", "statementIf");
 //        addParser("statement", "statementUnless");
 //        addParser("statement", "statementWhile");
 //        addParser("statement", "statementUntil");
-        addParser("statement", "@expression !terminator+");
+        addParser("statement", "@expression [terminator | eof]");
 //        addParser("statementIf", "statement if expression");
 //        addParser("statementUnless", "statement unless expression");
 //        addParser("statementWhile", "statement while expression");
@@ -33,63 +30,5 @@ public class Compilation extends Plugin {
 //        addParser("callWithBlock", "call");
 //        Compiler.compiler().literals.add(EOF);
     }
-
-//    public static Node call(Node node) {
-//        Node identifier = identifier(node);
-//        try {
-//
-//        } catch (Missing e) {}
-//    }
-//
-//    public static Node callWithBlock(Node node) {
-//        Node call = node;
-//        Node next = call(node);
-//        try {
-//            Node blockStart = next;
-//            Node blockArgList = blockStart(blockStart);
-//            next = blockArgs(blockArgList);
-//        } catch (Missing e) {}
-//        Node statements = next;
-//        Node blockEnd = statements(next);
-//        next = blockEnd(blockEnd);
-//        return next;
-//    }
-//
-//    public static Node statement(Node node) {
-//        Node next;
-//        try {
-//            Node call = callWithBlock(node);
-//        } catch (Missing e) {}
-//        Node expression = expression(node);
-//        next = expression.getNext();
-//        return nex;
-//    }
-//
-//    public static Node statements(Node node) {
-//        Node last = null;
-//        try {
-//            for (;;) {
-//                node = any(terminator(node));
-//                node = statement(node);
-//                last = node;
-//            }
-//        } catch (Missing e) {
-//        }
-//        return last.getNext();
-//    }
-//
-//    public static Node terminator(Node node) {
-//
-//    }
-
-//    @Override
-//    public Node parse(Node node) {
-//        statements(node);
-//    }
-//
-//    @Override
-//    public void compile(Node node, Backend back) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
 
 }

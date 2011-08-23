@@ -2,6 +2,7 @@ package org.dia.parse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import org.dia.Log;
 import org.dia.Named;
@@ -16,13 +17,17 @@ public class Production extends RuleGroup implements Named {
 
     public final Plugin plugin;
     public final String name;
+    public final String definition;
     public final int complexity;
+    public int index = 0;
 
     public Production(Plugin plugin, String name, String definition) {
-        super(parseRules(definition));
+        super(null);
         this.plugin = plugin;
         this.name = name;
-        this.complexity = complexity();
+        this.definition = definition;
+        rules = parseRules();
+        this.complexity = complexity(); // must be called after parseRules
     }
 
     @Override
@@ -31,25 +36,23 @@ public class Production extends RuleGroup implements Named {
     @Override
     public Plugin getPlugin() { return plugin; }
 
+    private static Stack<Rule> addAlternatives(Stack<Rule> local, List<List<Rule>> alternatives) {
+        if (alternatives != null) {
+            alternatives.add(local);
+            Rule rule = new RuleOr(alternatives);
+            local = new Stack<Rule>();
+            local.push(rule);
+        }
+        return local;
+    }
+
     private static void addIdent(StringBuilder ident, List<Rule> local) {
         if (ident.length() > 0) {
-//            if (ident.charAt(0) == '^') {
-//                ident.deleteCharAt(0);
-//                local.add(new RuleRoot(new RuleIdent(ident.substring(1))));
-//            } else {
-                local.add(new RuleIdent(ident.toString()));
-//            }
+            local.add(new RuleIdent(ident.toString()));
             ident.setLength(0);
         }
     }
     
-//    @Override
-//    public Node match(boolean first) {
-//        Node node = super.match(true);
-//        if (node != null) node = matched(node);
-//        return node;
-//    }
-
 //    @Override
     public Node matched(Node node) {
         try {
@@ -60,34 +63,50 @@ public class Production extends RuleGroup implements Named {
         }
     }
 
-    private static List<Rule> parseRules(CharSequence definition) {
-        List<Rule> local = new ArrayList<Rule>();
+    private List<Rule> parseRules() {
+        Stack<Rule> local = new Stack<Rule>();
+        List<List<Rule>> alternatives = null;
         StringBuilder ident = new StringBuilder();
-        for (int index = 0, end = definition.length(); index < end; index++) {
-            char ch = definition.charAt(index);
+        while (index < definition.length()) {
+            char ch = definition.charAt(index++);
             switch (ch) {
                 case '*':
                     addIdent(ident, local);
-                    local.add(new RuleStar(local.remove(local.size() - 1)));
+                    local.add(new RuleStar(local.pop()));
                     break;
                 case '?':
                     addIdent(ident, local);
-                    local.add(new RuleOpt(local.remove(local.size() - 1)));
+                    local.add(new RuleOpt(local.pop()));
                     break;
                 case '+':
                     addIdent(ident, local);
-                    local.add(new RulePlus(local.remove(local.size() - 1)));
+                    local.add(new RulePlus(local.pop()));
                     break;
                 case '-':
                     addIdent(ident, local);
-                    local.add(new RuleNot(local.remove(local.size() - 1)));
+                    local.add(new RuleNot(local.pop()));
+                    break;
+                case '|':
+                    addIdent(ident, local);
+                    if (alternatives == null) alternatives = new ArrayList<List<Rule>>();
+                    alternatives.add(local);
+                    local = new Stack<Rule>();
                     break;
                 case '(':
                     addIdent(ident, local);
-                    local.add(new RuleGroup(parseRules(definition.subSequence(index + 1, definition.length()))));
+                    local.add(new RuleGroup(parseRules()));
                     break;
                 case ')':
                     addIdent(ident, local);
+                    local = addAlternatives(local, alternatives);
+                    return local;
+                case '[':
+                    addIdent(ident, local);
+                    local.add(new RulePeek(parseRules()));
+                    break;
+                case ']':
+                    addIdent(ident, local);
+                    local = addAlternatives(local, alternatives);
                     return local;
                 case ' ':
                     addIdent(ident, local);
@@ -96,6 +115,7 @@ public class Production extends RuleGroup implements Named {
             }
         }
         addIdent(ident, local);
+        local = addAlternatives(local, alternatives);
         return local;
     }
 

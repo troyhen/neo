@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Stack;
 import org.dia.Node;
 
-class RuleGroup implements Rule {
+class RulePeek implements Rule {
     
-    protected List<Rule> rules;
+    protected final List<Rule> rules;
 
-    RuleGroup(List<Rule> rules) {
+    RulePeek(List<Rule> rules) {
         this.rules = rules;
     }
 
@@ -29,7 +29,7 @@ class RuleGroup implements Rule {
             index = rule.match(stack, index);//, found);
             if (index < 0) return index;
         }
-        return index;
+        return start;
     }
 
 }

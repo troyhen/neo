@@ -1,7 +1,7 @@
 package org.dia.parse;
 
+import java.util.List;
 import java.util.Stack;
-import org.dia.Compiler;
 import org.dia.Node;
 
 class RuleOpt implements Rule {
@@ -16,22 +16,12 @@ class RuleOpt implements Rule {
         return child.complexity();
     }
 
-//    @Override
-//    public Node match(boolean first) {
-//        Node node = null;
-//        int offset = Compiler.offset();
-//        try {
-//            node = child.match(first);
-//        } catch (Missing e) {
-//            Compiler.offset(offset);
-//        }
-//        return node;
-//    }
-
     @Override
     public int match(Stack<Node> stack, int start) {
-        int index = child.match(stack, start);
+//    public int match(List<Node> stack, int start, Byte[] found) {
+        int index = child.match(stack, start);//, found);
         if (index >= 0) return index;
         return start;
     }
+
 }
