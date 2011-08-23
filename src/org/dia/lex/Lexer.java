@@ -8,7 +8,6 @@ import org.dia.Named;
  */
 public interface Lexer extends Named {
 
-//    boolean isIgnored();
     Token nextToken();
 
 }

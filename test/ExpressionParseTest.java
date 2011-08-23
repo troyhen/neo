@@ -1,14 +1,10 @@
-import org.dia.lex.Token;
-import java.util.List;
 import java.util.logging.Level;
 import org.dia.Log;
 import org.dia.DiaException;
 import org.dia.Node;
 import org.dia.DiaLang;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -19,16 +15,6 @@ import static org.junit.Assert.*;
 public class ExpressionParseTest {
 
     private DiaLang lang;
-//    public ExpressionParseTest() {
-//    }
-//
-//    @BeforeClass
-//    public static void setUpClass() throws Exception {
-//    }
-//
-//    @AfterClass
-//    public static void tearDownClass() throws Exception {
-//    }
 
     @Before
     public void setUp() {
@@ -46,7 +32,7 @@ public class ExpressionParseTest {
         lang.load(expr);
         Node tokens = lang.tokenize();
         Node root = lang.parse();
-        assertNotNull(root);
+        assertNotNull(root);    // TODO need real test
     }
 
 }

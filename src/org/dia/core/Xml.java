@@ -25,16 +25,6 @@ public class Xml extends Plugin {
         add(new LexerPattern(this, NAME, "/((\\[(\\\\\\]|[^\\]])+|\\/|[^/])+)/[iop]?", 1));
     }
 
-//    @Override
-//    public Node parse(Node node) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
-//
-//    @Override
-//    public void compile(Node node, Backend back) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
-
     @Override
     public Token nextToken() {
         CharSequence buffer = Compiler.buffer();

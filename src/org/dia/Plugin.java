@@ -35,11 +35,11 @@ public class Plugin implements Lexer {
     }
 
     protected void addParser(String name) {
-        Compiler.compiler().add(name, new Production(this, name, ""));
+        Compiler.compiler().add(new Production(this, name, ""));
     }
 
     protected void addParser(String name, String structure) {
-        Compiler.compiler().add(name, new Production(this, name, structure));
+        Compiler.compiler().add(new Production(this, name, structure));
     }
 
     public void close() {
@@ -52,10 +52,6 @@ public class Plugin implements Lexer {
     public Token consume(Lexer lexer, int chars, Object value) {
         return Compiler.compiler().consume(lexer, chars, value);
     }
-
-//    @Override
-//    public boolean isIgnored() { return false; }
-
 
     private static final Class<?>[] matchedSig = new Class<?>[] {
         Node.class
@@ -91,18 +87,6 @@ public class Plugin implements Lexer {
         }
         return null;
     }
-
-//    protected Node or(Node...nodes) {
-//        for (Node node : nodes) {
-//            if (node != null) return node;
-//        }
-//        throw new Missing();
-//    }
-
-//    public void parse(Compiler parser) {
-//    }
-
-//    public abstract void compile(Node node, Backend back);
 
     @Override
     public String toString() {

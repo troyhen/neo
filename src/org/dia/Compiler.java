@@ -6,10 +6,8 @@ import java.io.FileReader;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.HashSet;
-//import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.Stack;
 
 import org.dia.lex.LexException;
 import org.dia.lex.Lexer;
@@ -36,16 +34,7 @@ public abstract class Compiler {
     private List<Production> grammar = new ArrayList<Production>();//LinkedList<Production>();
     private Node root;
     
-    public void add(String name, Production parser) {
-//        int complexity = parser.complexity;
-//        int index = 0;
-//        for (Production prod : grammar) {
-//            if (prod.complexity < complexity) {
-//                grammar.add(index, parser);
-//                return;
-//            }
-//            index++;
-//        }
+    public void add(Production parser) {
         grammar.add(parser);
     }
 
@@ -111,7 +100,6 @@ public abstract class Compiler {
         closed = false;
         line = 1;
         offset = 0;
-//        tokens = new ArrayList<Token>();
         root = new Node(new Named() {
 
             Plugin plugin = new Plugin();
@@ -145,45 +133,6 @@ public abstract class Compiler {
         }
     }
 
-//    public Node parse() throws Missing, ParseException {
-//        Stack<Node> stack = new Stack<Node>();
-//        for (Token token : tokens) {
-//            stack.push(token);
-//            reduce(stack);
-//        }
-//        if (stack.size() != 1) throw new ParseException("Syntax error at line "
-//                + stack.peek().getLine());
-//        return stack.pop();
-//    }
-//
-//    public void reduce(Stack<Node> stack) {
-//        for (;;) {
-//            int best = Integer.MAX_VALUE;
-//            Production production = null;
-//            for (Production parser : grammar) {
-//                for (int index = 0, end = stack.size(); index < end; index++) {
-//                    if (parser.name.equals("statement") && stack.size() == 2 && stack.peek().getName().equals("eof"))
-//                        System.out.print("");
-//                    int last = parser.match(stack, index);
-//                    if (last == end) {
-//                        if (best > index) {
-//                            production = parser;
-//                            best = index;
-//                        }
-//                        break;
-//                    }
-//                }
-//            }
-//            if (production == null) return;   // done if no matches
-//            Node node = new Node(production);
-//            while (stack.size() > best) {
-//                node.addFirst(stack.pop());
-//            }
-//            stack.push(node);
-//            Log.logger.info("parser: matched " + production.name
-//                    + " with " + node.childNames());
-//        }
-//    }
     public Node parse() throws Missing, ParseException {
         List<Node> matched = new ArrayList<Node>();
         for (;;) {

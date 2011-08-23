@@ -24,16 +24,6 @@ class RuleOr implements Rule {
         return result;
     }
 
-//    @Override
-//    public int match(Stack<Node> stack, int start) {
-////    public int match(List<Node> stack, int start, Byte[] found) {
-//        for (Rule rule : rules) {
-//            int index = rule.match(stack, start);//, found);
-//            if (index >= 0) return index;
-//        }
-//        return -1;
-//    }
-
     @Override
     public Node match(Node start, List<Node> matched) {
         for (Rule rule : rules) {
@@ -44,15 +34,5 @@ class RuleOr implements Rule {
         }
         return null;
     }
-
-//    @Override
-//    public void reduce(Node start, Node newParent) {
-//        for (Rule rule : rules) {
-//            Node node = rule.match(start);
-//            if (node != null) {
-//                rule.reduce(node, newParent);
-//            }
-//        }
-//    }
 
 }

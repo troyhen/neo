@@ -23,9 +23,6 @@ public abstract class LexerBase implements Lexer, Named {
     @Override
     public Plugin getPlugin() { return plugin; }
 
-//    @Override
-//    public boolean isIgnored() { return name.startsWith("!"); }
-
     public Token consume(int chars) {
         return plugin.consume(this, chars);
     }

@@ -1,10 +1,6 @@
 import org.dia.lex.LexerEof;
-import org.dia.lex.Token;
-import java.util.List;
-import org.dia.core.Compilation;
 import org.dia.Node;
 import org.dia.DiaLang;
-import org.dia.core.Whitespace;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

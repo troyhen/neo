@@ -67,7 +67,6 @@ public class Production extends RuleGroup implements Named {
         return next;
     }
 
-//    @Override
     public Node matched(Node node) {
         try {
             return plugin.matched(name, node);
@@ -133,10 +132,4 @@ public class Production extends RuleGroup implements Named {
         return local;
     }
 
-//    public Node reduce(Node node) {
-//        Node newNode = new Node(this, getName());
-//        node.insertBefore(newNode);
-//        super.reduce(node, newNode);
-//        return newNode;
-//    }
 }

@@ -1,14 +1,8 @@
-import org.dia.lex.Token;
-import java.util.List;
-import org.dia.core.Xml;
 import org.dia.Node;
 
 import org.dia.DiaLang;
 
-//import org.junit.After;
-//import org.junit.AfterClass;
 import org.junit.Before;
-//import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.dia.core.Xml.*;

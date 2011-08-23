@@ -1,9 +1,6 @@
 package org.dia.core;
 
-import org.dia.Node;
-import org.dia.Compiler;
 import org.dia.Plugin;
-import org.dia.back.Backend;
 import org.dia.lex.LexerChar;
 import org.dia.lex.LexerPattern;
 
@@ -29,16 +26,5 @@ public class Operator extends Plugin {
         add(new LexerPattern(this, OPERATOR_ASSIGN, "[-+~!@#$%^&*/?:]*=[-+~!@#$%^&*/?:]*"));
         add(new LexerPattern(this, OPERATOR, "[-+~!@#$%^&*/?:]+"));
     }
-
-//    @Override
-//    public void parse(Node root) {
-//        Node first = root.find("expression", OPERATOR_ADD, "expression");
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
-//
-//    @Override
-//    public void compile(Node node, Backend back) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
 
 }

@@ -17,17 +17,6 @@ class RuleNot implements Rule {
         return child.complexity();
     }
 
-//    @Override
-//    public int match(Stack<Node> stack, int start) {
-////    public int match(List<Node> stack, int start, Byte[] found) {
-//        int index = child.match(stack, start);//, found);
-//        if (index >= 0) {
-////            found[start] = 1;
-//            return -1;
-//        }
-//        return start;
-//    }
-
     @Override
     public Node match(Node node, List<Node> matched) {
         int size = matched.size();
@@ -36,9 +25,5 @@ class RuleNot implements Rule {
         if (result != null) return null;
         return node;
     }
-
-//    @Override
-//    public void reduce(Node node, Node newParent) {
-//    }
 
 }

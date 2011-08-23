@@ -42,14 +42,4 @@ public class Numbers extends Plugin {
 //        addParser("number", REAL_FORCED);
     }
 
-//    @Override
-//    public Node parse(Node node) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
-//
-//    @Override
-//    public void compile(Node node, Backend back) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
-
 }

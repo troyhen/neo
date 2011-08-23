@@ -1,9 +1,6 @@
 package org.dia.core;
 
-import org.dia.Compiler;
-import org.dia.Node;
 import org.dia.Plugin;
-import org.dia.back.Backend;
 import org.dia.lex.LexerPattern;
 
 /**
@@ -24,15 +21,5 @@ public class Strings extends Plugin {
         add(new LexerPattern(this, STRING_DOUBLE, "\"((\\\"|[^\"\\r\\n])*)\"", 1));
         add(new LexerPattern(this, STRING_MULTILINE, "\"((\\\"|[^\"\\r\\n])*)\"", 1));
     }
-
-//    @Override
-//    public Node parse(Node node) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
-//
-//    @Override
-//    public void compile(Node node, Backend back) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
 
 }

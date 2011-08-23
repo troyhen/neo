@@ -20,8 +20,6 @@ import org.dia.core.Xml;
 public class DiaLang extends Compiler {
 
     public DiaLang() {
-//        Package core = Package.getPackage("org.dia.core");
-//        java.lang.reflect
         plugins.add(new Compilation());
         plugins.add(new Whitespace());
         plugins.add(new Delimiter());
