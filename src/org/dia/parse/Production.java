@@ -52,7 +52,21 @@ public class Production extends RuleGroup implements Named {
             ident.setLength(0);
         }
     }
-    
+
+    @Override
+    public Node match(Node node, List<Node> matched) {
+        Node next = super.match(node, matched);
+        if (next != null) {
+            Node newNode = new Node(this, getName());
+            node.insertBefore(newNode);
+            for (Node n : matched) {
+                newNode.add(n);
+            }
+        }
+        matched.clear();
+        return next;
+    }
+
 //    @Override
     public Node matched(Node node) {
         try {
@@ -119,4 +133,10 @@ public class Production extends RuleGroup implements Named {
         return local;
     }
 
+//    public Node reduce(Node node) {
+//        Node newNode = new Node(this, getName());
+//        node.insertBefore(newNode);
+//        super.reduce(node, newNode);
+//        return newNode;
+//    }
 }

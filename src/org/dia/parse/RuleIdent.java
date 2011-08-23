@@ -21,16 +21,33 @@ class RuleIdent implements Rule {
         return 1;
     }
 
+//    @Override
+//    public int match(Stack<Node> stack, int start) {
+////    public int match(List<Node> stack, int start, Byte[] found) {
+//        if (start >= stack.size()) return -1;
+//        final String name = stack.get(start).getName();
+//        if (name.equals(identBase) || name.startsWith(identPlus)) {
+////            found[start] = 1;
+//            return start + 1;
+//        }
+//        return -1;
+//    }
+
     @Override
-    public int match(Stack<Node> stack, int start) {
-//    public int match(List<Node> stack, int start, Byte[] found) {
-        if (start >= stack.size()) return -1;
-        final String name = stack.get(start).getName();
+    public Node match(Node node, List<Node> matched) {
+        final String name = node.getName();
         if (name.equals(identBase) || name.startsWith(identPlus)) {
-//            found[start] = 1;
-            return start + 1;
+            Node next = node.getNext();
+            matched.add(node);
+            if (next == null) return node.getParent();
+            return next;
         }
-        return -1;
+        return null;
     }
+
+//    @Override
+//    public void reduce(Node node, Node newParent) {
+//        newParent.add(node);
+//    }
 
 }

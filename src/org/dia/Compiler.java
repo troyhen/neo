@@ -34,7 +34,7 @@ public abstract class Compiler {
     private CharBuffer buffer;
     private boolean closed = true;
     private List<Production> grammar = new ArrayList<Production>();//LinkedList<Production>();
-    private List<Token> tokens;
+    private Node root;
     
     public void add(String name, Production parser) {
 //        int complexity = parser.complexity;
@@ -111,7 +111,22 @@ public abstract class Compiler {
         closed = false;
         line = 1;
         offset = 0;
-        tokens = new ArrayList<Token>();
+//        tokens = new ArrayList<Token>();
+        root = new Node(new Named() {
+
+            Plugin plugin = new Plugin();
+
+            @Override
+            public String getName() {
+                return "root";
+            }
+
+            @Override
+            public Plugin getPlugin() {
+                return plugin;
+            }
+
+        });
     }
 
     public Token nextToken() throws LexException {
@@ -130,54 +145,76 @@ public abstract class Compiler {
         }
     }
 
+//    public Node parse() throws Missing, ParseException {
+//        Stack<Node> stack = new Stack<Node>();
+//        for (Token token : tokens) {
+//            stack.push(token);
+//            reduce(stack);
+//        }
+//        if (stack.size() != 1) throw new ParseException("Syntax error at line "
+//                + stack.peek().getLine());
+//        return stack.pop();
+//    }
+//
+//    public void reduce(Stack<Node> stack) {
+//        for (;;) {
+//            int best = Integer.MAX_VALUE;
+//            Production production = null;
+//            for (Production parser : grammar) {
+//                for (int index = 0, end = stack.size(); index < end; index++) {
+//                    if (parser.name.equals("statement") && stack.size() == 2 && stack.peek().getName().equals("eof"))
+//                        System.out.print("");
+//                    int last = parser.match(stack, index);
+//                    if (last == end) {
+//                        if (best > index) {
+//                            production = parser;
+//                            best = index;
+//                        }
+//                        break;
+//                    }
+//                }
+//            }
+//            if (production == null) return;   // done if no matches
+//            Node node = new Node(production);
+//            while (stack.size() > best) {
+//                node.addFirst(stack.pop());
+//            }
+//            stack.push(node);
+//            Log.logger.info("parser: matched " + production.name
+//                    + " with " + node.childNames());
+//        }
+//    }
     public Node parse() throws Missing, ParseException {
-        Stack<Node> stack = new Stack<Node>();
-        for (Token token : tokens) {
-            stack.push(token);
-            reduce(stack);
-        }
-        if (stack.size() != 1) throw new ParseException("Syntax error at line "
-                + stack.peek().getLine());
-        return stack.pop();
-    }
-
-    public void reduce(Stack<Node> stack) {
+        List<Node> matched = new ArrayList<Node>();
         for (;;) {
-            int best = Integer.MAX_VALUE;
-            Production production = null;
-            for (Production parser : grammar) {
-                for (int index = 0, end = stack.size(); index < end; index++) {
-                    if (parser.name.equals("statement") && stack.size() == 2 && stack.peek().getName().equals("eof"))
-                        System.out.print("");
-                    int last = parser.match(stack, index);
-                    if (last == end) {
-                        if (best > index) {
-                            production = parser;
-                            best = index;
-                        }
-                        break;
+            boolean changed = false;
+            for (Production production : grammar) {
+                Node node = root.getFirst();
+                while (node != null) {
+                    Node next = production.match(node, matched);
+                    if (next != null) {
+                        Log.logger.info("parser: matched " + production.name
+                                + " with " + node.getParent().childNames());
+                        changed = true;
+                        node = next;
+                    } else {
+                        node = node.getNext();
                     }
                 }
             }
-            if (production == null) return;   // done if no matches
-            Node node = new Node(production);
-            while (stack.size() > best) {
-                node.addFirst(stack.pop());
-            }
-            stack.push(node);
-            Log.logger.info("parser: matched " + production.name
-                    + " with " + node.childNames());
+            if (!changed) break;
         }
+        return root;
     }
 
-    public List<Token> tokenize() throws DiaException {
+    public Node tokenize() throws DiaException {
         if (closed) open();
         for(;;) {
             Token token = nextToken();
-            tokens.add(token);
+            root.add(token);
             if (token.getName().equals(LexerEof.EOF)) break;
         }
-        return tokens;
+        return root;
     }
 
 }

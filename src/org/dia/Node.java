@@ -1,5 +1,7 @@
 package org.dia;
 
+import java.util.List;
+
 /**
  *
  * @author Troy Heninger
@@ -15,6 +17,7 @@ public class Node {
     private Node first;
     private Node last;
     private Node next;
+    private Node prev;
 
     public Node(Named named) {
         this(named, null, null);
@@ -36,24 +39,26 @@ public class Node {
 
     public void add(Node child) {
         if (child == null) throw new NullPointerException();
-        if (first == null) {
-            first = last = child;
+        child.unlink();
+        if (this.last == null) {
+            this.first = this.last = child;
         } else {
-            last.next = child;
-            last = child;
+            child.prev = last;
+            this.last.next = child;
+            this.last = child;
         }
         child.parent = this;
-        child.next = null;
     }
 
     public void addFirst(Node child) {
         if (child == null) throw new NullPointerException();
-        if (first == null) {
-            child.next = null;
-            first = last = child;
+        child.unlink();
+        if (this.first == null) {
+            this.first = this.last = child;
         } else {
-            child.next = first;
-            first = child;
+            child.next = this.first;
+            this.first.prev = child;
+            this.first = child;
         }
         child.parent = this;
     }
@@ -61,24 +66,9 @@ public class Node {
     public void addAll(Node child) {
         if (child == null) throw new NullPointerException();
         while (child != null) {
-            if (first == null) {
-                first = last = child;
-            } else {
-                last.next = child;
-                last = child;
-            }
-            child.parent = this;
-            child = child.next;
-        }
-    }
-
-    public void addNext(Node nextNode) {
-        if (nextNode == null) throw new NullPointerException();
-        nextNode.next = next;
-        nextNode.parent = parent;
-        next = nextNode;
-        if (parent != null && parent.last == this) {
-            parent.last = nextNode;
+            Node next = child.next;
+            add(child);
+            child = next;
         }
     }
 
@@ -141,9 +131,49 @@ public class Node {
     public boolean isIgnored() { return ignore; }
     public boolean isRoot() { return root; }
 
+    public void insertAfter(Node node) {
+        if (node == null) throw new NullPointerException();
+        node.next = this.next;
+        if (this.next != null) this.next.prev = node;
+        node.parent = this.parent;
+        node.prev = this;
+        this.next = node;
+        if (parent != null && parent.last == this) {
+            parent.last = node;
+        }
+    }
+
+    public void insertBefore(Node node) {
+        if (node == null) throw new NullPointerException();
+        node.prev = this.prev;
+        if (this.prev != null) this.prev.next = node;
+        node.parent = this.parent;
+        node.next = this;
+        this.prev = node;
+        if (parent != null && parent.first == this) {
+            parent.first = node;
+        }
+    }
+
+    public static void revert(List<Node> matched, int size) {
+        while (matched.size() > size) {
+            matched.remove(matched.size() - 1);
+        }
+    }
+
     @Override
     public String toString() {
         return getName() + (text != null ? "(" + text + ')' : "");
+    }
+
+    public void unlink() {
+        if (parent != null) {
+            if (parent.first == this) parent.first = this.next;
+            if (parent.last == this) parent.last = this.prev;
+        }
+        if (this.prev != null) this.prev.next = this.next;
+        if (this.next != null) this.next.prev = this.prev;
+        this.prev = this.next = this.parent = null;
     }
 
 }

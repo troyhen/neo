@@ -31,7 +31,7 @@ public class XmlTest {
     public void testSimple() throws Exception {
         final String simple = "<test/>";
         lang.load(simple);
-        List<Token> tokens = lang.tokenize();
+        Node tokens = lang.tokenize();
         assertEquals(NAME, tokens.get(0).getName());
         assertEquals(simple, tokens.get(0).getValue().toString());
     }
@@ -40,7 +40,7 @@ public class XmlTest {
     public void testComplex() throws Exception {
         final String complex = "<div id=\"content\">\r\n<p class=\"main\">This is a\n<span>test</span><br/>\r</div>";
         lang.load(complex);
-        List<Token> tokens = lang.tokenize();
+        Node tokens = lang.tokenize();
         assertEquals(NAME, tokens.get(0).getName());
         assertEquals(complex, tokens.get(0).getValue().toString());
     }

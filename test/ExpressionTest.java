@@ -43,7 +43,7 @@ public class ExpressionTest {
     public void testPlus() throws Exception {
         String simple = "1+2.0-8d";
         lang.load(simple);
-        List<Token> tokens = lang.tokenize();
+        Node tokens = lang.tokenize();
         assertEquals(OPERATOR_ADD, tokens.get(1).getName());
         assertEquals("+", tokens.get(1).getValue().toString());
     }

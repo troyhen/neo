@@ -44,7 +44,7 @@ public class ExpressionParseTest {
     public void parseExpression() throws DiaException {
         final String expr = "1+2";
         lang.load(expr);
-        List<Token> tokens = lang.tokenize();
+        Node tokens = lang.tokenize();
         Node root = lang.parse();
         assertNotNull(root);
     }

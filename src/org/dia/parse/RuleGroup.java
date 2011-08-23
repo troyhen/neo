@@ -21,15 +21,31 @@ class RuleGroup implements Rule {
         return result;
     }
 
+//    @Override
+//    public int match(Stack<Node> stack, int start) {
+////    public int match(List<Node> stack, int start, Byte[] found) {
+//        int index = start;
+//        for (Rule rule : rules) {
+//            index = rule.match(stack, index);//, found);
+//            if (index < 0) return index;
+//        }
+//        return index;
+//    }
     @Override
-    public int match(Stack<Node> stack, int start) {
-//    public int match(List<Node> stack, int start, Byte[] found) {
-        int index = start;
+    public Node match(Node node, List<Node> matched) {
         for (Rule rule : rules) {
-            index = rule.match(stack, index);//, found);
-            if (index < 0) return index;
+            node = rule.match(node, matched);
+            if (node == null) break;
         }
-        return index;
+        return node;
     }
 
+//    @Override
+//    public void reduce(Node node, Node newParent) {
+//        for (Rule rule : rules) {
+//            Node next = node.getNext();
+//            rule.reduce(node, newParent);
+//            node = next;
+//        }
+//    }
 }

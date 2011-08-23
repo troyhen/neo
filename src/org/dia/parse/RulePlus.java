@@ -10,12 +10,19 @@ class RulePlus extends RuleStar {
         super(child);
     }
 
+//    @Override
+//    public int match(Stack<Node> stack, int start) {
+////    public int match(List<Node> stack, int start, Byte[] found) {
+//        int index = child.match(stack, start);//, found);
+//        if (index < 0) return index;
+//        return super.match(stack, index);//, found);
+//    }
+
     @Override
-    public int match(Stack<Node> stack, int start) {
-//    public int match(List<Node> stack, int start, Byte[] found) {
-        int index = child.match(stack, start);//, found);
-        if (index < 0) return index;
-        return super.match(stack, index);//, found);
+    public Node match(Node node, List<Node> matched) {
+        node = child.match(node, matched);
+        if (node == null) return null;
+        return super.match(node, matched);
     }
 
 }

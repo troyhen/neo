@@ -14,7 +14,7 @@ import org.dia.parse.Production;
  *
  * @author Troy Heninger
  */
-public abstract class Plugin implements Lexer {
+public class Plugin implements Lexer {
 
     private List<Lexer> lexers = new ArrayList<Lexer>();
     protected List<String> names = new ArrayList<String>();

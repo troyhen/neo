@@ -16,12 +16,26 @@ class RuleOpt implements Rule {
         return child.complexity();
     }
 
+//    @Override
+//    public int match(Stack<Node> stack, int start) {
+////    public int match(List<Node> stack, int start, Byte[] found) {
+//        int index = child.match(stack, start);//, found);
+//        if (index >= 0) return index;
+//        return start;
+//    }
+
     @Override
-    public int match(Stack<Node> stack, int start) {
-//    public int match(List<Node> stack, int start, Byte[] found) {
-        int index = child.match(stack, start);//, found);
-        if (index >= 0) return index;
-        return start;
+    public Node match(Node node, List<Node> matched) {
+        Node next = child.match(node, matched);
+        if (next != null) return next;
+        return node;
     }
+
+//    @Override
+//    public void reduce(Node node, Node newParent) {
+//        Node next = child.match(node);
+//        if (next == null) return;
+//        child.reduce(node, newParent);
+//    }
 
 }

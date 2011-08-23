@@ -43,7 +43,7 @@ public class CommentTest {
     public void testSimple() throws Exception {
         final String single = "//This is a test";
         lang.load(single);
-        List<Token> tokens = lang.tokenize();
+        Node tokens = lang.tokenize();
         assertEquals(1, lang.getLine());
         assertEquals(LexerEof.EOF, tokens.get(0).getName());
     }
@@ -52,7 +52,7 @@ public class CommentTest {
     public void testSimpleCrlf() throws Exception {
         final String singlecrlf = "//This is a test\r\n";
         lang.load(singlecrlf);
-        List<Token> tokens = lang.tokenize();
+        Node tokens = lang.tokenize();
         assertEquals(2, lang.getLine());
         assertEquals(EOL, tokens.get(0).getName());
     }
@@ -61,7 +61,7 @@ public class CommentTest {
     public void testSlashStar() throws Exception {
         final String slashstar = "/*This is a comment*/";
         lang.load(slashstar);
-        List<Token> tokens = lang.tokenize();
+        Node tokens = lang.tokenize();
         assertEquals(LexerEof.EOF, tokens.get(0).getName());
     }
 
@@ -69,7 +69,7 @@ public class CommentTest {
     public void testMultiline() throws Exception {
         final String multiline = "/*This\r\nis\na\rtest*/";
         lang.load(multiline);
-        List<Token> tokens = lang.tokenize();
+        Node tokens = lang.tokenize();
         assertEquals(lang.getLine(), 4);
         assertEquals(LexerEof.EOF, tokens.get(0).getName());
     }
@@ -78,7 +78,7 @@ public class CommentTest {
     public void testCombined() throws Exception {
         final String combined = "\r\n//Comment 1\r\n/*\r\nComment\r\n*/\r\n";
         lang.load(combined);
-        List<Token> tokens = lang.tokenize();
+        Node tokens = lang.tokenize();
         assertEquals(EOL, tokens.get(0).getName());
         assertEquals(EOL, tokens.get(1).getName());
         assertEquals(EOL, tokens.get(2).getName());
