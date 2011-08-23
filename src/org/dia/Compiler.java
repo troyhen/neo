@@ -134,6 +134,10 @@ public abstract class Compiler {
     }
 
     public Node parse() throws Missing, ParseException {
+        if (closed) {
+            open();
+            tokenize();
+        }
         List<Node> matched = new ArrayList<Node>();
         for (;;) {
             boolean changed = false;

@@ -12,10 +12,10 @@ public class Compilation extends Plugin {
     @Override
     public void open() {
         add(new LexerEof(this));
-        addParser("compilation", "@statements @statement? !eof");
         addParser("statements", "!terminator* (@statement !terminator)+");
         addParser("terminator", "semi");
         addParser("terminator", "eol");
+        addParser("terminator", "eof");
 //        addParser("statement", "callWithBlock");
 //        addParser("statement", "alias");
 //        addParser("statement", "statementIf");

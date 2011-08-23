@@ -102,6 +102,16 @@ public class Node {
         return buff.toString();
     }
 
+    public int countChildren() {
+        int count = 0;
+        Node node = first;
+        while (node != null) {
+            count++;
+            node = node.next;
+        }
+        return count;
+    }
+
     public Node get(int index) {
         Node node = getFirst();
         while (index-- > 0 && node != null) {
