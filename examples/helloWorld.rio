@@ -1,0 +1,3 @@
+use rio.io.Console.println
+
+println "hello world"
