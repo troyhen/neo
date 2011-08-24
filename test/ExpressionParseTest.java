@@ -1,8 +1,8 @@
 import java.util.logging.Level;
-import org.dia.Log;
-import org.dia.DiaException;
-import org.dia.Node;
-import org.dia.DiaLang;
+import org.rio.Log;
+import org.rio.DiaException;
+import org.rio.Node;
+import org.rio.DiaLang;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;

@@ -1,11 +1,11 @@
-import org.dia.Node;
+import org.rio.Node;
 
-import org.dia.DiaLang;
+import org.rio.DiaLang;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.dia.core.Xml.*;
+import static org.rio.core.Xml.*;
 import static org.junit.Assert.*;
 
 /**

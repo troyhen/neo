@@ -1,9 +1,9 @@
-import org.dia.DiaLang;
-import org.dia.Node;
+import org.rio.DiaLang;
+import org.rio.Node;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.dia.core.Operator.*;
+import static org.rio.core.Operator.*;
 import static org.junit.Assert.*;
 
 /**

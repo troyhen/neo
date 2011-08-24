@@ -1,13 +1,13 @@
-import org.dia.lex.LexerEof;
-import org.dia.Node;
-import org.dia.DiaLang;
+import org.rio.lex.LexerEof;
+import org.rio.Node;
+import org.rio.DiaLang;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.dia.core.Whitespace.*;
+import static org.rio.core.Whitespace.*;
 import static org.junit.Assert.*;
 
 /**
