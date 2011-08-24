@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.rio.core.Operator.*;
-import static org.rio.core.Numbers.*;
 import static org.junit.Assert.*;
 
 /**

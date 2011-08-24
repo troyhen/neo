@@ -19,17 +19,21 @@ import org.rio.parse.Production;
  *
  * @author Troy Heninger
  */
-public abstract class Compiler {
+public class Compiler {
+    
+    public static final String DEFAULT_BACKEND = "class";
+
+    enum State { closed, opened, tokenized, parsed, pruned, rendered, error };
 
     private static ThreadLocal<Compiler> compiler = new ThreadLocal<Compiler>();
 
     public final List<Plugin> plugins = new ArrayList<Plugin>();
     public final Set<String> literals = new HashSet<String>();
 
+    private State state = State.closed;
+    private List<Production> grammar = new ArrayList<Production>();//LinkedList<Production>();
     private int line, offset;
     private CharBuffer buffer;
-    private boolean closed = true;
-    private List<Production> grammar = new ArrayList<Production>();//LinkedList<Production>();
     private Node root;
     
     public void add(Production parser) {
@@ -41,8 +45,28 @@ public abstract class Compiler {
     public CharSequence getBuffer() { return buffer; }
     
     public void close() {
+        buffer = null;
+        root = null;
         compiler.set(null);
-        closed = true;
+        state = State.closed;
+    }
+
+    public void compile(File file) throws IOException, RioException {
+        compile(file, DEFAULT_BACKEND);
+    }
+
+    public void compile(File file, String backend) throws IOException, RioException {
+        load(file);
+        render(backend);
+    }
+
+    public void compile(String text) throws RioException {
+        compile(text, DEFAULT_BACKEND);
+    }
+    
+    public void compile(String text, String backend) throws RioException {
+        load(text);
+        render(backend);
     }
 
     public static Compiler compiler() { return (Compiler) compiler.get(); }
@@ -95,7 +119,6 @@ public abstract class Compiler {
         for (Plugin plugin : plugins) {
             plugin.open();
         }
-        closed = false;
         line = 1;
         offset = 0;
         root = new Node(new Named() {
@@ -113,6 +136,7 @@ public abstract class Compiler {
             }
 
         });
+        state = State.opened;
     }
 
     public Token nextToken() throws LexException {
@@ -132,17 +156,16 @@ public abstract class Compiler {
     }
 
     public Node prune() throws RioException {
-        if (closed) {
-            open();
-            tokenize();
-            parse();
-        }
+        if (state == State.closed) open();
+        if (state == State.opened) tokenize();
+        if (state == State.tokenized) parse();
         Node node = root.getFirst();
         prune(node);
+        state = State.pruned;
         return root;
     }
 
-    private void prune(Node node) {
+    private void prune(Node node) throws RioException {
         while (node != null) {
             if (node.getFirst() != null) {
                 prune(node.getFirst());
@@ -152,10 +175,8 @@ public abstract class Compiler {
     }
 
     public Node parse() throws RioException {
-        if (closed) {
-            open();
-            tokenize();
-        }
+        if (state == State.closed) open();
+        if (state == State.opened) tokenize();
         List<Node> matched = new ArrayList<Node>();
         for (;;) {
             boolean changed = false;
@@ -175,16 +196,27 @@ public abstract class Compiler {
             }
             if (!changed) break;
         }
+        state = State.parsed;
         return root;
     }
 
+    private void render(String backend) throws RioException {
+        if (state == State.closed) open();
+        if (state == State.opened) tokenize();
+        if (state == State.tokenized) parse();
+        if (state == State.parsed) prune();
+        
+        state = State.rendered;
+    }
+
     public Node tokenize() throws RioException {
-        if (closed) open();
+        if (state == State.closed) open();
         for(;;) {
             Token token = nextToken();
             root.add(token);
             if (token.getName().equals(LexerEof.EOF)) break;
         }
+        state = State.tokenized;
         return root;
     }
 
