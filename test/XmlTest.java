@@ -1,6 +1,6 @@
 import org.rio.Node;
 
-import org.rio.DiaLang;
+import org.rio.RioLang;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,11 +14,11 @@ import static org.junit.Assert.*;
  */
 public class XmlTest {
 
-    private DiaLang lang;
+    private RioLang lang;
 
     @Before
     public void setUp() {
-        lang = new DiaLang();
+        lang = new RioLang();
     }
     
     @Test

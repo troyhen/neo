@@ -18,9 +18,9 @@ import org.rio.core.Xml;
  *
  * @author Troy Heninger
  */
-public class DiaLang extends Compiler {
+public class RioLang extends Compiler {
 
-    public DiaLang() {
+    public RioLang() {
         plugins.add(new Compilation());
         plugins.add(new Whitespace());
         plugins.add(new Delimiter());

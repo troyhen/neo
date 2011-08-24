@@ -18,7 +18,6 @@ public class Production extends RuleGroup implements Named {
     public final Plugin plugin;
     public final String name;
     public final String definition;
-    public final int complexity;
     public int index = 0;
 
     public Production(Plugin plugin, String name, String definition) {
@@ -27,7 +26,6 @@ public class Production extends RuleGroup implements Named {
         this.name = name;
         this.definition = definition;
         rules = parseRules();
-        this.complexity = complexity(); // must be called after parseRules
     }
 
     @Override
@@ -65,15 +63,6 @@ public class Production extends RuleGroup implements Named {
         }
         matched.clear();
         return next;
-    }
-
-    public Node matched(Node node) {
-        try {
-            return plugin.matched(name, node);
-        } catch (Exception ex) {
-            Log.logger.severe(ex.toString());
-            throw new ParseException(ex);
-        }
     }
 
     private List<Rule> parseRules() {

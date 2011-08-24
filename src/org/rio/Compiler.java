@@ -13,8 +13,6 @@ import org.rio.lex.LexException;
 import org.rio.lex.Lexer;
 import org.rio.lex.LexerEof;
 import org.rio.lex.Token;
-import org.rio.parse.Missing;
-import org.rio.parse.ParseException;
 import org.rio.parse.Production;
 
 /**
@@ -102,7 +100,7 @@ public abstract class Compiler {
         offset = 0;
         root = new Node(new Named() {
 
-            Plugin plugin = new Plugin();
+            Plugin plugin = new PluginBase();
 
             @Override
             public String getName() {
@@ -133,7 +131,27 @@ public abstract class Compiler {
         }
     }
 
-    public Node parse() throws Missing, ParseException {
+    public Node prune() throws RioException {
+        if (closed) {
+            open();
+            tokenize();
+            parse();
+        }
+        Node node = root.getFirst();
+        prune(node);
+        return root;
+    }
+
+    private void prune(Node node) {
+        while (node != null) {
+            if (node.getFirst() != null) {
+                prune(node.getFirst());
+            }
+            node = node.prune();
+        }
+    }
+
+    public Node parse() throws RioException {
         if (closed) {
             open();
             tokenize();
@@ -160,7 +178,7 @@ public abstract class Compiler {
         return root;
     }
 
-    public Node tokenize() throws DiaException {
+    public Node tokenize() throws RioException {
         if (closed) open();
         for(;;) {
             Token token = nextToken();

@@ -1,13 +1,13 @@
 package org.rio.core;
 
-import org.rio.Plugin;
+import org.rio.PluginBase;
 import org.rio.lex.LexerChar;
 
 /**
  *
  * @author Troy Heninger
  */
-public class Delimiter extends Plugin {
+public class Delimiter extends PluginBase {
 
     public static final String COMMA = "comma";
     public static final String SEMI = "semi";

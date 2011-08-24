@@ -1,13 +1,13 @@
 package org.rio.core;
 
-import org.rio.Plugin;
+import org.rio.PluginBase;
 import org.rio.lex.LexerPattern;
 
 /**
  *
  * @author Troy Heninger
  */
-public class Whitespace extends Plugin {
+public class Whitespace extends PluginBase {
 
     public static final String EOL = "eol";
 

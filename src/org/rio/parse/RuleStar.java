@@ -12,11 +12,6 @@ class RuleStar implements Rule {
     }
 
     @Override
-    public int complexity() {
-        return child.complexity();
-    }
-
-    @Override
     public Node match(Node node, List<Node> matched) {
         for (;;) {
             Node next = child.match(node, matched);

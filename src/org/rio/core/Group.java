@@ -1,13 +1,13 @@
 package org.rio.core;
 
-import org.rio.Plugin;
+import org.rio.PluginBase;
 import org.rio.lex.LexerChar;
 
 /**
  *
  * @author Troy Heninger
  */
-public class Group extends Plugin {
+public class Group extends PluginBase {
 
     public static final String NAME = "group";
 

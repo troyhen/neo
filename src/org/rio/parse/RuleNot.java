@@ -13,11 +13,6 @@ class RuleNot implements Rule {
     }
 
     @Override
-    public int complexity() {
-        return child.complexity();
-    }
-
-    @Override
     public Node match(Node node, List<Node> matched) {
         int size = matched.size();
         Node result = child.match(node, null);

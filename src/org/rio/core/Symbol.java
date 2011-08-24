@@ -1,13 +1,13 @@
 package org.rio.core;
 
-import org.rio.Plugin;
+import org.rio.PluginBase;
 import org.rio.lex.LexerPattern;
 
 /**
  *
  * @author Troy Heninger
  */
-public class Symbol extends Plugin {
+public class Symbol extends PluginBase {
 
     public static final String SYMBOL = "symbol";
     public static final String SYMBOL_QUOTED = "symbol.quoted";

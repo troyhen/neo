@@ -1,13 +1,13 @@
 package org.rio.core;
 
-import org.rio.Plugin;
+import org.rio.PluginBase;
 import org.rio.lex.LexerString;
 
 /**
  *
  * @author Troy Heninger
  */
-public class Range extends Plugin {
+public class Range extends PluginBase {
 
     public static final String NAME = "range";
     public static final String RANGE_INCLUSIVE = "range.inclusive";

@@ -1,6 +1,6 @@
 package org.rio.core;
 
-import org.rio.Plugin;
+import org.rio.PluginBase;
 import org.rio.lex.LexerChar;
 import org.rio.lex.LexerPattern;
 
@@ -8,7 +8,7 @@ import org.rio.lex.LexerPattern;
  *
  * @author Troy Heninger
  */
-public class Operator extends Plugin {
+public class Operator extends PluginBase {
     
     public static final String OPERATOR = "operator";
     public static final String OPERATOR_ADD = "operator.add";

@@ -1,8 +1,8 @@
 import java.util.logging.Level;
 import org.rio.Log;
-import org.rio.DiaException;
+import org.rio.RioException;
 import org.rio.Node;
-import org.rio.DiaLang;
+import org.rio.RioLang;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -13,16 +13,16 @@ import static org.junit.Assert.*;
  */
 public class ExpressionParseTest {
 
-    private DiaLang lang;
+    private RioLang lang;
 
     @Before
     public void setUp() {
         Log.logger.setLevel(Level.ALL);
-        lang = new DiaLang();
+        lang = new RioLang();
     }
 
     @Test
-    public void parseExpression() throws DiaException {
+    public void parseExpression() throws RioException {
         final String expr = "1+2";
         lang.load(expr);
         Node root = lang.parse();
@@ -34,7 +34,7 @@ public class ExpressionParseTest {
     }
 
     @Test
-    public void parseExpression2() throws DiaException {
+    public void parseExpression2() throws RioException {
         final String expr = "1+2*5";
         lang.load(expr);
         Node root = lang.parse();

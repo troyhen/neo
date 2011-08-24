@@ -1,6 +1,6 @@
 import org.rio.lex.LexerEof;
 import org.rio.Node;
-import org.rio.DiaLang;
+import org.rio.RioLang;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
  */
 public class CommentTest {
 
-    private DiaLang lang;
+    private RioLang lang;
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -28,7 +28,7 @@ public class CommentTest {
 
     @Before
     public void setUp() {
-        lang = new DiaLang();
+        lang = new RioLang();
     }
 
     @After

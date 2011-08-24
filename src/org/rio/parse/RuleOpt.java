@@ -11,11 +11,6 @@ class RuleOpt implements Rule {
     }
 
     @Override
-    public int complexity() {
-        return child.complexity();
-    }
-
-    @Override
     public Node match(Node node, List<Node> matched) {
         Node next = child.match(node, matched);
         if (next != null) return next;

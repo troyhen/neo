@@ -7,17 +7,20 @@ import java.util.List;
  * @author Troy Heninger
  */
 public class Node {
+    
+    public static final byte IGNORE = 1;
+    public static final byte ROOT = 2;
+    public static final byte SUBSUME = 4;
+    
     private final CharSequence text;
     private final Named named;
-    private final boolean ignore;
-    private final boolean root;
-    private final boolean subsume;
     private final Object value;
     private Node parent;
     private Node first;
     private Node last;
     private Node next;
     private Node prev;
+    private byte flags;
 
     public Node(Named named) {
         this(named, null, null);
@@ -30,9 +33,7 @@ public class Node {
     public Node(Named named, CharSequence text, Object value) {
         this.named = named;
         String name = named.getName();
-        this.ignore = name.startsWith("!");
-        this.root = name.startsWith("^");
-        this.subsume = name.startsWith("@");
+        flags |= name.startsWith("!") ? IGNORE : 0; // lexers use this for ignored tokens
         this.value = value;
         this.text = text;
     }
@@ -121,6 +122,8 @@ public class Node {
     }
 
     public Node getFirst() { return first; }
+    public byte getFlags() { return flags; }
+    public void setFlags(byte flags) { this.flags = flags; }
     public Node getLast() { return last; }
 
     public int getLine() {
@@ -128,21 +131,24 @@ public class Node {
         return 0;
     }
 
-    public String getName() {
-        String name = named.getName();
-        return ignore || root || subsume ? name.substring(1) : name;
-    }
+    public String getName() { return named.getName(); }
+//        String name = named.getName();
+//        return ignore || root || subsume ? name.substring(1) : name;
+//    }
     
+    public Named getNamed() { return named; }
     public Node getNext() { return next; }
     public Node getParent() { return parent; }
     public Plugin getPlugin() { return named.getPlugin(); }
     public CharSequence getText() { return text; }
     public Object getValue() { return value; }
-    public boolean isIgnored() { return ignore; }
-    public boolean isRoot() { return root; }
+    public boolean isIgnored() { return (flags & IGNORE) != 0; }
+    public boolean isRoot() { return (flags & ROOT) != 0; }
+    public boolean isSubsumed() { return (flags & SUBSUME) != 0; }
 
     public void insertAfter(Node node) {
         if (node == null) throw new NullPointerException();
+        node.unlink();
         node.next = this.next;
         if (this.next != null) this.next.prev = node;
         node.parent = this.parent;
@@ -155,6 +161,7 @@ public class Node {
 
     public void insertBefore(Node node) {
         if (node == null) throw new NullPointerException();
+        node.unlink();
         node.prev = this.prev;
         if (this.prev != null) this.prev.next = node;
         node.parent = this.parent;
@@ -163,6 +170,31 @@ public class Node {
         if (parent != null && parent.first == this) {
             parent.first = node;
         }
+    }
+
+    public Node prune() {
+        Node result = next;
+        if (isIgnored()) {
+            unlink();
+        } else if (isRoot()) {
+            Node node = parent.first;
+            while (node != null) {
+                Node nextNode = node.next;
+                if (node != this) {
+                    this.add(node);
+                }
+                node = nextNode;
+            }
+        } else if (isSubsumed()) {
+            Node node = first;
+            while (node != null) {
+                Node nextNode = node.next;
+                insertAfter(node);
+                node = nextNode;
+            }
+            unlink();
+        }
+        return result;
     }
 
     public static void revert(List<Node> matched, int size) {

@@ -1,18 +1,18 @@
 package org.rio.core;
 
-import org.rio.Plugin;
+import org.rio.PluginBase;
 import org.rio.lex.LexerEof;
 
 /**
  *
  * @author Troy Heninger
  */
-public class Compilation extends Plugin {
+public class Compilation extends PluginBase {
 
     @Override
     public void open() {
         add(new LexerEof(this));
-        addParser("statements", "!terminator* (@statement !terminator)+");
+        addParser("statements", "!terminator* (statement !terminator)+");
         addParser("terminator", "semi");
         addParser("terminator", "eol");
         addParser("terminator", "eof");

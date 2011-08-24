@@ -12,15 +12,6 @@ class RuleGroup implements Rule {
     }
 
     @Override
-    public int complexity() {
-        int result = 0;
-        for (Rule rule : rules) {
-            result += rule.complexity();
-        }
-        return result;
-    }
-
-    @Override
     public Node match(Node node, List<Node> matched) {
         for (Rule rule : rules) {
             node = rule.match(node, matched);

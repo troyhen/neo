@@ -1,7 +1,7 @@
 package org.rio.core;
 
 import org.rio.Compiler;
-import org.rio.Plugin;
+import org.rio.PluginBase;
 import org.rio.lex.Lexer;
 import org.rio.lex.LexerPattern;
 import org.rio.lex.Token;
@@ -10,7 +10,7 @@ import org.rio.lex.Token;
  *
  * @author Troy Heninger
  */
-public class Numbers extends Plugin {
+public class Numbers extends PluginBase {
 
     public static final String INTEGER = "number.integer";
     public static final String REAL = "number.real";

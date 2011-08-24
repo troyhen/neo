@@ -1,13 +1,13 @@
 package org.rio.core;
 
-import org.rio.Plugin;
+import org.rio.PluginBase;
 import org.rio.lex.LexerPattern;
 
 /**
  *
  * @author Troy Heninger
  */
-public class Strings extends Plugin {
+public class Strings extends PluginBase {
 
     public static final String STRING_DOUBLE = "string.double";
     public static final String STRING_MULTILINE = "string.multiline";
