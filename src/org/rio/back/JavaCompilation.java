@@ -32,7 +32,7 @@ public class JavaCompilation implements Backend {
     }
 
     private void renderDefaultClassOpen(CodeBuilder buff) {
-        buff.println("public class Main {").tabLess();
+        buff.println("public class Main {").tabMore();
     }
 
     private void renderHeader(CodeBuilder buff) {
@@ -44,7 +44,7 @@ public class JavaCompilation implements Backend {
     }
 
     private void renderMainOpen(CodeBuilder buff) {
-        buff.println("public static void main(String[] args) {").tabLess();
+        buff.println("public static void main(String[] args) {").tabMore();
     }
 
     private void renderStatement(CodeBuilder buff, Node node) {
@@ -57,6 +57,7 @@ public class JavaCompilation implements Backend {
 
     private void renderStatements(CodeBuilder buff, Node node) {
         while (node != null) {
+            buff.tab();
             renderStatement(buff, node.getFirst());
             buff.append(";").eol();
             node = node.getNext();

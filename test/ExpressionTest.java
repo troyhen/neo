@@ -54,13 +54,26 @@ public class ExpressionTest {
     }
 
     @Test
-    public void compileExpression() {
+    public void compileExpression1() {
         final String expr = "1+2*5";
         lang.compile(expr);
         String program = lang.get("output");
+        System.err.println(program);
         assertTrue(program.indexOf("class Main") > 0);
         assertTrue(program.indexOf("public static void main") > 0);
         assertTrue(program.indexOf("2 * 5") > 0);
         assertTrue(program.indexOf("1 +") > 0);
+    }
+
+    @Test
+    public void compileExpression2() {
+        final String expr = "2*5+1";
+        lang.compile(expr);
+        String program = lang.get("output");
+        System.err.println(program);
+        assertTrue(program.indexOf("class Main") > 0);
+        assertTrue(program.indexOf("public static void main") > 0);
+        assertTrue(program.indexOf("2 * 5") > 0);
+        assertTrue(program.indexOf("+ 1") > 0);
     }
 }
