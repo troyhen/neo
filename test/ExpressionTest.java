@@ -1,9 +1,9 @@
-import org.rio.RioLang;
-import org.rio.Node;
+import org.neo.RioLang;
+import org.neo.Node;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.rio.core.Operator.*;
+import static org.neo.core.Operator.*;
 import static org.junit.Assert.*;
 
 /**

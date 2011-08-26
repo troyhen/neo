@@ -1,5 +1,5 @@
 # This was a very early draft and incomplete.
-# See org.rio.core.* classes for the actual grammar.
+# See org.neo.core.* classes for the actual grammar.
 
 root| (statement eos)*
     ;

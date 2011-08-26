@@ -1,13 +1,13 @@
-import org.rio.lex.LexerEof;
-import org.rio.Node;
-import org.rio.RioLang;
+import org.neo.lex.LexerEof;
+import org.neo.Node;
+import org.neo.RioLang;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.rio.core.Whitespace.*;
+import static org.neo.core.Whitespace.*;
 import static org.junit.Assert.*;
 
 /**

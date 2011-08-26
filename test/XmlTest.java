@@ -1,11 +1,11 @@
-import org.rio.Node;
+import org.neo.Node;
 
-import org.rio.RioLang;
+import org.neo.RioLang;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.rio.core.Xml.*;
+import static org.neo.core.Xml.*;
 import static org.junit.Assert.*;
 
 /**

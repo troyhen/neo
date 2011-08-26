@@ -1,4 +1,4 @@
-Welcome to the Rio Programming Language
+Welcome to the Neo Programming Language
 =======================================
 
 Another programming language??? Yes! I had a wise friend who said, in essence, 
@@ -9,7 +9,7 @@ I love writing languages and have written my share (Tuil, Browz Script, DbSP,
 and GSP to name a few). I love learning and using languages. I like many things
 from each of them. But none have everything I want. (FYI: my current favorites
 are Ruby, Scala, and Java, each for different reasons.) So I'm writing yet one
-more language. Will Rio be **The One Language to Rule Them All**? Probably not.
+more language. Will Neo be **The One Language to Rule Them All**? Probably not.
 But will this language be way cool and a blast to use? *Absolutely!*
 
 Status
@@ -25,7 +25,7 @@ Language Goals
 
 Simplicity
 ----------
-Rio should be simple to learn, simple to read, and simple to use.
+Neo should be simple to learn, simple to read, and simple to use.
 This means it should do things in expected ways. It needs to use well known
 idioms from other languages, but not just programming languages. It should
 incorporate and support data languages like XML/HTML, JSON, and YAML. It should
@@ -40,14 +40,14 @@ casting. Ruby has method_missing and instance_eval. All of these are used to
 create DSLs (domain specific languages). The closest I've encountered is Mirah's
 macros. But they are all too limited.
 
-Rio is designed from the foundation to support and rely on language plug-ins.
+Neo is designed from the foundation to support and rely on language plug-ins.
 Plug-ins actually add lexers to the tokenizer, grammar productions to the LR
 parser, can modify the AST tree after parsing, and add support to the back-end
 code producers. The core language is all built from Plug-ins.
 
 You are encouraged to extend the language yourself. Does this mean you have to
-contribute or somehow compile them in to the Rio compiler in order to use them?
-No. Simply import a class which extends org.rio.Plugin and you will have access
+contribute or somehow compile them in to the Neo compiler in order to use them?
+No. Simply import a class which extends org.neo.Plugin and you will have access
 to all of the language extensions that plugin implements. On the other hand we
 actively encourage everyone to send us your awesome language extensions. The
 best will eventually make their way into the language core. Others will be made
