@@ -2,8 +2,8 @@ package org.rio.back;
 
 /**
  *
- * @author theninger
+ * @author Troy Heninger
  */
-public class Backend {
+public interface Backend extends Render {
 
 }

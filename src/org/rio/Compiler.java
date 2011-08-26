@@ -5,9 +5,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.rio.back.Backend;
 
 import org.rio.lex.LexException;
 import org.rio.lex.Lexer;
@@ -21,16 +26,18 @@ import org.rio.parse.Production;
  */
 public class Compiler {
     
-    public static final String DEFAULT_BACKEND = "class";
+    public static final String DEFAULT_BACKEND = "java";
 
-    enum State { closed, opened, tokenized, parsed, pruned, rendered, error };
+    enum State { closed, opened, loaded, tokenized, parsed, pruned, rendered, error };
 
     private static ThreadLocal<Compiler> compiler = new ThreadLocal<Compiler>();
 
     public final List<Plugin> plugins = new ArrayList<Plugin>();
     public final Set<String> literals = new HashSet<String>();
+    public final Map<String, Backend> backends = new HashMap<String, Backend>();
 
     private State state = State.closed;
+    private Map<String, String> config = new HashMap<String, String>();
     private List<Production> grammar = new ArrayList<Production>();//LinkedList<Production>();
     private int line, offset;
     private CharBuffer buffer;
@@ -51,22 +58,29 @@ public class Compiler {
         state = State.closed;
     }
 
-    public void compile(File file) throws IOException, RioException {
-        compile(file, DEFAULT_BACKEND);
+    public void compile() throws RioException {
+        render();
     }
 
-    public void compile(File file, String backend) throws IOException, RioException {
-        load(file);
-        render(backend);
+    public void compile(File file) throws RioException {
+        set("file", file.getPath());
+        compile();
+    }
+
+    public void compile(File file, String backend) throws RioException {
+        set("file", file.getPath());
+        set("backend", backend);
+        compile();
     }
 
     public void compile(String text) throws RioException {
-        compile(text, DEFAULT_BACKEND);
+        set("text", text);
+        compile();
     }
     
-    public void compile(String text, String backend) throws RioException {
-        load(text);
-        render(backend);
+    public void compile(Map<String, String> options) throws RioException {
+        config.putAll(options);
+        compile();
     }
 
     public static Compiler compiler() { return (Compiler) compiler.get(); }
@@ -83,6 +97,22 @@ public class Compiler {
         return token;
     }
 
+    public static File file() {
+        String fileName = compiler().get("file");
+        if (fileName == null) return null;
+        File file = new File(fileName);
+        return file;
+    }
+
+    public String get(String key) { return config.get(key); }
+
+    private String get(String key, String defValue) {
+        if (config.containsKey(key)) return config.get(key);
+        return defValue;
+    }
+
+    public String set(String key, String value) { return config.put(key, value); }
+
     public CharSequence limit(CharSequence text, int limit) {
         limit = Math.min(text.length(), limit);
         int index = 0;
@@ -96,7 +126,24 @@ public class Compiler {
     public int getLine() { return line; }
 
     public static int line() { return compiler().line; }
-    
+
+    public void load() throws RioException {
+        String text = get("text");
+        if (text != null) load(text);
+        else {
+            String fileName = get("file");
+            if (fileName == null) throw new RioException("Missing source file");
+            File file = new File(fileName);
+            try {
+                load(file);
+            } catch (IOException ex) {
+                Logger.getLogger(Compiler.class.getName()).log(Level.SEVERE, null, ex);
+                throw new RioException(ex);
+            }
+        }
+        state = State.loaded;
+    }
+
     public void load(File file) throws IOException {
         buffer = CharBuffer.allocate((int) file.length());
         FileReader inp = new FileReader(file);
@@ -105,10 +152,12 @@ public class Compiler {
         } finally {
             inp.close();
         }
+        set("file", file.getPath());
     }
 
     public void load(String text) {
         buffer = CharBuffer.wrap(text);
+        set("text", text);
     }
 
     public static int offset() { return compiler().offset; }
@@ -157,7 +206,8 @@ public class Compiler {
 
     public Node prune() throws RioException {
         if (state == State.closed) open();
-        if (state == State.opened) tokenize();
+        if (state == State.opened) load();
+        if (state == State.loaded) tokenize();
         if (state == State.tokenized) parse();
         Node node = root.getFirst();
         prune(node);
@@ -176,7 +226,8 @@ public class Compiler {
 
     public Node parse() throws RioException {
         if (state == State.closed) open();
-        if (state == State.opened) tokenize();
+        if (state == State.opened) load();
+        if (state == State.loaded) tokenize();
         List<Node> matched = new ArrayList<Node>();
         for (;;) {
             boolean changed = false;
@@ -200,17 +251,21 @@ public class Compiler {
         return root;
     }
 
-    private void render(String backend) throws RioException {
+    private void render() throws RioException {
         if (state == State.closed) open();
-        if (state == State.opened) tokenize();
+        if (state == State.opened) load();
+        if (state == State.loaded) tokenize();
         if (state == State.tokenized) parse();
         if (state == State.parsed) prune();
-        
+        String backend = get("backend", DEFAULT_BACKEND);
+        Backend back = backends.get(backend);
+        back.render(root.getFirst());
         state = State.rendered;
     }
 
     public Node tokenize() throws RioException {
         if (state == State.closed) open();
+        if (state == State.opened) load();
         for(;;) {
             Token token = nextToken();
             root.add(token);

@@ -1,6 +1,7 @@
 package org.rio;
 
 import org.rio.Compiler;
+import org.rio.back.JavaCompilation;
 import org.rio.core.Delimiter;
 import org.rio.core.Compilation;
 import org.rio.core.Expression;
@@ -33,6 +34,7 @@ public class RioLang extends Compiler {
         plugins.add(new RegEx());
         plugins.add(new Xml());
         plugins.add(new Expression());
+        backends.put(DEFAULT_BACKEND, new JavaCompilation());
     }
 
 }
