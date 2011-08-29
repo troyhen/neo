@@ -66,6 +66,7 @@ public class JavaCompilation implements Backend {
             if (node.getName().equals("importStatement")) {
                 // ignore imports here
             } else {
+                buff.tab();
                 expression.render(node);
                 buff.append(";").eol();
             }
@@ -75,7 +76,6 @@ public class JavaCompilation implements Backend {
 
     private void renderStatements(CodeBuilder buff, Node node) {
         while (node != null) {
-            buff.tab();
             renderStatement(buff, node.getFirst());
             node = node.getNext();
         }

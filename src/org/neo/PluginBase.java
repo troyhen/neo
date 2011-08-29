@@ -51,6 +51,7 @@ public class PluginBase implements Plugin {
         return Compiler.compiler().consume(named, chars);
     }
 
+    @Override
     public Token consume(Named named, int chars, Object value) {
         return Compiler.compiler().consume(named, chars, value);
     }
@@ -75,22 +76,17 @@ public class PluginBase implements Plugin {
     @Override
     public Node match(Node node, List<Node> matched) {
         Node start = node;
-//        Node result = null;
-//    loop:
         for (Production production : grammar) {
             while (node != null) {
                 Node nextNode = production.match(node, matched);
                 if (nextNode != null) {
                     return nextNode;
-//                    result = nextNode;
-//                    node = start;
-//                    continue loop;
                 }
                 node = node.getNext();
             }
             node = start;
         }
-        return null;//result;
+        return null;
     }
 
     public Node prune(String name, Node node) throws Exception {
@@ -99,6 +95,7 @@ public class PluginBase implements Plugin {
         return (Node) method.invoke(this, node);
     }
 
+    @Override
     public void open() {
     }
     

@@ -2,7 +2,6 @@ package org.neo.parse;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 import org.neo.Node;
 
 class RuleOr implements Rule {

@@ -4,23 +4,17 @@ import java.io.IOException;
 import java.io.File;
 import java.io.FileReader;
 import java.nio.CharBuffer;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.neo.back.Backend;
 
+import org.neo.back.Backend;
 import org.neo.lex.LexException;
-import org.neo.lex.Lexer;
 import org.neo.lex.LexerEof;
 import org.neo.lex.Token;
-import org.neo.parse.Production;
 
 /**
  *
@@ -40,16 +34,10 @@ public class Compiler {
 
     private State state = State.closed;
     private Map<String, String> config = new HashMap<String, String>();
-    //private List<Production> grammar = new ArrayList<Production>();//LinkedList<Production>();
-    //private Deque<Production> grammar = new ArrayDeque<Production>();
     private int line, offset;
     private CharBuffer buffer;
     private Node root;
     
-//    public void add(Production parser) {
-//        grammar.addFirst(parser);
-//    }
-
     public static CharSequence buffer() { return compiler().buffer; }
 
     public CharSequence getBuffer() { return buffer; }
@@ -140,7 +128,7 @@ public class Compiler {
             try {
                 load(file);
             } catch (IOException ex) {
-                Logger.getLogger(Compiler.class.getName()).log(Level.SEVERE, null, ex);
+                Log.logger.severe(ex.toString());
                 throw new NeoException(ex);
             }
         }
@@ -235,34 +223,16 @@ public class Compiler {
         if (state == State.opened) load();
         if (state == State.loaded) tokenize();
         List<Node> matched = new ArrayList<Node>();
-//        for (;;) {
-//            boolean changed = false;
-//            for (Production production : grammar) {
-        loop:
-            for (;;) {
-                Node node = root.getFirst();
-//            while (node != null) {
-                Log.logger.info("current state: " + root.childNames());
-                for (Plugin plugin : plugins) {
-                    Node next = plugin.match(node, matched);
-//                    Node next = production.match(node, matched);
-                    if (next != null) {
-//                        changed = true;
-//                        node = next;
-//                        node = root.getFirst();
-                        continue loop;
-                    }
-                }
-                break;
-//                    } else {
-//                        node = node.getNext();
-//                    }
-//                }
-//                }
-//                if (changed) break; // restart grammar when matches were found
+    loop:
+        for (;;) {
+            Node node = root.getFirst();
+            Log.logger.info("current state: " + root.childNames());
+            for (Plugin plugin : plugins) {
+                Node next = plugin.match(node, matched);
+                if (next != null) continue loop;
             }
-//            if (!changed) break;
-//        }
+            break;
+        }
         state = State.parsed;
         Log.logger.info("parse complete with " + root.childNames());
         return root;

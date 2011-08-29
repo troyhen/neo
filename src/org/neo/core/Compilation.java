@@ -28,7 +28,6 @@ public class Compilation extends PluginBase {
 //        addParser("statementWhile", "statement while expression");
 //        addParser("statementUntil", "statement until expression");
 //        addParser("callWithBlock", "call");
-//        Compiler.compiler().literals.add(EOF);
         addParser("statements", "!terminator* statement+");
     }
 

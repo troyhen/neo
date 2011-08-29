@@ -4,7 +4,6 @@ import org.neo.Compiler;
 import org.neo.Named;
 import org.neo.Plugin;
 import org.neo.PluginBase;
-import org.neo.lex.Lexer;
 import org.neo.lex.LexerPattern;
 import org.neo.lex.Token;
 

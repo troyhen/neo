@@ -1,7 +1,6 @@
 package org.neo.parse;
 
 import java.util.List;
-import java.util.Stack;
 import org.neo.Node;
 
 class RulePlus extends RuleStar {

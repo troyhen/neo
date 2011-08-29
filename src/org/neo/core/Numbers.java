@@ -37,9 +37,6 @@ public class Numbers extends PluginBase {
         add(new LexerPattern(this, REAL, "-?[0-9_]+\\.[0-9_]([eE]-?[0-9_]+)?[dD]?"));
         add(new LexerPattern(this, REAL_FORCED, "-?[0-9_]+[dD]"));
         add(new LexerPattern(this, INTEGER, "-?[0-9_]+"));
-//        addParser("number", INTEGER);
-//        addParser("number", REAL);
-//        addParser("number", REAL_FORCED);
     }
 
 }

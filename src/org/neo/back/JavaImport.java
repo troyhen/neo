@@ -1,7 +1,5 @@
 package org.neo.back;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.neo.Node;
 import org.neo.NeoException;
 

@@ -132,9 +132,6 @@ public class Node {
     }
 
     public String getName() { return named.getName(); }
-//        String name = named.getName();
-//        return ignore || root || subsume ? name.substring(1) : name;
-//    }
     
     public Named getNamed() { return named; }
     public Node getNext() { return next; }

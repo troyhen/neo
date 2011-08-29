@@ -16,7 +16,6 @@ public class Import extends PluginBase {
     public void open() {
         super.open();
         names.add(NAME);
-//        add(new LexerPattern(this, NAME, "symbol{import}", 1));
         add(new LexerString(this, "operator.dotStar", ".*"));
         addParser("importStatement", "!symbol.import symbol (operator.dot symbol)* operator.dotStar?");
     }
