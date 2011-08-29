@@ -36,7 +36,7 @@ public class JavaCompilation implements Backend {
     }
 
     private void renderDefaultClassOpen(CodeBuilder buff) {
-        buff.eol().println("public class Main {").tabMore();
+        buff.eol().println("class Main {").tabMore();
     }
 
     private void renderHeader(CodeBuilder buff) {
