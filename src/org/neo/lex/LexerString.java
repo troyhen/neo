@@ -24,7 +24,7 @@ public class LexerString extends LexerBase {
     public Token nextToken() {
         final int len = string.length();
         CharSequence buffer = Compiler.buffer();
-        if (buffer.length() >= len && buffer.subSequence(0, len).equals(string)) {
+        if (buffer.length() >= len && buffer.subSequence(0, len).toString().equals(string)) {
             return consume(len);
         }
         return null;

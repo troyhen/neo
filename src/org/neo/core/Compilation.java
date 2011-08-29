@@ -12,7 +12,6 @@ public class Compilation extends PluginBase {
     @Override
     public void open() {
         add(new LexerEof(this));
-        addParser("statements", "!terminator* (statement !terminator)+");
         addParser("terminator", "semi");
         addParser("terminator", "eol");
         addParser("terminator", "eof");
@@ -22,13 +21,15 @@ public class Compilation extends PluginBase {
 //        addParser("statement", "statementUnless");
 //        addParser("statement", "statementWhile");
 //        addParser("statement", "statementUntil");
-        addParser("statement", "@expression [terminator | eof]");
+        addParser("statement", "importStatement !terminator+");
+        addParser("statement", "@expression !terminator+");
 //        addParser("statementIf", "statement if expression");
 //        addParser("statementUnless", "statement unless expression");
 //        addParser("statementWhile", "statement while expression");
 //        addParser("statementUntil", "statement until expression");
 //        addParser("callWithBlock", "call");
 //        Compiler.compiler().literals.add(EOF);
+        addParser("statements", "!terminator* statement+");
     }
 
 }

@@ -1,6 +1,7 @@
 package org.neo.lex;
 
 import java.util.regex.Pattern;
+import org.neo.Named;
 import org.neo.Node;
 
 /**
@@ -12,15 +13,15 @@ public class Token extends Node {
     private static final Pattern linePat = Pattern.compile("\\r\\n|\\r|\\n");
     
     private final int line;
-    private final Lexer lexer;
+    private final Named named;
 
-    public Token(Lexer lexer, CharSequence text, int line) {
-        this(lexer, text, line, text);
+    public Token(Named named, CharSequence text, int line) {
+        this(named, text, line, text);
     }
     
-    public Token(Lexer lexer, CharSequence text, int line, Object value) {
-        super(lexer, text, value);
-        this.lexer = lexer;
+    public Token(Named named, CharSequence text, int line, Object value) {
+        super(named, text, value);
+        this.named = named;
         this.line = line;
     }
 
@@ -37,5 +38,5 @@ public class Token extends Node {
     public int getLine() { return line; }
 
     @Override
-    public String getName() { return lexer.getName(); }
+    public String getName() { return named.getName(); }
 }

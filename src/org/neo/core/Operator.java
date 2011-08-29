@@ -15,6 +15,7 @@ public class Operator extends PluginBase {
     public static final String OPERATOR_ASSIGN = "operator.assign";
     public static final String OPERATOR_MUL = "operator.mul";
     public static final String OPERATOR_POW = "operator.pow";
+    public static final String OPERATOR_DOT = "operator.dot";
 
     @Override
     public void open() {
@@ -23,6 +24,7 @@ public class Operator extends PluginBase {
         add(new LexerPattern(this, OPERATOR_ADD, "[-+]"));
         add(new LexerPattern(this, OPERATOR_MUL, "[*/%]"));
         add(new LexerChar(this, OPERATOR_POW, '^'));
+        add(new LexerChar(this, OPERATOR_DOT, '.'));
         add(new LexerPattern(this, OPERATOR_ASSIGN, "[-+~!@#$%^&*/?:]*=[-+~!@#$%^&*/?:]*"));
         add(new LexerPattern(this, OPERATOR, "[-+~!@#$%^&*/?:]+"));
     }

@@ -26,4 +26,8 @@ public abstract class LexerBase implements Lexer, Named {
     public Token consume(int chars) {
         return plugin.consume(this, chars);
     }
+
+    public Token consume(int chars, Object value) {
+        return plugin.consume(this, chars, value);
+    }
 }

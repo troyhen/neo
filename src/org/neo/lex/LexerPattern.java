@@ -40,7 +40,8 @@ public class LexerPattern extends LexerBase {
         CharSequence buffer = Compiler.buffer();
         java.util.regex.Matcher match = pattern.matcher(buffer);
         if (match.find()) {
-            return consume(match.end());
+            if (group <= 0) return consume(match.end());
+            return consume(match.end(), match.group(group));
         }
         return null;
     }

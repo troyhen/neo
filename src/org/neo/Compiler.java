@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.File;
 import java.io.FileReader;
 import java.nio.CharBuffer;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -38,14 +40,15 @@ public class Compiler {
 
     private State state = State.closed;
     private Map<String, String> config = new HashMap<String, String>();
-    private List<Production> grammar = new ArrayList<Production>();//LinkedList<Production>();
+    //private List<Production> grammar = new ArrayList<Production>();//LinkedList<Production>();
+    //private Deque<Production> grammar = new ArrayDeque<Production>();
     private int line, offset;
     private CharBuffer buffer;
     private Node root;
     
-    public void add(Production parser) {
-        grammar.add(parser);
-    }
+//    public void add(Production parser) {
+//        grammar.addFirst(parser);
+//    }
 
     public static CharSequence buffer() { return compiler().buffer; }
 
@@ -58,41 +61,41 @@ public class Compiler {
         state = State.closed;
     }
 
-    public void compile() throws RioException {
+    public void compile() throws NeoException {
         render();
     }
 
-    public void compile(File file) throws RioException {
+    public void compile(File file) throws NeoException {
         set("file", file.getPath());
         compile();
     }
 
-    public void compile(File file, String backend) throws RioException {
+    public void compile(File file, String backend) throws NeoException {
         set("file", file.getPath());
         set("backend", backend);
         compile();
     }
 
-    public void compile(String text) throws RioException {
+    public void compile(String text) throws NeoException {
         set("text", text);
         compile();
     }
     
-    public void compile(Map<String, String> options) throws RioException {
+    public void compile(Map<String, String> options) throws NeoException {
         config.putAll(options);
         compile();
     }
 
     public static Compiler compiler() { return (Compiler) compiler.get(); }
 
-    public Token consume(Lexer lexer, int chars) {
-        Token token = new Token(lexer, buffer.subSequence(0, chars), line);
+    public Token consume(Named named, int chars) {
+        Token token = new Token(named, buffer.subSequence(0, chars), line);
         buffer.position(buffer.position() + chars);
         return token;
     }
 
-    public Token consume(Lexer lexer, int chars, Object value) {
-        Token token = new Token(lexer, buffer.subSequence(0, chars), line, value);
+    public Token consume(Named named, int chars, Object value) {
+        Token token = new Token(named, buffer.subSequence(0, chars), line, value);
         buffer.position(buffer.position() + chars);
         return token;
     }
@@ -127,28 +130,30 @@ public class Compiler {
 
     public static int line() { return compiler().line; }
 
-    public void load() throws RioException {
+    public void load() throws NeoException {
         String text = get("text");
         if (text != null) load(text);
         else {
             String fileName = get("file");
-            if (fileName == null) throw new RioException("Missing source file");
+            if (fileName == null) throw new NeoException("Missing source file");
             File file = new File(fileName);
             try {
                 load(file);
             } catch (IOException ex) {
                 Logger.getLogger(Compiler.class.getName()).log(Level.SEVERE, null, ex);
-                throw new RioException(ex);
+                throw new NeoException(ex);
             }
         }
         state = State.loaded;
     }
 
     public void load(File file) throws IOException {
+        if (state == State.closed) open();
         buffer = CharBuffer.allocate((int) file.length());
         FileReader inp = new FileReader(file);
         try {
             inp.read(buffer);
+            buffer.flip();
         } finally {
             inp.close();
         }
@@ -156,6 +161,7 @@ public class Compiler {
     }
 
     public void load(String text) {
+        if (state == State.closed) open();
         buffer = CharBuffer.wrap(text);
         set("text", text);
     }
@@ -204,7 +210,7 @@ public class Compiler {
         }
     }
 
-    public Node prune() throws RioException {
+    public Node prune() throws NeoException {
         if (state == State.closed) open();
         if (state == State.opened) load();
         if (state == State.loaded) tokenize();
@@ -215,7 +221,7 @@ public class Compiler {
         return root;
     }
 
-    private void prune(Node node) throws RioException {
+    private void prune(Node node) throws NeoException {
         while (node != null) {
             if (node.getFirst() != null) {
                 prune(node.getFirst());
@@ -224,34 +230,45 @@ public class Compiler {
         }
     }
 
-    public Node parse() throws RioException {
+    public Node parse() throws NeoException {
         if (state == State.closed) open();
         if (state == State.opened) load();
         if (state == State.loaded) tokenize();
         List<Node> matched = new ArrayList<Node>();
-        for (;;) {
-            boolean changed = false;
-            for (Production production : grammar) {
+//        for (;;) {
+//            boolean changed = false;
+//            for (Production production : grammar) {
+        loop:
+            for (;;) {
                 Node node = root.getFirst();
-                while (node != null) {
-                    Node next = production.match(node, matched);
+//            while (node != null) {
+                Log.logger.info("current state: " + root.childNames());
+                for (Plugin plugin : plugins) {
+                    Node next = plugin.match(node, matched);
+//                    Node next = production.match(node, matched);
                     if (next != null) {
-                        Log.logger.info("parser: matched " + production.name
-                                + " with " + node.getParent().childNames());
-                        changed = true;
-                        node = next;
-                    } else {
-                        node = node.getNext();
+//                        changed = true;
+//                        node = next;
+//                        node = root.getFirst();
+                        continue loop;
                     }
                 }
+                break;
+//                    } else {
+//                        node = node.getNext();
+//                    }
+//                }
+//                }
+//                if (changed) break; // restart grammar when matches were found
             }
-            if (!changed) break;
-        }
+//            if (!changed) break;
+//        }
         state = State.parsed;
+        Log.logger.info("parse complete with " + root.childNames());
         return root;
     }
 
-    private void render() throws RioException {
+    private void render() throws NeoException {
         if (state == State.closed) open();
         if (state == State.opened) load();
         if (state == State.loaded) tokenize();
@@ -263,7 +280,7 @@ public class Compiler {
         state = State.rendered;
     }
 
-    public Node tokenize() throws RioException {
+    public Node tokenize() throws NeoException {
         if (state == State.closed) open();
         if (state == State.opened) load();
         for(;;) {

@@ -1,4 +1,4 @@
-import org.neo.RioLang;
+import org.neo.NeoLang;
 import org.neo.Node;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,11 +12,11 @@ import static org.junit.Assert.*;
  */
 public class ExpressionTest {
 
-    private RioLang lang;
+    private NeoLang lang;
 
     @Before
     public void setUp() {
-        lang = new RioLang();
+        lang = new NeoLang();
     }
 
     @Test
@@ -35,10 +35,10 @@ public class ExpressionTest {
         lang.load(expr);
         Node root = lang.parse();
         assertNotNull(root);
-        assertEquals(1, root.countChildren());
-        assertEquals("statements", root.get(0).getName());
-        assertEquals("statement", root.get(0).get(0).getName());
-        assertEquals("expression", root.get(0).get(0).get(0).getName());
+        assertEquals("Wrong number of children", 1, root.countChildren());
+        assertEquals("Top of tree should be ", "statements", root.get(0).getName());
+        assertEquals("Second level should be ", "statement", root.get(0).get(0).getName());
+        assertEquals("Third level should be ", "expression", root.get(0).get(0).get(0).getName());
     }
 
     @Test

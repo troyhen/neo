@@ -1,6 +1,6 @@
 import org.neo.Node;
 
-import org.neo.RioLang;
+import org.neo.NeoLang;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,11 +14,11 @@ import static org.junit.Assert.*;
  */
 public class XmlTest {
 
-    private RioLang lang;
+    private NeoLang lang;
 
     @Before
     public void setUp() {
-        lang = new RioLang();
+        lang = new NeoLang();
     }
     
     @Test

@@ -1,6 +1,6 @@
 import org.neo.lex.LexerEof;
 import org.neo.Node;
-import org.neo.RioLang;
+import org.neo.NeoLang;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
  */
 public class CommentTest {
 
-    private RioLang lang;
+    private NeoLang lang;
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -28,7 +28,7 @@ public class CommentTest {
 
     @Before
     public void setUp() {
-        lang = new RioLang();
+        lang = new NeoLang();
     }
 
     @After

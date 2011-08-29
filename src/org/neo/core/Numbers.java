@@ -1,8 +1,8 @@
 package org.neo.core;
 
 import org.neo.Compiler;
+import org.neo.Named;
 import org.neo.PluginBase;
-import org.neo.lex.Lexer;
 import org.neo.lex.LexerPattern;
 import org.neo.lex.Token;
 
@@ -17,10 +17,10 @@ public class Numbers extends PluginBase {
     public static final String REAL_FORCED = "number.real.forced";
 
     @Override
-    public Token consume(Lexer lexer, int chars) {
+    public Token consume(Named named, int chars) {
         String text = Compiler.buffer().subSequence(0, chars).toString();
         Number value;
-        if (lexer.getName().equals(INTEGER)) {
+        if (named.getName().equals(INTEGER)) {
             value = new Integer(text);
         } else {
 //Not needed since Java will ignore the trailing 'd'

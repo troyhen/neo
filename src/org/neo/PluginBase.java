@@ -17,6 +17,7 @@ import org.neo.parse.Production;
 public class PluginBase implements Plugin {
 
     private List<Lexer> lexers = new ArrayList<Lexer>();
+    private List<Production> grammar = new ArrayList<Production>();
     protected List<String> names = new ArrayList<String>();
     private Map<String, Method> cache = new HashMap<String, Method>();
 
@@ -35,22 +36,23 @@ public class PluginBase implements Plugin {
     }
 
     protected void addParser(String name) {
-        Compiler.compiler().add(new Production(this, name, ""));
+        addParser(name, "");
     }
 
     protected void addParser(String name, String structure) {
-        Compiler.compiler().add(new Production(this, name, structure));
+        grammar.add(new Production(this, name, structure));
     }
 
     public void close() {
     }
 
-    public Token consume(Lexer lexer, int chars) {
-        return Compiler.compiler().consume(lexer, chars);
+    @Override
+    public Token consume(Named named, int chars) {
+        return Compiler.compiler().consume(named, chars);
     }
 
-    public Token consume(Lexer lexer, int chars, Object value) {
-        return Compiler.compiler().consume(lexer, chars, value);
+    public Token consume(Named named, int chars, Object value) {
+        return Compiler.compiler().consume(named, chars, value);
     }
 
     private static final Class<?>[] matchedSig = new Class<?>[] {
@@ -68,6 +70,27 @@ public class PluginBase implements Plugin {
             cache.put(name, method);
         }
         return method;
+    }
+
+    @Override
+    public Node match(Node node, List<Node> matched) {
+        Node start = node;
+//        Node result = null;
+//    loop:
+        for (Production production : grammar) {
+            while (node != null) {
+                Node nextNode = production.match(node, matched);
+                if (nextNode != null) {
+                    return nextNode;
+//                    result = nextNode;
+//                    node = start;
+//                    continue loop;
+                }
+                node = node.getNext();
+            }
+            node = start;
+        }
+        return null;//result;
     }
 
     public Node prune(String name, Node node) throws Exception {

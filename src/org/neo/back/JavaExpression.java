@@ -1,7 +1,7 @@
 package org.neo.back;
 
 import org.neo.Node;
-import org.neo.RioException;
+import org.neo.NeoException;
 
 /**
  *
@@ -20,10 +20,28 @@ public class JavaExpression implements Render {
             buff.append(" ");
             render(node.get(1));
             buff.append(")");
+        } else if (node.getName().startsWith("symbol")) {
+            buff.append(node.getValue());
+        } else if (node.getName().startsWith("string")) {
+            buff.append("\"");
+            buff.append(node.getValue());   // TODO escape double quotes
+            buff.append("\"");
         } else if (node.getName().startsWith("number")) {
             buff.append(node.getValue());
+//        } else if (node.getName().startsWith("access.dot")) {
+//            buff.append("(");
+        } else if (node.getName().startsWith("access.call")) {
+            node = node.getFirst();
+            render(node);
+            node = node.getNext();
+            buff.append("(");
+            while (node != null) {
+                render(node);
+                node = node.getNext();
+            }
+            buff.append(")");
         } else {
-            throw new RioException("Unexpected node: " + node);
+            throw new NeoException("Unexpected node: " + node);
         }
     }
 

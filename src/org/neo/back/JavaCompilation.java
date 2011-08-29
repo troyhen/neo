@@ -13,12 +13,16 @@ public class JavaCompilation implements Backend {
 
     public static CodeBuilder output() { return output.get(); }
 
+    private JavaExpression expression = new JavaExpression();
+    private JavaImport importStmt = new JavaImport();
+
     @Override
     public void render(Node node) {
         CodeBuilder buff;
         output.set(buff = new CodeBuilder());
         renderHeader(buff);
 //        renderPackage(buff);
+        renderImports(buff, node);
         renderDefaultClassOpen(buff);
         renderMainOpen(buff);
         renderStatements(buff, node.getFirst());
@@ -32,7 +36,7 @@ public class JavaCompilation implements Backend {
     }
 
     private void renderDefaultClassOpen(CodeBuilder buff) {
-        buff.println("public class Main {").tabMore();
+        buff.eol().println("public class Main {").tabMore();
     }
 
     private void renderHeader(CodeBuilder buff) {
@@ -43,14 +47,28 @@ public class JavaCompilation implements Backend {
         buff.append(" by the neo compiler. */").eol().eol();
     }
 
+    private void renderImports(CodeBuilder buff, Node node) {
+        while (node != null) {
+            if (node.getName().equals("importStatement")) importStmt.render(node);
+            else {
+                if (node.getFirst() != null) renderImports(buff, node.getFirst());
+            }
+            node = node.getNext();
+        }
+    }
+    
     private void renderMainOpen(CodeBuilder buff) {
         buff.println("public static void main(String[] args) {").tabMore();
     }
 
     private void renderStatement(CodeBuilder buff, Node node) {
-        JavaExpression expression = new JavaExpression();
         while (node != null) {
-            expression.render(node);
+            if (node.getName().equals("importStatement")) {
+                // ignore imports here
+            } else {
+                expression.render(node);
+                buff.append(";").eol();
+            }
             node = node.getNext();
         }
     }
@@ -59,7 +77,6 @@ public class JavaCompilation implements Backend {
         while (node != null) {
             buff.tab();
             renderStatement(buff, node.getFirst());
-            buff.append(";").eol();
             node = node.getNext();
         }
     }

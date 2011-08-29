@@ -3,8 +3,8 @@ package org.neo.parse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
 import org.neo.Log;
+
 import org.neo.Named;
 import org.neo.Node;
 import org.neo.Plugin;
@@ -55,11 +55,13 @@ public class Production extends RuleGroup implements Named {
     public Node match(Node node, List<Node> matched) {
         Node next = super.match(node, matched);
         if (next != null) {
-            Node newNode = new Node(this, getName());
+            Node newNode = new Node(this);//, getName());
             node.insertBefore(newNode);
             for (Node n : matched) {
                 newNode.add(n);
             }
+            Log.logger.info("production " + name + " matched "
+                    + newNode.childNames());
         }
         matched.clear();
         return next;
