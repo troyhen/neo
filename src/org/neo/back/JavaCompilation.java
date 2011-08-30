@@ -1,6 +1,15 @@
 package org.neo.back;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import javax.tools.JavaCompiler;
+import javax.tools.ToolProvider;
 import org.neo.Compiler;
+import org.neo.Log;
+import org.neo.NeoException;
 import org.neo.Node;
 
 /**
@@ -16,6 +25,37 @@ public class JavaCompilation implements Backend {
     private JavaExpression expression = new JavaExpression();
     private JavaImport importStmt = new JavaImport();
 
+    private String getClassName() {
+        File file = Compiler.file();
+        if (file == null) return "Main";
+        String name = file.getName();
+        int dot = name.indexOf('.');
+        if (dot > 0) name = name.substring(0, dot);
+        return name;
+    }
+
+    private void javac(String saveName) {
+        String classCmd = Compiler.compiler().get("class");
+        if (classCmd != null) {
+            JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
+            int res = javac.run(System.in, System.out, System.err, saveName);
+            if (res != 0) throw new NeoException("javac error: " + res);
+            if (classCmd.equals("load") || classCmd.equals("run")) {
+                File saveFile = new File(saveName);
+                Loader load = new Loader(saveFile.getParent());
+                try {
+                    Class cl = load.loadClass(getClassName());
+                    if (classCmd.equals("run")) {
+                        run(cl);
+                    }
+                } catch (ClassNotFoundException ex) {
+                    Log.logger.severe(ex.toString());
+                    throw new NeoException(ex);
+                }
+            }
+        }
+    }
+
     @Override
     public void render(Node node) {
         CodeBuilder buff;
@@ -23,20 +63,22 @@ public class JavaCompilation implements Backend {
         renderHeader(buff);
 //        renderPackage(buff);
         renderImports(buff, node);
-        renderDefaultClassOpen(buff);
+        renderClassOpen(buff);
         renderMainOpen(buff);
         renderStatements(buff, node.getFirst());
         renderBlockClose(buff);
         renderBlockClose(buff);
-        Compiler.compiler().set("output", buff.toString());
+        String result = buff.toString();
+        Compiler.compiler().set("output", result);
+        save(result);
     }
 
     private void renderBlockClose(CodeBuilder buff) {
         buff.tabLess().println("}");
     }
 
-    private void renderDefaultClassOpen(CodeBuilder buff) {
-        buff.eol().println("class Main {").tabMore();
+    private void renderClassOpen(CodeBuilder buff) {
+        buff.eol().println("public class " + getClassName() + " {").tabMore();
     }
 
     private void renderHeader(CodeBuilder buff) {
@@ -84,4 +126,38 @@ public class JavaCompilation implements Backend {
 //    private void renderPackage(StringBuilder buff) {
 //
 //    }
+
+    private void save(String result) throws NeoException {
+        String saveName = Compiler.compiler().get("save");
+        if (saveName != null) {
+            try {
+                FileWriter out = new FileWriter(saveName);
+                try {
+                    out.write(result);
+                } finally {
+                    out.close();
+                }
+                javac(saveName);
+            } catch (IOException ex) {
+                Log.logger.severe(ex.toString());
+                throw new NeoException(ex);
+            }
+        }
+    }
+
+    private void run(Class cl) {
+        Method[] methods = cl.getDeclaredMethods();
+        for (Method method : methods) {
+            if (Modifier.isStatic(method.getModifiers()) && method.getName().equals("main")) {
+                try {
+                    method.invoke(null, (Object)new String[0]);
+                    break;
+                } catch (Exception ex) {
+                    Log.logger.severe(ex.toString());
+                    throw new NeoException(ex);
+                }
+            }
+        }
+    }
+
 }
