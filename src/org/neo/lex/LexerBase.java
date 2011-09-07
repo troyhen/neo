@@ -1,13 +1,12 @@
 package org.neo.lex;
 
-import org.neo.Named;
 import org.neo.Plugin;
 
 /**
  *
  * @author Troy Heninger
  */
-public abstract class LexerBase implements Lexer, Named {
+public abstract class LexerBase implements Lexer {
 
     public final Plugin plugin;
     public final String name;
@@ -18,16 +17,16 @@ public abstract class LexerBase implements Lexer, Named {
     }
 
     @Override
-    public String getName() { return /*isIgnored() ? name.substring(1) :*/ name; }
+    public String getName() { return name; }
 
     @Override
     public Plugin getPlugin() { return plugin; }
 
     public Token consume(int chars) {
-        return plugin.consume(this, chars);
+        return plugin.consume(name, chars);
     }
 
     public Token consume(int chars, Object value) {
-        return plugin.consume(this, chars, value);
+        return plugin.consume(name, chars, value);
     }
 }

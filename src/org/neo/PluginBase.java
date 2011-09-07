@@ -47,13 +47,13 @@ public class PluginBase implements Plugin {
     }
 
     @Override
-    public Token consume(Named named, int chars) {
-        return Compiler.compiler().consume(named, chars);
+    public Token consume(String name, int chars) {
+        return Compiler.compiler().consume(this, name, chars);
     }
 
     @Override
-    public Token consume(Named named, int chars, Object value) {
-        return Compiler.compiler().consume(named, chars, value);
+    public Token consume(String name, int chars, Object value) {
+        return Compiler.compiler().consume(this, name, chars, value);
     }
 
     private static final Class<?>[] matchedSig = new Class<?>[] {

@@ -10,8 +10,8 @@ import org.neo.parse.Rule;
  */
 public interface Plugin extends Lexer, Rule {
 
-    Token consume(Named named, int chars);
-    Token consume(Named named, int chars, Object value);
+    Token consume(String name, int chars);
+    Token consume(String name, int chars, Object value);
 
     void open();
 

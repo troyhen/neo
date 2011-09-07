@@ -15,9 +15,13 @@ public class LexerEof extends LexerBase {
         super(plugin, EOF);
     }
 
+    public boolean atEof() {
+        return Compiler.buffer().length() == 0;
+    }
+
     @Override
     public Token nextToken() {
-        if (Compiler.buffer().length() == 0) {
+        if (atEof()) {
             return consume(0);
         }
         return null;

@@ -1,7 +1,7 @@
 package org.neo.core;
 
 import org.neo.PluginBase;
-import org.neo.lex.LexerEof;
+//import org.neo.lex.LexerEof;
 
 /**
  *
@@ -11,7 +11,7 @@ public class Compilation extends PluginBase {
 
     @Override
     public void open() {
-        add(new LexerEof(this));
+//        add(new LexerEof(this));
         addParser("terminator", "semi");
         addParser("terminator", "eol");
         addParser("terminator", "eof");

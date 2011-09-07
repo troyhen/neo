@@ -76,14 +76,14 @@ public class Compiler {
 
     public static Compiler compiler() { return (Compiler) compiler.get(); }
 
-    public Token consume(Named named, int chars) {
-        Token token = new Token(named, buffer.subSequence(0, chars), line);
+    public Token consume(Plugin plugin, String name, int chars) {
+        Token token = new Token(plugin, name, buffer.subSequence(0, chars), line);
         buffer.position(buffer.position() + chars);
         return token;
     }
 
-    public Token consume(Named named, int chars, Object value) {
-        Token token = new Token(named, buffer.subSequence(0, chars), line, value);
+    public Token consume(Plugin plugin, String name, int chars, Object value) {
+        Token token = new Token(plugin, name, buffer.subSequence(0, chars), line, value);
         buffer.position(buffer.position() + chars);
         return token;
     }
@@ -164,21 +164,7 @@ public class Compiler {
         }
         line = 1;
         offset = 0;
-        root = new Node(new Named() {
-
-            Plugin plugin = new PluginBase();
-
-            @Override
-            public String getName() {
-                return "root";
-            }
-
-            @Override
-            public Plugin getPlugin() {
-                return plugin;
-            }
-
-        });
+        root = new Node(new PluginBase(), "root");
         state = State.opened;
     }
 
@@ -249,6 +235,8 @@ public class Compiler {
         back.render(root.getFirst());
         state = State.rendered;
     }
+
+    public Node getRoot() { return root; }
 
     public Node tokenize() throws NeoException {
         if (state == State.closed) open();

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Stack;
 import org.neo.Log;
 
-import org.neo.Named;
 import org.neo.Node;
 import org.neo.Plugin;
 
@@ -13,7 +12,7 @@ import org.neo.Plugin;
  *
  * @author Troy Heninger
  */
-public class Production extends RuleGroup implements Named {
+public class Production extends RuleGroup {
 
     public final Plugin plugin;
     public final String name;
@@ -28,10 +27,7 @@ public class Production extends RuleGroup implements Named {
         rules = parseRules();
     }
 
-    @Override
     public String getName() { return name; }
-
-    @Override
     public Plugin getPlugin() { return plugin; }
 
     private static Stack<Rule> addAlternatives(Stack<Rule> local, List<List<Rule>> alternatives) {
@@ -55,7 +51,7 @@ public class Production extends RuleGroup implements Named {
     public Node match(Node node, List<Node> matched) {
         Node next = super.match(node, matched);
         if (next != null) {
-            Node newNode = new Node(this);//, getName());
+            Node newNode = new Node(plugin, name);
             node.insertBefore(newNode);
             for (Node n : matched) {
                 newNode.add(n);

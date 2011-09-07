@@ -13,7 +13,8 @@ public class Node {
     public static final byte SUBSUME = 4;
     
     private final CharSequence text;
-    private final Named named;
+    private final Plugin plugin;
+    private final String name;
     private final Object value;
     private Node parent;
     private Node first;
@@ -22,17 +23,17 @@ public class Node {
     private Node prev;
     private byte flags;
 
-    public Node(Named named) {
-        this(named, null, null);
+    public Node(Plugin plugin, String name) {
+        this(plugin, name, null, null);
     }
     
-    public Node(Named named, CharSequence text) {
-        this(named, text, null);
+    public Node(Plugin plugin, String name, CharSequence text) {
+        this(plugin, name, text, null);
     }
     
-    public Node(Named named, CharSequence text, Object value) {
-        this.named = named;
-        String name = named.getName();
+    public Node(Plugin plugin, String name, CharSequence text, Object value) {
+        this.plugin = plugin;
+        this.name = name;
         flags |= name.startsWith("!") ? IGNORE : 0; // lexers use this for ignored tokens
         this.value = value;
         this.text = text;
@@ -67,9 +68,9 @@ public class Node {
     public void addAll(Node child) {
         if (child == null) throw new NullPointerException();
         while (child != null) {
-            Node next = child.next;
+            Node nextNode = child.next;
             add(child);
-            child = next;
+            child = nextNode;
         }
     }
 
@@ -131,12 +132,10 @@ public class Node {
         return 0;
     }
 
-    public String getName() { return named.getName(); }
-    
-    public Named getNamed() { return named; }
+    public String getName() { return name; }
     public Node getNext() { return next; }
     public Node getParent() { return parent; }
-    public Plugin getPlugin() { return named.getPlugin(); }
+    public Plugin getPlugin() { return plugin; }
     public CharSequence getText() { return text; }
     public Object getValue() { return value; }
     public boolean isIgnored() { return (flags & IGNORE) != 0; }

@@ -1,7 +1,6 @@
 package org.neo.core;
 
 import org.neo.Compiler;
-import org.neo.Named;
 import org.neo.PluginBase;
 import org.neo.lex.LexerPattern;
 import org.neo.lex.Token;
@@ -17,17 +16,17 @@ public class Numbers extends PluginBase {
     public static final String REAL_FORCED = "number.real.forced";
 
     @Override
-    public Token consume(Named named, int chars) {
+    public Token consume(String name, int chars) {
         String text = Compiler.buffer().subSequence(0, chars).toString();
         Number value;
-        if (named.getName().equals(INTEGER)) {
+        if (name.equals(INTEGER)) {
             value = new Integer(text);
         } else {
 //Not needed since Java will ignore the trailing 'd'
 //            if (name == REAL_FORCED) text = text.substring(0, text.length() - 1);
             value = new Double(text);
         }
-        return super.consume(this, chars, value);
+        return super.consume(name, chars, value);
     }
 
     @Override

@@ -1,13 +1,15 @@
 package org.neo.lex;
 
-import org.neo.Named;
+import org.neo.Plugin;
 
 /**
  *
  * @author Troy Heninger
  */
-public interface Lexer extends Named {
+public interface Lexer {
 
+    String getName();
+    Plugin getPlugin();
     Token nextToken();
 
 }

@@ -21,7 +21,7 @@ public class StringTest {
 
     @Test
     public void testTokenizer() {
-        String simple = " \"this is a string\" "
+        String simple = "\"this is a string\" "
                 + "'this is another' "
                 + "`word "
                 + "\"\"\"This\nis\na\nvery\nlong\nstring\"\"\" ";
