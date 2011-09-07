@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author theninger
+ * @author Troy Heninger
  */
 public class ExpressionTest {
 

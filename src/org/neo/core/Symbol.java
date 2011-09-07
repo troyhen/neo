@@ -14,7 +14,7 @@ import org.neo.lex.Token;
 public class Symbol extends PluginBase {
 
     public static final String SYMBOL = "symbol";
-    public static final String SYMBOL_QUOTED = "symbol.quoted";
+//    public static final String SYMBOL_QUOTED = "symbol.quoted";
 
     private LexerPattern symbol;
 
@@ -43,7 +43,7 @@ public class Symbol extends PluginBase {
         super.open();
         names.add(SYMBOL);
         add(symbol = new LexerPattern(this, SYMBOL, "[A-Za-z_$][A-Za-z0-9_$]*\\??"));
-        add(new LexerPattern(this, SYMBOL_QUOTED, "`([^`\\r\\n])`", 1));
+//        add(new LexerPattern(this, SYMBOL_QUOTED, "`([^`\\r\\n])`", 1));
     }
 
 }

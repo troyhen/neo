@@ -30,6 +30,10 @@ public class Expression extends PluginBase {
         addParser("ifExpression", "!symbol.if expression !symbol.then terminator statements elseClause? !symbol.end");
         addParser("unlessExpression", "!symbol.unless expression !symbol.then statement elseClause?");
         addParser("unlessExpression", "!symbol.unless expression !symbol.then terminator statements elseClause? !symbol.end");
+        addParser("whileExpression", "!symbol.while expression !symbol.then statement elseClause?");
+        addParser("whileExpression", "!symbol.while expression !symbol.then terminator statements elseClause? !symbol.end");
+        addParser("untilExpression", "!symbol.until expression !symbol.then statement elseClause?");
+        addParser("untilExpression", "!symbol.until expression !symbol.then terminator statements elseClause? !symbol.end");
     }
 
     public Node expression(Node first, Node after) {

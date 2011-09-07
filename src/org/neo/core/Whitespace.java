@@ -15,8 +15,10 @@ public class Whitespace extends PluginBase {
     public void open() {
         names.add("ws");
         add(new LexerPattern(this, EOL, "(\\r\\n|\\r|\\n)"));
-        add(new LexerPattern(this, "!comment.multiline", "/\\*([^*]|\\*[^/])*\\*/"));
-        add(new LexerPattern(this, "!comment.line", "//[^\\r\\n]*"));
+//        add(new LexerPattern(this, "!comment.multiline", "/\\*([^*]|\\*[^/])*\\*/"));
+//        add(new LexerPattern(this, "!comment.line", "//[^\\r\\n]*"));
+        add(new LexerPattern(this, "!comment.multiline", "###+(##[^#]|#[^#]|[^#])*###+"));
+        add(new LexerPattern(this, "!comment.line", "#[^\\r\\n]*"));
         add(new LexerPattern(this, "!space", "[ \\t]+"));
     }
 
