@@ -23,12 +23,14 @@ public class StringTest {
     public void testTokenizer() {
         String simple = " \"this is a string\" "
                 + "'this is another' "
+                + "`word "
                 + "\"\"\"This\nis\na\nvery\nlong\nstring\"\"\" ";
         lang.load(simple);
         Node tokens = lang.tokenize();
         assertEquals(Strings.STRING_DOUBLE, tokens.get(0).getName());
         assertEquals(Strings.STRING_SINGLE, tokens.get(1).getName());
-        assertEquals(Strings.STRING_MULTILINE, tokens.get(2).getName());
+        assertEquals(Strings.STRING_WORD, tokens.get(2).getName());
+        assertEquals(Strings.STRING_MULTILINE, tokens.get(3).getName());
     }
 
 

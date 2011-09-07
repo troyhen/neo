@@ -13,7 +13,7 @@ import org.neo.lex.Token;
  */
 public class Xml extends PluginBase {
     
-    public static final Pattern xmlStart = Pattern.compile("^<([_A-Za-z][-:_A-Za-z0-9]*)[^>]*>");
+    public static final Pattern xmlStart = Pattern.compile("^<([_A-Za-z][-:_A-Za-z0-9]*)[^>\\r\n]*>");
     public static final Pattern xmlEnd = Pattern.compile("</([_A-Za-z][-:_A-Za-z0-9]*)[ \\t\\r\\n]*>");
     public static final String NAME = "xml";
     public static final String ABREV = "x";

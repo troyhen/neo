@@ -16,11 +16,13 @@ public class Strings extends PluginBase {
     public static final String STRING_SINGLE = "string.single";
 //    public static final String STRING_SINGLE_BAD = "string.single.bad";
 //    public static final String STRING_SINGLE_BAD2 = "string.single.bad2";
+    public static final String STRING_WORD = "string.word";
 
     @Override
     public void open() {
         super.open();
         names.add("string");
+        add(new LexerPattern(this, STRING_WORD, "`([^ \\r\\n,.;:#]+)", 1));
         add(new LexerPattern(this, STRING_SINGLE, "'((\\\\'|[^'\\r\\n])*)'", 1));
 //        add(new LexerPattern(this, STRING_SINGLE_BAD, "'((\\\\'|[^'\\r\\n])*)[\\r\\n]", 1));
 //        add(new LexerPattern(this, STRING_SINGLE_BAD2, "'((\\\\'|[^'\\r\\n])*)$", 1));
