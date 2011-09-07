@@ -17,9 +17,19 @@ public class Expression extends PluginBase {
         addParser("expression", "@expression ^operator.mul @expression");
         addParser("expression", "@expression ^operator.add @expression");
         addParser("expression", "access");
+        addParser("expression", "ifExpression");
+        addParser("expression", "unlessExpression");
+        addParser("expression", "whileExpression");
+        addParser("expression", "untilExpression");
         addParser("access.dot", "@expression ^operator.dot access");
         addParser("access.call", "symbol !start.paren (@expression (!comma @expression)*)? !end.paren");
         addParser("access.call", "symbol (@expression (!comma @expression)*)?");
+        addParser("elseClause", "!symbol.else statement");
+        addParser("elseClause", "!symbol.else !terminator statements");
+        addParser("ifExpression", "!symbol.if expression !symbol.then statement elseClause?");
+        addParser("ifExpression", "!symbol.if expression !symbol.then terminator statements elseClause? !symbol.end");
+        addParser("unlessExpression", "!symbol.unless expression !symbol.then statement elseClause?");
+        addParser("unlessExpression", "!symbol.unless expression !symbol.then terminator statements elseClause? !symbol.end");
     }
 
     public Node expression(Node first, Node after) {

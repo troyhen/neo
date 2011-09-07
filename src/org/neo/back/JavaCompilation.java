@@ -1,12 +1,16 @@
 package org.neo.back;
 
+import com.sun.tools.javac.Main;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
+
 import org.neo.Compiler;
 import org.neo.Log;
 import org.neo.NeoException;
@@ -17,6 +21,8 @@ import org.neo.Node;
  * @author Troy Heninger
  */
 public class JavaCompilation implements Backend {
+
+    private static final boolean PLATFORM_COMPILER = false;
 
     public static ThreadLocal<CodeBuilder> output = new ThreadLocal<CodeBuilder>();
 
@@ -37,8 +43,14 @@ public class JavaCompilation implements Backend {
     private void javac(String saveName) {
         String classCmd = Compiler.compiler().get("class");
         if (classCmd != null) {
-            JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
-            int res = javac.run(System.in, System.out, System.err, saveName);
+            int res;
+            if (PLATFORM_COMPILER) {
+                JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
+                if (javac == null) throw new NeoException("Missing javac tool. Make sure tools.jar is in your classpath.");
+                res = javac.run(System.in, System.out, System.err, saveName);
+            } else {
+                res = Main.compile(new String[]{saveName});
+            }
             if (res != 0) throw new NeoException("javac error: " + res);
             if (classCmd.equals("load") || classCmd.equals("run")) {
                 File saveFile = new File(saveName);
