@@ -13,6 +13,7 @@ public class Expression extends PluginBase {
     public void open() {
         addParser("expression", "number");
         addParser("expression", "string");
+        addParser("expression", "@expression ^operator.as (symbol operator.dot)* symbol");
         addParser("expression", "@expression ^operator.pow @expression");
         addParser("expression", "@expression ^operator.mul @expression");
         addParser("expression", "@expression ^operator.add @expression");

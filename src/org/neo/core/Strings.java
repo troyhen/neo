@@ -22,7 +22,7 @@ public class Strings extends PluginBase {
     public void open() {
         super.open();
         names.add("string");
-        add(new LexerPattern(this, STRING_WORD, "`([^ \\r\\n,.;:#]+)", 1));
+        add(new LexerPattern(this, STRING_WORD, "`([^ \\r\\n,.;:#~]+)", 1));
         add(new LexerPattern(this, STRING_SINGLE, "'((\\\\'|[^'\\r\\n])*)'", 1));
 //        add(new LexerPattern(this, STRING_SINGLE_BAD, "'((\\\\'|[^'\\r\\n])*)[\\r\\n]", 1));
 //        add(new LexerPattern(this, STRING_SINGLE_BAD2, "'((\\\\'|[^'\\r\\n])*)$", 1));

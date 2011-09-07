@@ -37,7 +37,7 @@ public class HelloWorldTest {
         String result = lang.get("output");
         Log.logger.info(result);
         assertTrue("should contain import static", result.contains("import static "));
-        assertTrue("should contain path to Console", result.contains("neo.os.Console"));
+        assertTrue("should contain path to Console", result.contains("neo.os.N.*"));
         assertTrue("should contain a call to println", result.contains("println("));
         assertTrue("should contain the message string", result.contains("\"hello world\""));
     }

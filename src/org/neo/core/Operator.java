@@ -11,6 +11,7 @@ import org.neo.lex.LexerPattern;
 public class Operator extends PluginBase {
     
     public static final String OPERATOR = "operator";
+    public static final String OPERATOR_AS = "operator.as";
     public static final String OPERATOR_ADD = "operator.add";
     public static final String OPERATOR_ASSIGN = "operator.assign";
     public static final String OPERATOR_MUL = "operator.mul";
@@ -21,6 +22,7 @@ public class Operator extends PluginBase {
     public void open() {
         super.open();
         names.add(OPERATOR);
+        add(new LexerChar(this, OPERATOR_AS, '~'));
         add(new LexerPattern(this, OPERATOR_ADD, "[-+]"));
         add(new LexerPattern(this, OPERATOR_MUL, "[*/%]"));
         add(new LexerChar(this, OPERATOR_POW, '^'));

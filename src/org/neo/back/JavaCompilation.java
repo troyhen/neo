@@ -99,6 +99,8 @@ public class JavaCompilation implements Backend {
             buff.append(" from ").append(Compiler.file());
         }
         buff.append(" by the neo compiler. */").eol().eol();
+        buff.append("import neo.lang.*;").eol();
+        buff.append("import static neo.lang.N.*;").eol();
     }
 
     private void renderImports(CodeBuilder buff, Node node) {

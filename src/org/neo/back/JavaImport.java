@@ -12,22 +12,26 @@ public class JavaImport implements Render {
     @Override
     public void render(Node node) {
         CodeBuilder buff = JavaCompilation.output();
+        String path = getPath(node.getFirst());
         buff.append("import ");
-        String path = getPath(node);
-        try {
-            if (isStatic(path)) {
-                buff.append("static ");
-            }
-        } catch (ClassNotFoundException ex) {
-            throw new NeoException(ex);
-        }
+//        try {
+//            if (isStatic(path)) {
+//                buff.append("static ");
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            throw new NeoException(ex);
+//        }
         buff.append(path);
+        buff.append(".*");
+        buff.append(";").eol();
+        buff.append("import static ");
+        buff.append(path);
+        buff.append(".N.*");
         buff.append(";").eol();
     }
 
-    private String getPath(Node node) {
+    public String getPath(Node node) {
         StringBuilder buff = new StringBuilder();
-        node = node.getFirst();
         while (node != null) {
             buff.append(node.getValue());
             node = node.getNext();
@@ -35,19 +39,19 @@ public class JavaImport implements Render {
         return buff.toString();
     }
 
-    private boolean isStatic(String path) throws ClassNotFoundException {
-        String pkg = path;
-        if (pkg.endsWith(".*")) pkg = pkg.substring(0, pkg.length() - 2);
-        try {
-            Class.forName(pkg);
-            return false;
-        } catch (ClassNotFoundException e) {}
-        int ix = pkg.lastIndexOf(".");
-        if (ix < 0) return false;
-        pkg = pkg.substring(0, ix);
-        Class.forName(pkg);
-        return true;
-//        Package.getPackage(pkg);
-    }
+//    private boolean isStatic(String path) throws ClassNotFoundException {
+//        String pkg = path;
+//        if (pkg.endsWith(".*")) pkg = pkg.substring(0, pkg.length() - 2);
+//        try {
+//            Class.forName(pkg);
+//            return false;
+//        } catch (ClassNotFoundException e) {}
+//        int ix = pkg.lastIndexOf(".");
+//        if (ix < 0) return false;
+//        pkg = pkg.substring(0, ix);
+//        Class.forName(pkg);
+//        return true;
+////        Package.getPackage(pkg);
+//    }
 
  }

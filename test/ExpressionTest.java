@@ -58,7 +58,7 @@ public class ExpressionTest {
         final String expr = "1+2*5";
         lang.compile(expr);
         String program = lang.get("output");
-        System.err.println(program);
+//        System.out.println(program);
         assertTrue(program.indexOf("class Main") > 0);
         assertTrue(program.indexOf("public static void main") > 0);
         assertTrue(program.indexOf("2 * 5") > 0);
@@ -70,7 +70,7 @@ public class ExpressionTest {
         final String expr = "2*5+1";
         lang.compile(expr);
         String program = lang.get("output");
-        System.err.println(program);
+//        System.out.println(program);
         assertTrue(program.indexOf("class Main") > 0);
         assertTrue(program.indexOf("public static void main") > 0);
         assertTrue(program.indexOf("2 * 5") > 0);
