@@ -13,7 +13,7 @@ public class Import extends PluginCore {
     public void open() {
         super.open();
         names.add(NAME);
-        addParser(STATEMENT, "!symbol.import (symbol operator.dot)* symbol !terminator+");
+        addParser(STATEMENT, "!symbol.import (symbol operator.dot)* symbol");
     }
 
 }

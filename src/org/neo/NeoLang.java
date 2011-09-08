@@ -26,12 +26,12 @@ public class NeoLang extends Compiler {
         plugins.add(new Whitespace());
         plugins.add(new Delimiter());
         plugins.add(new Import());  // must come before Expression
+        plugins.add(new Numbers()); // must come before Expression
         plugins.add(new Expression());
         plugins.add(new Group());
         plugins.add(new Symbol());
         plugins.add(new Range());
         plugins.add(new Operator());
-        plugins.add(new Numbers());
         plugins.add(new Strings());
         plugins.add(new RegEx());
         plugins.add(new Xml());

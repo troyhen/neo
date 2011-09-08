@@ -17,7 +17,7 @@ public class Expression extends PluginCore {
         addParser("expression", "access");
         addParser("access.dot", "@expression ^operator.dot access");
         addParser("access.call", "symbol !start.paren (@expression (!comma? @expression)*)? !end.paren");
-        addParser("access.call", "symbol (@expression (!comma? @expression)*)?");
+        addParser("access.call", "(symbol.if | symbol.while | symbol.unless | symbol.until)- symbol (@expression (!comma? @expression)*)?");
         addParser("expression", "symbol.if @expression !symbol.then statement elseClause? !symbol.end?");
         addParser("expression", "symbol.if @expression !symbol.then? !terminator @block elseClause?");
         addParser("expression", "symbol.unless @expression !symbol.then statement elseClause?");

@@ -14,7 +14,7 @@ class RuleNot implements Rule {
     @Override
     public Node match(Node node, List<Node> matched) {
         int size = matched.size();
-        Node result = child.match(node, null);
+        Node result = child.match(node, matched);
         Node.revert(matched, size);
         if (result != null) return null;
         return node;

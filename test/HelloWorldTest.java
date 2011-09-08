@@ -1,3 +1,4 @@
+import java.util.logging.Level;
 import org.junit.After;
 import java.io.File;
 import org.neo.Log;
@@ -26,6 +27,7 @@ public class HelloWorldTest {
 
     @After
     public void tearDown() {
+        Log.logger.setLevel(Level.WARNING);
         javaFile.delete();
         classFile.delete();
     }
@@ -39,10 +41,10 @@ public class HelloWorldTest {
         String result = lang.get("output");
 //System.err.println(result);
         Log.logger.info(result);
-        assertTrue("should contain import static", result.contains("import static "));
-        assertTrue("should contain path to Console", result.contains("neo.os.N.*"));
-        assertTrue("should contain a call to println", result.contains("println("));
-        assertTrue("should contain the message string", result.contains("\"hello world\""));
+        assertTrue("missing import static", result.contains("import static "));
+        assertTrue("missing path to Console", result.contains("neo.os.N.*"));
+        assertTrue("missing call to println", result.contains("println("));
+        assertTrue("missing message string", result.contains("\"hello world\""));
     }
 
     @Test
