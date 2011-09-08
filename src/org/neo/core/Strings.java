@@ -1,13 +1,12 @@
 package org.neo.core;
 
-import org.neo.PluginBase;
 import org.neo.lex.LexerPattern;
 
 /**
  *
  * @author Troy Heninger
  */
-public class Strings extends PluginBase {
+public class Strings extends PluginCore {
 
     public static final String STRING_DOUBLE = "string.double";
 //    public static final String STRING_DOUBLE_BAD = "string.double.bad";

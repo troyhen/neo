@@ -3,7 +3,6 @@ package org.neo.core;
 import java.util.regex.Pattern;
 
 import org.neo.Compiler;
-import org.neo.PluginBase;
 import org.neo.lex.LexerPattern;
 import org.neo.lex.Token;
 
@@ -11,7 +10,7 @@ import org.neo.lex.Token;
  *
  * @author Troy Heninger
  */
-public class Xml extends PluginBase {
+public class Xml extends PluginCore {
     
     public static final Pattern xmlStart = Pattern.compile("^<([_A-Za-z][-:_A-Za-z0-9]*)[^>\\r\n]*>");
     public static final Pattern xmlEnd = Pattern.compile("</([_A-Za-z][-:_A-Za-z0-9]*)[ \\t\\r\\n]*>");

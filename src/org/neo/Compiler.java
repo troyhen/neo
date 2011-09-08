@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.neo.back.Backend;
 import org.neo.lex.LexException;
 import org.neo.lex.LexerEof;
 import org.neo.lex.Token;
@@ -30,7 +29,7 @@ public class Compiler {
 
     public final List<Plugin> plugins = new ArrayList<Plugin>();
     public final Set<String> literals = new HashSet<String>();
-    public final Map<String, Backend> backends = new HashMap<String, Backend>();
+//    public final Map<String, Backend> backends = new HashMap<String, Backend>();
 
     private State state = State.closed;
     private Map<String, String> config = new HashMap<String, String>();
@@ -164,7 +163,6 @@ public class Compiler {
         }
         line = 1;
         offset = 0;
-        root = new Node(new PluginBase(), "root");
         state = State.opened;
     }
 
@@ -189,8 +187,7 @@ public class Compiler {
         if (state == State.opened) load();
         if (state == State.loaded) tokenize();
         if (state == State.tokenized) parse();
-        Node node = root.getFirst();
-        prune(node);
+        prune(root);
         state = State.pruned;
         return root;
     }
@@ -224,6 +221,10 @@ public class Compiler {
         return root;
     }
 
+    public void printTree() {
+        root.printTree();
+    }
+    
     private void render() throws NeoException {
         if (state == State.closed) open();
         if (state == State.opened) load();
@@ -231,12 +232,12 @@ public class Compiler {
         if (state == State.tokenized) parse();
         if (state == State.parsed) prune();
         String backend = get("backend", DEFAULT_BACKEND);
-        Backend back = backends.get(backend);
-        back.render(root.getFirst());
+        root.render(backend);
         state = State.rendered;
     }
 
     public Node getRoot() { return root; }
+    public void setRoot(Node root) { this.root = root; }
 
     public Node tokenize() throws NeoException {
         if (state == State.closed) open();

@@ -1,13 +1,12 @@
 package org.neo.core;
 
-import org.neo.PluginBase;
 import org.neo.lex.LexerChar;
 
 /**
  *
  * @author Troy Heninger
  */
-public class Group extends PluginBase {
+public class Group extends PluginCore {
 
     public static final String NAME = "group";
 

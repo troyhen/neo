@@ -168,6 +168,25 @@ public class Node {
         }
     }
 
+    public void printTree() {
+        printTree(this, "");
+    }
+
+    protected static void printTree(Node node, String tab) {
+        while (node != null) {
+            System.out.print(tab);
+            System.out.print(node.name);
+            if (node.value != null) {
+                System.out.print(" (" + node.value + ')');
+            }
+            System.out.println();
+            if (node.first != null) {
+                printTree(node.first, tab + "    ");
+            }
+            node = node.next;
+        }
+    }
+
     public Node prune() {
         Node result = next;
         if (isIgnored()) {
@@ -191,6 +210,10 @@ public class Node {
             unlink();
         }
         return result;
+    }
+
+    public void render(String backend) {
+        plugin.render(this, backend);
     }
 
     public static void revert(List<Node> matched, int size) {

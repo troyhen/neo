@@ -1,17 +1,18 @@
 package org.neo.back;
 
 import org.neo.Node;
-import org.neo.NeoException;
+import org.neo.back.JavaCompilation.Segment;
+//import org.neo.NeoException;
 
 /**
  *
  * @author Troy Heninger
  */
-public class JavaImport implements Render {
+public class JavaStatementImport implements Backend {
 
     @Override
     public void render(Node node) {
-        CodeBuilder buff = JavaCompilation.output();
+        CodeBuilder buff = JavaCompilation.output(Segment.outside);
         String path = getPath(node.getFirst());
         buff.append("import ");
 //        try {
@@ -30,7 +31,7 @@ public class JavaImport implements Render {
         buff.append(";").eol();
     }
 
-    public String getPath(Node node) {
+    public static String getPath(Node node) {
         StringBuilder buff = new StringBuilder();
         while (node != null) {
             buff.append(node.getValue());

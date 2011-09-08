@@ -32,9 +32,12 @@ public class HelloWorldTest {
 
     @Test
     public void compileHelloWorld() {
+//        Log.logger.setLevel(Level.ALL);
         lang.set("file", "examples/helloWorld.neo");
         lang.compile();
+//lang.printTree();
         String result = lang.get("output");
+//System.err.println(result);
         Log.logger.info(result);
         assertTrue("should contain import static", result.contains("import static "));
         assertTrue("should contain path to Console", result.contains("neo.os.N.*"));

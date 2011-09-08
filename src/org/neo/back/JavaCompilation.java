@@ -7,6 +7,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
@@ -15,6 +17,7 @@ import org.neo.Compiler;
 import org.neo.Log;
 import org.neo.NeoException;
 import org.neo.Node;
+import org.neo.core.Import;
 
 /**
  *
@@ -24,12 +27,29 @@ public class JavaCompilation implements Backend {
 
     private static final boolean PLATFORM_COMPILER = false;
 
-    public static ThreadLocal<CodeBuilder> output = new ThreadLocal<CodeBuilder>();
+    public static ThreadLocal<List<CodeBuilder>> output = new ThreadLocal<List<CodeBuilder>>();
 
-    public static CodeBuilder output() { return output.get(); }
+    private static int segments;
+    public static enum Segment {outside, inside;
+        int index = segments++;
+    };
+
+    public static CodeBuilder output(Segment segment) {
+        List<CodeBuilder> list = output.get();
+        if (list == null) {
+            output.set(list = new ArrayList<CodeBuilder>());
+        }
+        CodeBuilder buf;
+        while (segment.index >= list.size()) {
+            buf = new CodeBuilder();
+            list.add(buf);
+        }
+        buf = list.get(segment.index);
+        return buf;
+    }
 
     private JavaExpression expression = new JavaExpression();
-    private JavaImport importStmt = new JavaImport();
+    private JavaStatementImport importStmt = new JavaStatementImport();
 
     private String getClassName() {
         File file = Compiler.file();
@@ -70,17 +90,18 @@ public class JavaCompilation implements Backend {
 
     @Override
     public void render(Node node) {
-        CodeBuilder buff;
-        output.set(buff = new CodeBuilder());
-        renderHeader(buff);
+        output.set(null);
+        CodeBuilder outside  = output(Segment.outside);
+        renderHeader(outside);
 //        renderPackage(buff);
-        renderImports(buff, node);
-        renderClassOpen(buff);
-        renderMainOpen(buff);
-        renderStatements(buff, node.getFirst());
-        renderBlockClose(buff);
-        renderBlockClose(buff);
-        String result = buff.toString();
+//        renderImports(buff, node);
+        CodeBuilder inside  = output(Segment.inside);
+        renderClassOpen(inside);
+        renderMainOpen(inside);
+        node.getFirst().render("java");//renderStatements(buff, node);
+        renderBlockClose(inside);
+        renderBlockClose(inside);
+        String result = toString();
         Compiler.compiler().set("output", result);
         save(result);
     }
@@ -105,7 +126,7 @@ public class JavaCompilation implements Backend {
 
     private void renderImports(CodeBuilder buff, Node node) {
         while (node != null) {
-            if (node.getName().equals("importStatement")) importStmt.render(node);
+            if (node.getName().equals(Import.STATEMENT)) importStmt.render(node);
             else {
                 if (node.getFirst() != null) renderImports(buff, node.getFirst());
             }
@@ -119,11 +140,11 @@ public class JavaCompilation implements Backend {
 
     private void renderStatement(CodeBuilder buff, Node node) {
         while (node != null) {
-            if (node.getName().equals("importStatement")) {
+            if (node.getName().equals(Import.STATEMENT)) {
                 // ignore imports here
             } else {
                 buff.tab();
-                expression.render(node);
+                expression.render(node.getFirst());
                 buff.append(";").eol();
             }
             node = node.getNext();
@@ -172,6 +193,15 @@ public class JavaCompilation implements Backend {
                 }
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder buf = new StringBuilder();
+        for (CodeBuilder segment : output.get()) {
+            buf.append(segment);
+        }
+        return buf.toString();
     }
 
 }

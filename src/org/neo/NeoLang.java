@@ -1,6 +1,5 @@
 package org.neo;
 
-import org.neo.back.JavaCompilation;
 import org.neo.core.Delimiter;
 import org.neo.core.Compilation;
 import org.neo.core.Expression;
@@ -20,22 +19,29 @@ import org.neo.core.Xml;
  * @author Troy Heninger
  */
 public class NeoLang extends Compiler {
+    
+    private final Compilation main;
 
     public NeoLang() {
         plugins.add(new Whitespace());
         plugins.add(new Delimiter());
-        plugins.add(new Import());  // must come before expression
+        plugins.add(new Import());  // must come before Expression
         plugins.add(new Expression());
         plugins.add(new Group());
+        plugins.add(new Symbol());
         plugins.add(new Range());
         plugins.add(new Operator());
         plugins.add(new Numbers());
         plugins.add(new Strings());
-        plugins.add(new Symbol());
         plugins.add(new RegEx());
         plugins.add(new Xml());
-        plugins.add(new Compilation()); // must be last
-        backends.put(DEFAULT_BACKEND, new JavaCompilation());
+        plugins.add(main = new Compilation()); // must be last
+    }
+
+    @Override
+    public void open() {
+        super.open();
+        setRoot(new Node(main, "compilation"));
     }
 
 }

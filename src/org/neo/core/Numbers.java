@@ -1,7 +1,6 @@
 package org.neo.core;
 
 import org.neo.Compiler;
-import org.neo.PluginBase;
 import org.neo.lex.LexerPattern;
 import org.neo.lex.Token;
 
@@ -9,7 +8,7 @@ import org.neo.lex.Token;
  *
  * @author Troy Heninger
  */
-public class Numbers extends PluginBase {
+public class Numbers extends PluginCore {
 
     public static final String INTEGER = "number.integer";
     public static final String REAL = "number.real";

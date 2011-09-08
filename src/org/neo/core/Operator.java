@@ -1,6 +1,5 @@
 package org.neo.core;
 
-import org.neo.PluginBase;
 import org.neo.lex.LexerChar;
 import org.neo.lex.LexerPattern;
 
@@ -8,7 +7,7 @@ import org.neo.lex.LexerPattern;
  *
  * @author Troy Heninger
  */
-public class Operator extends PluginBase {
+public class Operator extends PluginCore {
     
     public static final String OPERATOR = "operator";
     public static final String OPERATOR_AS = "operator.as";

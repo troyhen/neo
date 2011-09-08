@@ -6,7 +6,7 @@ import org.neo.Node;
  *
  * @author Troy Heninger
  */
-public class JvmExpression implements Render {
+public class JvmExpression implements Backend {
 
     @Override
     public void render(Node node) {

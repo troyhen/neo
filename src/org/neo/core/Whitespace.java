@@ -1,6 +1,5 @@
 package org.neo.core;
 
-import org.neo.PluginBase;
 import org.neo.lex.LexerIndent;
 import org.neo.lex.LexerPattern;
 
@@ -8,7 +7,7 @@ import org.neo.lex.LexerPattern;
  *
  * @author Troy Heninger
  */
-public class Whitespace extends PluginBase {
+public class Whitespace extends PluginCore {
 
     public static final String EOL = "eol";
     public static final String END_BLOCK = "end.block";
@@ -22,6 +21,10 @@ public class Whitespace extends PluginBase {
         add(new LexerPattern(this, "!comment.line", "[ \\t]*#[^\\r\\n]*"));
         add(new LexerIndent(this, EOL, START_BLOCK, END_BLOCK)); // must come after comment lexers since they consume indented comments
         add(new LexerPattern(this, "!space", "[ \\t]+"));   // must come after indent lexer
+        addParser("terminator", "semi");
+        addParser("terminator", "eol");
+        addParser("terminator", "eof");
+        addParser("block", "!start.block statements !end.block !symbol.end?");
     }
 
 }

@@ -1,21 +1,19 @@
 package org.neo.core;
 
-import org.neo.PluginBase;
-
 /**
  *
  * @author Troy Heninger
  */
-public class Import extends PluginBase {
+public class Import extends PluginCore {
 
     public static final String NAME = "import";
+    public static final String STATEMENT = "statement.import";
 
     @Override
     public void open() {
         super.open();
         names.add(NAME);
-//        add(new LexerString(this, "operator.dotStar", ".*"));
-        addParser("importStatement", "!symbol.import symbol (operator.dot symbol)*");// operator.dotStar?");
+        addParser(STATEMENT, "!symbol.import (symbol operator.dot)* symbol !terminator+");
     }
 
 }

@@ -112,4 +112,10 @@ public class PluginBase implements Plugin {
     public String toString() {
         return getName();
     }
+
+    @Override
+    public void render(Node node, String backend) {
+        // Do nothing. Certain subclasses will need render their nodes.
+    }
+
 }
