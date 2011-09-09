@@ -6,6 +6,27 @@ package neo.lang;
  */
 public class N {
 
+    public static int compare(Comparable obj1, Comparable obj2) {
+        if (obj1 == null && obj2 == null) return 0;
+        return obj1.compareTo(obj2);
+    }
+
+    public static int compare(int obj1, int obj2) {
+        return obj1 == obj2 ? 0 : obj1 < obj2 ? -1 : 1;
+    }
+
+    public static int compare(long obj1, long obj2) {
+        return obj1 == obj2 ? 0 : obj1 < obj2 ? -1 : 1;
+    }
+
+    public static int compare(double obj1, double obj2) {
+        return obj1 == obj2 ? 0 : obj1 < obj2 ? -1 : 1;
+    }
+
+    public static int compare(float obj1, float obj2) {
+        return obj1 == obj2 ? 0 : obj1 < obj2 ? -1 : 1;
+    }
+
     public static <T> T to(Object obj, T type) {
         throw new IllegalArgumentException("Unknown type cast");
     }

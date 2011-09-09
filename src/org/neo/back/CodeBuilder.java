@@ -25,6 +25,18 @@ public class CodeBuilder {
         buff.append(EOL);
         return this;
     }
+    
+    public void insert(int offset, CharSequence string) {
+        buff.insert(offset, string);
+    }
+
+    public int lastIndexOf(char ch) {
+        int ix = buff.length() - 1;
+        while (ix >= 0) {
+            if (buff.charAt(ix) == ch) break;
+        }
+        return ix;
+    }
 
     public CodeBuilder println(CharSequence text) {
         return tab().append(text).eol();
@@ -37,6 +49,10 @@ public class CodeBuilder {
     public CodeBuilder tab() {
         buff.append(tabs);
         return this;
+    }
+
+    public CharSequence tabs() {
+        return tabs;
     }
     
     public CodeBuilder tabMore() {
@@ -55,5 +71,6 @@ public class CodeBuilder {
     public String toString() {
         return buff.toString();
     }
+
 
 }

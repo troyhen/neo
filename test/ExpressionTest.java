@@ -76,4 +76,13 @@ public class ExpressionTest {
         assertTrue(program.indexOf("2 * 5") > 0);
         assertTrue(program.indexOf("+ 1") > 0);
     }
+
+    @Test
+    public void compileCompare() {
+        final String expr = "1 <=> 2";
+        lang.compile(expr);
+        String program = lang.get("output");
+        System.out.println(program);
+        assertTrue("missing comare", program.indexOf("compare(1, 2)") > 0);
+    }
 }

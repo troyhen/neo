@@ -31,10 +31,10 @@ public class NeoLang extends Compiler {
         plugins.add(new Group());
         plugins.add(new Symbol());
         plugins.add(new Range());
+        plugins.add(new Xml());  // must come before Operator
         plugins.add(new Operator());
         plugins.add(new Strings());
         plugins.add(new RegEx());
-        plugins.add(new Xml());
         plugins.add(main = new Compilation()); // must be last
     }
 

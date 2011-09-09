@@ -14,6 +14,7 @@ public class Expression extends PluginCore {
         addParser("expression", "@expression ^operator.pow @expression");
         addParser("expression", "@expression ^operator.mul @expression");
         addParser("expression", "@expression ^operator.add @expression");
+        addParser("expression", "@expression ^operator.compare @expression");
         addParser("expression", "access");
         addParser("access.dot", "@expression ^operator.dot access");
         addParser("access.call", "symbol !start.paren (@expression (!comma? @expression)*)? !end.paren");

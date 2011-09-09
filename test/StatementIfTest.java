@@ -29,44 +29,44 @@ public class StatementIfTest {
 
     @Test
     public void compileIf1() {
-        final String expr = "execute if true";
+        final String expr = "execute if 1 < 2";
         lang.compile(expr);
         String program = lang.get("output");
 //System.out.println(program);
-        assertTrue("missing if", program.indexOf("if (true)") > 0);
+        assertTrue("missing if", program.indexOf("if ((1 < 2))") > 0);
         assertTrue("missing execute", program.indexOf("execute()") > 0);
     }
 
     @Test
     public void compileWhile1() {
 //Log.logger.setLevel(Level.ALL);
-        final String expr = "execute while true";
+        final String expr = "execute while 1 > 2";
         lang.compile(expr);
         String program = lang.get("output");
 //System.out.println(program);
-        assertTrue("missing while", program.indexOf("while (true)") > 0);
+        assertTrue("missing while", program.indexOf("while ((1 > 2))") > 0);
         assertTrue("missing execute", program.indexOf("execute()") > 0);
     }
 
     @Test
     public void compileUnless1() {
 //Log.logger.setLevel(Level.ALL);
-        final String expr = "execute unless false";
+        final String expr = "execute unless 1 >= 2";
         lang.compile(expr);
         String program = lang.get("output");
 //System.out.println(program);
-        assertTrue("missing if", program.indexOf("if (!(false))") > 0);
+        assertTrue("missing if", program.indexOf("if (!(1 >= 2))") > 0);
         assertTrue("missing execute", program.indexOf("execute()") > 0);
     }
 
     @Test
     public void compileUntil1() {
 //Log.logger.setLevel(Level.ALL);
-        final String expr = "execute until false";
+        final String expr = "execute until 1 == 2";
         lang.compile(expr);
         String program = lang.get("output");
 //System.out.println(program);
-        assertTrue("missing while", program.indexOf("while (!(false))") > 0);
+        assertTrue("missing while", program.indexOf("while (!(1 == 2))") > 0);
         assertTrue("missing execute", program.indexOf("execute()") > 0);
     }
 
