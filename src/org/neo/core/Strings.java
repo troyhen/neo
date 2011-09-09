@@ -1,12 +1,14 @@
 package org.neo.core;
 
+import org.neo.Compiler;
 import org.neo.lex.LexerPattern;
+import org.neo.lex.Token;
 
 /**
  *
  * @author Troy Heninger
  */
-public class Strings extends PluginCore {
+public class Strings extends CorePlugin {
 
     public static final String STRING_DOUBLE = "string.double";
 //    public static final String STRING_DOUBLE_BAD = "string.double.bad";
@@ -29,6 +31,12 @@ public class Strings extends PluginCore {
         add(new LexerPattern(this, STRING_MULTILINE, "\"\"\"((\"\"[^\"]|\"[^\"]|[^\"])*)\"\"\"", 1));
         add(new LexerPattern(this, STRING_DOUBLE, "\"((\\\\\"|[^\"\\r\\n])*)\"", 1));
 //        add(new LexerPattern(this, STRING_DOUBLE_BAD, "\"((\\\"|[^\"\\r\\n])*)[\\r\\n]", 1));
+    }
+
+    @Override
+    public Token consume(String name, int chars) {
+        String text = Compiler.buffer().subSequence(0, chars).toString();
+        return super.consume(name, chars, text, "java.lang.String");
     }
 
 }

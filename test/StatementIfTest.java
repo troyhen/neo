@@ -33,7 +33,7 @@ public class StatementIfTest {
         lang.compile(expr);
         String program = lang.get("output");
 //System.out.println(program);
-        assertTrue("missing if", program.indexOf("if ((1 < 2))") > 0);
+        assertTrue("missing if", program.indexOf("if (toboolean((1 < 2)))") > 0);
         assertTrue("missing execute", program.indexOf("execute()") > 0);
     }
 
@@ -44,7 +44,7 @@ public class StatementIfTest {
         lang.compile(expr);
         String program = lang.get("output");
 //System.out.println(program);
-        assertTrue("missing while", program.indexOf("while ((1 > 2))") > 0);
+        assertTrue("missing while", program.indexOf("while (toboolean((1 > 2)))") > 0);
         assertTrue("missing execute", program.indexOf("execute()") > 0);
     }
 
@@ -55,7 +55,7 @@ public class StatementIfTest {
         lang.compile(expr);
         String program = lang.get("output");
 //System.out.println(program);
-        assertTrue("missing if", program.indexOf("if (!(1 >= 2))") > 0);
+        assertTrue("missing if", program.indexOf("if (!toboolean((1 >= 2)))") > 0);
         assertTrue("missing execute", program.indexOf("execute()") > 0);
     }
 
@@ -66,7 +66,7 @@ public class StatementIfTest {
         lang.compile(expr);
         String program = lang.get("output");
 //System.out.println(program);
-        assertTrue("missing while", program.indexOf("while (!(1 == 2))") > 0);
+        assertTrue("missing while", program.indexOf("while (!toboolean((1 == 2)))") > 0);
         assertTrue("missing execute", program.indexOf("execute()") > 0);
     }
 

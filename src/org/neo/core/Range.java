@@ -6,7 +6,7 @@ import org.neo.lex.LexerString;
  *
  * @author Troy Heninger
  */
-public class Range extends PluginCore {
+public class Range extends CorePlugin {
 
     public static final String NAME = "range";
     public static final String RANGE_INCLUSIVE = "range.inclusive";

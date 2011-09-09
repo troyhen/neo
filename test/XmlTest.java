@@ -32,7 +32,7 @@ public class XmlTest {
 
     @Test
     public void testComplex() throws Exception {
-        final String complex = "<div id=\"content\">\r\n<p class=\"main\">This is a\n<span>test</span><br/>\r</div>";
+        final String complex = "<div id=\"content\">\r\n<p class=\"main\">This is a\n<span>test</span><br/> of the xml parser</p>\r</div>";
         lang.load(complex);
         Node tokens = lang.tokenize();
         assertEquals(NAME, tokens.get(0).getName());

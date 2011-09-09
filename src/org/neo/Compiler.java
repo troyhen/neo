@@ -7,7 +7,9 @@ import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,13 +25,13 @@ public class Compiler {
     
     public static final String DEFAULT_BACKEND = "java";
 
-    enum State { closed, opened, loaded, tokenized, parsed, pruned, rendered, error };
+    enum State { closed, opened, loaded, tokenized, parsed, pruned, transformed, rendered, error };
 
     private static ThreadLocal<Compiler> compiler = new ThreadLocal<Compiler>();
 
     public final List<Plugin> plugins = new ArrayList<Plugin>();
     public final Set<String> literals = new HashSet<String>();
-//    public final Map<String, Backend> backends = new HashMap<String, Backend>();
+    private final LinkedList<Map<String, String>> symbols = new LinkedList<Map<String, String>>();
 
     private State state = State.closed;
     private Map<String, String> config = new HashMap<String, String>();
@@ -87,6 +89,12 @@ public class Compiler {
         return token;
     }
 
+    public Token consume(Plugin plugin, String name, int chars, Object value, String type) {
+        Token token = new Token(plugin, name, buffer.subSequence(0, chars), line, value, type);
+        buffer.position(buffer.position() + chars);
+        return token;
+    }
+
     public static File file() {
         String fileName = compiler().get("file");
         if (fileName == null) return null;
@@ -135,7 +143,9 @@ public class Compiler {
     }
 
     public void load(File file) throws IOException {
-        if (state == State.closed) open();
+        switch (state) {
+            case closed: open();
+        }
         buffer = CharBuffer.allocate((int) file.length());
         FileReader inp = new FileReader(file);
         try {
@@ -148,7 +158,9 @@ public class Compiler {
     }
 
     public void load(String text) {
-        if (state == State.closed) open();
+        switch (state) {
+            case closed: open();
+        }
         buffer = CharBuffer.wrap(text);
         set("text", text);
     }
@@ -183,10 +195,12 @@ public class Compiler {
     }
 
     public Node prune() throws NeoException {
-        if (state == State.closed) open();
-        if (state == State.opened) load();
-        if (state == State.loaded) tokenize();
-        if (state == State.tokenized) parse();
+        switch (state) {
+            case closed: open();
+            case opened: load();
+            case loaded: tokenize();
+            case tokenized: parse();
+        }
         prune(root);
         state = State.pruned;
         return root;
@@ -201,10 +215,35 @@ public class Compiler {
         }
     }
 
+    public Node transform() throws NeoException {
+        switch (state) {
+            case closed: open();
+            case opened: load();
+            case loaded: tokenize();
+            case tokenized: parse();
+            case parsed: prune();
+        }
+        transform(root);
+        state = State.transformed;
+        return root;
+    }
+
+    private void transform(Node node) throws NeoException {
+        while (node != null) {
+            if (node.getFirst() != null) {
+                transform(node.getFirst());
+            }
+            node = node.transform();
+            node = node.getNext();
+        }
+    }
+
     public Node parse() throws NeoException {
-        if (state == State.closed) open();
-        if (state == State.opened) load();
-        if (state == State.loaded) tokenize();
+        switch (state) {
+            case closed: open();
+            case opened: load();
+            case loaded: tokenize();
+        }
         List<Node> matched = new ArrayList<Node>();
     loop:
         for (;;) {
@@ -226,11 +265,14 @@ public class Compiler {
     }
     
     private void render() throws NeoException {
-        if (state == State.closed) open();
-        if (state == State.opened) load();
-        if (state == State.loaded) tokenize();
-        if (state == State.tokenized) parse();
-        if (state == State.parsed) prune();
+        switch (state) {
+            case closed: open();
+            case opened: load();
+            case loaded: tokenize();
+            case tokenized: parse();
+            case parsed: prune();
+            case pruned: transform();
+        }
         String backend = get("backend", DEFAULT_BACKEND);
         root.render(backend);
         state = State.rendered;
@@ -239,9 +281,34 @@ public class Compiler {
     public Node getRoot() { return root; }
     public void setRoot(Node root) { this.root = root; }
 
+    public void symbolAdd(String name, String type) {
+        Map<String, String> map = symbols.peek();
+        map.put(name, type);
+    }
+
+    public String symbolFind(String name) {
+        ListIterator<Map<String, String>> it = symbols.listIterator(symbols.size());
+        while (it.hasPrevious()) {
+            Map<String, String> map = it.previous();
+            String type = map.get(name);
+            if (type != null) return type;
+        }
+        return null;
+    }
+
+    public void symbolPop() {
+        symbols.pop();
+    }
+
+    public void symbolPush() {
+        symbols.push(new HashMap<String, String>());
+    }
+
     public Node tokenize() throws NeoException {
-        if (state == State.closed) open();
-        if (state == State.opened) load();
+        switch (state) {
+            case closed: open();
+            case opened: load();
+        }
         for(;;) {
             Token token = nextToken();
             root.add(token);

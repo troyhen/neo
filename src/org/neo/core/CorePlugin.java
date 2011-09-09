@@ -13,7 +13,7 @@ import org.neo.back.Render;
  *
  * @author Troy Heninger
  */
-public class PluginCore extends PluginBase {
+public class CorePlugin extends PluginBase {
 
     private static String capitalize(String word) {
         if (word == null || word.length() == 0) return word;

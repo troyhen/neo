@@ -12,9 +12,9 @@ public class JavaStatementUnless implements Backend {
     @Override
     public void render(Node node) {
         CodeBuilder buff = JavaCompilation.output(Segment.inside);
-        buff.tab().append("if (!");
+        buff.tab().append("if (!toboolean(");
         node.get(1).render("java");
-        buff.append(") {").eol().tabMore();
+        buff.append(")) {").eol().tabMore();
         node.getFirst().render("java");
         buff.tabLess().tab().append("}").eol();
     }

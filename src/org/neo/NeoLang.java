@@ -11,6 +11,7 @@ import org.neo.core.Range;
 import org.neo.core.RegEx;
 import org.neo.core.Strings;
 import org.neo.core.Symbol;
+import org.neo.core.Variable;
 import org.neo.core.Whitespace;
 import org.neo.core.Xml;
 
@@ -27,7 +28,8 @@ public class NeoLang extends Compiler {
         plugins.add(new Delimiter());
         plugins.add(new Import());  // must come before Expression
         plugins.add(new Numbers()); // must come before Expression
-        plugins.add(new Expression());
+        plugins.add(new Variable());
+        plugins.add(new Expression()); // must come befor Expression
         plugins.add(new Group());
         plugins.add(new Symbol());
         plugins.add(new Range());

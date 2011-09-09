@@ -6,7 +6,7 @@ import org.neo.lex.LexerChar;
  *
  * @author Troy Heninger
  */
-public class Group extends PluginCore {
+public class Group extends CorePlugin {
 
     public static final String NAME = "group";
 

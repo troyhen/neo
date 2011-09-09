@@ -4,7 +4,7 @@ package org.neo.core;
  *
  * @author Troy Heninger
  */
-public class Import extends PluginCore {
+public class Import extends CorePlugin {
 
     public static final String NAME = "import";
     public static final String STATEMENT = "statement.import";

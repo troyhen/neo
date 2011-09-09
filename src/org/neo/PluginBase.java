@@ -56,6 +56,11 @@ public class PluginBase implements Plugin {
         return Compiler.compiler().consume(this, name, chars, value);
     }
 
+    @Override
+    public Token consume(String name, int chars, Object value, String type) {
+        return Compiler.compiler().consume(this, name, chars, value, type);
+    }
+
     private static final Class<?>[] matchedSig = new Class<?>[] {
         Node.class
     };
@@ -89,10 +94,13 @@ public class PluginBase implements Plugin {
         return null;
     }
 
-    public Node prune(String name, Node node) throws Exception {
-        Method method = lookup(name);
-        if (method == null) return node;
-        return (Node) method.invoke(this, node);
+    @Override
+    public Node transform(Node node) {
+//        Method method = lookup(name);
+//        if (method == null) return node;
+//        return (Node) method.invoke(this, node);
+        // subclasses should override this for nodes they care to modify
+        return node;
     }
 
     @Override

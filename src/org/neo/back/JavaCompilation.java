@@ -17,7 +17,6 @@ import org.neo.Compiler;
 import org.neo.Log;
 import org.neo.NeoException;
 import org.neo.Node;
-import org.neo.core.Import;
 
 /**
  *
@@ -48,8 +47,8 @@ public class JavaCompilation implements Backend {
         return buf;
     }
 
-    private JavaExpression expression = new JavaExpression();
-    private JavaStatementImport importStmt = new JavaStatementImport();
+//    private JavaExpression expression = new JavaExpression();
+//    private JavaStatementImport importStmt = new JavaStatementImport();
 
     private String getClassName() {
         File file = Compiler.file();
@@ -124,39 +123,39 @@ public class JavaCompilation implements Backend {
         buff.append("import static neo.lang.N.*;").eol();
     }
 
-    private void renderImports(CodeBuilder buff, Node node) {
-        while (node != null) {
-            if (node.getName().equals(Import.STATEMENT)) importStmt.render(node);
-            else {
-                if (node.getFirst() != null) renderImports(buff, node.getFirst());
-            }
-            node = node.getNext();
-        }
-    }
+//    private void renderImports(CodeBuilder buff, Node node) {
+//        while (node != null) {
+//            if (node.getName().equals(Import.STATEMENT)) importStmt.render(node);
+//            else {
+//                if (node.getFirst() != null) renderImports(buff, node.getFirst());
+//            }
+//            node = node.getNext();
+//        }
+//    }
     
     private void renderMainOpen(CodeBuilder buff) {
         buff.println("public static void main(String[] args) {").tabMore();
     }
 
-    private void renderStatement(CodeBuilder buff, Node node) {
-        while (node != null) {
-            if (node.getName().equals(Import.STATEMENT)) {
-                // ignore imports here
-            } else {
-                buff.tab();
-                expression.render(node.getFirst());
-                buff.append(";").eol();
-            }
-            node = node.getNext();
-        }
-    }
+//    private void renderStatement(CodeBuilder buff, Node node) {
+//        while (node != null) {
+//            if (node.getName().equals(Import.STATEMENT)) {
+//                // ignore imports here
+//            } else {
+//                buff.tab();
+//                expression.render(node.getFirst());
+//                buff.append(";").eol();
+//            }
+//            node = node.getNext();
+//        }
+//    }
 
-    private void renderStatements(CodeBuilder buff, Node node) {
-        while (node != null) {
-            renderStatement(buff, node.getFirst());
-            node = node.getNext();
-        }
-    }
+//    private void renderStatements(CodeBuilder buff, Node node) {
+//        while (node != null) {
+//            renderStatement(buff, node.getFirst());
+//            node = node.getNext();
+//        }
+//    }
     
 //    private void renderPackage(StringBuilder buff) {
 //

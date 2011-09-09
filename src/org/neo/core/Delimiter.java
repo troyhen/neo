@@ -6,7 +6,7 @@ import org.neo.lex.LexerChar;
  *
  * @author Troy Heninger
  */
-public class Delimiter extends PluginCore {
+public class Delimiter extends CorePlugin {
 
     public static final String COMMA = "comma";
     public static final String SEMI = "semi";

@@ -19,7 +19,12 @@ public class Token extends Node {
     }
     
     public Token(Plugin plugin, String name, CharSequence text, int line, Object value) {
+        this(plugin, name, text, line, value, null);
+    }
+
+    public Token(Plugin plugin, String name, CharSequence text, int line, Object value, String type) {
         super(plugin, name, text, value);
+        setType(type);
         this.line = line;
     }
 

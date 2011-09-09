@@ -12,9 +12,9 @@ public class JavaStatementUntil implements Backend {
     @Override
     public void render(Node node) {
         CodeBuilder buff = JavaCompilation.output(Segment.inside);
-        buff.tab().append("while (!");
+        buff.tab().append("while (!toboolean(");
         node.get(1).render("java");
-        buff.append(") {").eol().tabMore();
+        buff.append(")) {").eol().tabMore();
         node.getFirst().render("java");
         buff.tabLess().tab().append("}").eol();
     }

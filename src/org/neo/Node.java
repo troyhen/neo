@@ -16,6 +16,7 @@ public class Node {
     private final Plugin plugin;
     private final String name;
     private final Object value;
+    private String type = "Object"; // TODO this needs to be implied from the code
     private Node parent;
     private Node first;
     private Node last;
@@ -137,6 +138,8 @@ public class Node {
     public Node getParent() { return parent; }
     public Plugin getPlugin() { return plugin; }
     public CharSequence getText() { return text; }
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
     public Object getValue() { return value; }
     public boolean isIgnored() { return (flags & IGNORE) != 0; }
     public boolean isRoot() { return (flags & ROOT) != 0; }
@@ -201,11 +204,8 @@ public class Node {
                 node = nextNode;
             }
         } else if (isSubsumed()) {
-            Node node = first;
-            while (node != null) {
-                Node nextNode = node.next;
-                insertAfter(node);
-                node = nextNode;
+            while (last != null) {
+                insertAfter(last);
             }
             unlink();
         }
@@ -220,6 +220,10 @@ public class Node {
         while (matched.size() > size) {
             matched.remove(matched.size() - 1);
         }
+    }
+
+    public Node transform() {
+        return plugin.transform(this);
     }
 
     @Override

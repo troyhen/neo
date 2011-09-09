@@ -9,7 +9,7 @@ import org.neo.lex.Token;
  *
  * @author Troy Heninger
  */
-public class Numbers extends PluginCore {
+public class Numbers extends CorePlugin {
 
     public static final String TRUE = "number.true";
     public static final String FALSE = "number.false";
@@ -21,16 +21,24 @@ public class Numbers extends PluginCore {
     public Token consume(String name, int chars) {
         String text = Compiler.buffer().subSequence(0, chars).toString();
         Object value;
+        String type;
         if (name.equals(TRUE) || name.equals(FALSE)) {
             value = text;
+            type = "boolean";
         } else if (name.equals(INTEGER)) {
             value = new Integer(text);
+            type = "int";
         } else {
                 // Note, Java will ignore the trailing 'f'
-            if (text.toLowerCase().endsWith("f")) value = new Float(text);
-            else value = new Double(text);
+            if (text.toLowerCase().endsWith("f")) {
+                value = new Float(text);
+                type = "float";
+            } else {
+                value = new Double(text);
+                type = "double";
+            }
         }
-        return super.consume(name, chars, value);
+        return super.consume(name, chars, value, type);
     }
 
     @Override

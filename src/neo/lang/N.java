@@ -1,5 +1,7 @@
 package neo.lang;
 
+import java.util.Collection;
+
 /**
  *
  * @author Troy Heninger
@@ -31,9 +33,18 @@ public class N {
         throw new IllegalArgumentException("Unknown type cast");
     }
 
-    public static boolean toboolean(Object val) {
+    public static boolean toboolean(Collection val) {
         if (val == null) return false;
-        throw new IllegalArgumentException("Unknown type cast");
+        return !val.isEmpty();
+    }
+
+    public static boolean toboolean(Boolean val) {
+        if (val == null) return false;
+        return val.booleanValue();
+    }
+
+    public static boolean toboolean(Object val) {
+        return val != null;
     }
 
     public static boolean toboolean(Number val) {

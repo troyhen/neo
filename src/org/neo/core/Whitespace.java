@@ -7,7 +7,7 @@ import org.neo.lex.LexerPattern;
  *
  * @author Troy Heninger
  */
-public class Whitespace extends PluginCore {
+public class Whitespace extends CorePlugin {
 
     public static final String EOL = "eol";
     public static final String END_BLOCK = "end.block";

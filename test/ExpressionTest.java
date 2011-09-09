@@ -82,7 +82,7 @@ public class ExpressionTest {
         final String expr = "1 <=> 2";
         lang.compile(expr);
         String program = lang.get("output");
-        System.out.println(program);
+//        System.out.println(program);
         assertTrue("missing comare", program.indexOf("compare(1, 2)") > 0);
     }
 }
