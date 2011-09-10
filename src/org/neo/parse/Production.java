@@ -100,14 +100,25 @@ public class Production extends RuleGroup {
                     addIdent(ident, local);
                     local = addAlternatives(local, alternatives);
                     return local;
-                case '[':
+                case '<':
                     addIdent(ident, local);
-                    local.add(new RulePeek(parseRules()));
+                    if (local.size() > 0) {
+                        Rule before = new RuleBefore(local);
+                        local = new Stack<Rule>();
+                        local.add(before);
+                    }
                     break;
-                case ']':
+                case '>':
                     addIdent(ident, local);
-                    local = addAlternatives(local, alternatives);
-                    return local;
+                    List<Rule> after = parseRules();
+                    if (after.size() > 0) {
+                        local.add(new RuleAfter(after));
+                    }
+                    break;
+//                case ']':
+//                    addIdent(ident, local);
+//                    local = addAlternatives(local, alternatives);
+//                    return local;
                 case ' ':
                     addIdent(ident, local);
                     break;
@@ -117,6 +128,11 @@ public class Production extends RuleGroup {
         addIdent(ident, local);
         local = addAlternatives(local, alternatives);
         return local;
+    }
+
+    @Override
+    public String toString() {
+        return name + ": " + definition;
     }
 
 }

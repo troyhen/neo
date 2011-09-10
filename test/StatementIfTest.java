@@ -30,7 +30,9 @@ public class StatementIfTest {
     @Test
     public void compileIf1() {
         final String expr = "execute if 1 < 2";
+//Log.logger.setLevel(Level.ALL);
         lang.compile(expr);
+//lang.printTree();
         String program = lang.get("output");
 //System.out.println(program);
         assertTrue("missing if", program.indexOf("if (toboolean((1 < 2)))") > 0);

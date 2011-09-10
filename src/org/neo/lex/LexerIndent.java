@@ -42,24 +42,24 @@ public class LexerIndent extends LexerEof {
         if (atEof()) {
             if (indents.isEmpty()) return super.nextToken();
             indents.pop();
-            return getPlugin().consume(endBlock, 0);
+            return getPlugin().consume(endBlock, 0, null, null);
         }
         if (!atBol()) return null;
         CharSequence indent = getIndent();
         if (indents.isEmpty()) {
             if (indent.length() == 0) return null;
             indents.push(indent);
-            return getPlugin().consume(startBlock, indent.length());
+            return getPlugin().consume(startBlock, indent.length(), null, null);
         }
         CharSequence lastIndent = indents.peek();
         checkMatch(indent, lastIndent);
         if (indent.equals(lastIndent)) return null;
         if (indent.length() > lastIndent.length()) {
             indents.push(indent);
-            return getPlugin().consume(startBlock, indent.length());
+            return getPlugin().consume(startBlock, indent.length(), null, null);
         }
         indents.pop();
-        return getPlugin().consume(endBlock, 0);
+        return getPlugin().consume(endBlock, 0, null, null);
     }
 
     public CharSequence getIndent() {

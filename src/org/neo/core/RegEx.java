@@ -1,6 +1,5 @@
 package org.neo.core;
 
-import org.neo.Compiler;
 import org.neo.lex.LexerPattern;
 import org.neo.lex.Token;
 
@@ -22,10 +21,8 @@ public class RegEx extends CorePlugin {
     }
 
     @Override
-    public Token consume(String name, int chars) {
-        Token token = super.consume(name, chars);
-        token.setType("java.util.regex.Pattern");
-        return token;
+    public Token consume(String name, int chars, Object value, String type) {
+        return super.consume(name, chars, value, "java.util.regex.Pattern");
     }
 
 }

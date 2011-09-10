@@ -46,15 +46,15 @@ public class PluginBase implements Plugin {
     public void close() {
     }
 
-    @Override
-    public Token consume(String name, int chars) {
-        return Compiler.compiler().consume(this, name, chars);
-    }
-
-    @Override
-    public Token consume(String name, int chars, Object value) {
-        return Compiler.compiler().consume(this, name, chars, value);
-    }
+//    @Override
+//    public Token consume(String name, int chars) {
+//        return Compiler.compiler().consume(this, name, chars);
+//    }
+//
+//    @Override
+//    public Token consume(String name, int chars, Object value) {
+//        return Compiler.compiler().consume(this, name, chars, value);
+//    }
 
     @Override
     public Token consume(String name, int chars, Object value, String type) {

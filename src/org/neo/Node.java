@@ -16,7 +16,7 @@ public class Node {
     private final Plugin plugin;
     private final String name;
     private final Object value;
-    private String type = "Object"; // TODO this needs to be implied from the code
+    private String type;
     private Node parent;
     private Node first;
     private Node last;
@@ -25,19 +25,24 @@ public class Node {
     private byte flags;
 
     public Node(Plugin plugin, String name) {
-        this(plugin, name, null, null);
+        this(plugin, name, null, null, null);
     }
     
     public Node(Plugin plugin, String name, CharSequence text) {
-        this(plugin, name, text, null);
+        this(plugin, name, text, null, null);
     }
     
     public Node(Plugin plugin, String name, CharSequence text, Object value) {
+        this(plugin, name, text, null, null);
+    }
+
+    public Node(Plugin plugin, String name, CharSequence text, Object value, String type) {
         this.plugin = plugin;
         this.name = name;
         flags |= name.startsWith("!") ? IGNORE : 0; // lexers use this for ignored tokens
         this.value = value;
         this.text = text;
+        this.type = type;
     }
 
     public void add(Node child) {
@@ -137,6 +142,7 @@ public class Node {
     public Node getNext() { return next; }
     public Node getParent() { return parent; }
     public Plugin getPlugin() { return plugin; }
+    public Node getPrev() { return prev; }
     public CharSequence getText() { return text; }
     public String getType() { return type; }
     public void setType(String type) { this.type = type; }

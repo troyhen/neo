@@ -15,7 +15,7 @@ public class Token extends Node {
     private final int line;
 
     public Token(Plugin plugin, String name, CharSequence text, int line) {
-        this(plugin, name, text, line, text);
+        this(plugin, name, text, line, text, null);
     }
     
     public Token(Plugin plugin, String name, CharSequence text, int line, Object value) {
@@ -23,8 +23,7 @@ public class Token extends Node {
     }
 
     public Token(Plugin plugin, String name, CharSequence text, int line, Object value, String type) {
-        super(plugin, name, text, value);
-        setType(type);
+        super(plugin, name, text, value, type);
         this.line = line;
     }
 

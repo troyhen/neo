@@ -9,7 +9,7 @@ import org.neo.Compiler;
 import org.neo.NeoException;
 import org.neo.lex.Token;
 
-import org.xml.sax.InputSource;
+//import org.xml.sax.InputSource;
 
 /**
  *
@@ -51,11 +51,11 @@ public class Xml extends CorePlugin {
             String found = matcher.group();
             String tag = matcher.group(1);
             boolean slash = found.endsWith("/>");
-            if (slash) return consume(NAME, matcher.end());
+            if (slash) return consume(NAME, matcher.end(), null, "XmlDocument");
             int offset = matcher.end();
             int end = matchEnd(buffer.subSequence(offset, buffer.length()), tag);
             if (end > 0) {
-                return consume(NAME, offset + end);
+                return consume(NAME, offset + end, null, "XmlDocument");
             }
         }
         return null;

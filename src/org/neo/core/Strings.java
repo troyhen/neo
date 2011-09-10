@@ -23,7 +23,7 @@ public class Strings extends CorePlugin {
     public void open() {
         super.open();
         names.add("string");
-        add(new LexerPattern(this, STRING_WORD, "`([^ \\t\\r\\n,.;:#~]+)", 1));
+        add(new LexerPattern(this, STRING_WORD, "`([^ \\t\\r\\n,.;:#~\\[\\]\\(\\)\\{\\}']+)", 1));
         add(new LexerPattern(this, STRING_SINGLE, "'((\\\\'|[^'\\r\\n])*)'", 1));
 //        add(new LexerPattern(this, STRING_SINGLE_BAD, "'((\\\\'|[^'\\r\\n])*)[\\r\\n]", 1));
 //        add(new LexerPattern(this, STRING_SINGLE_BAD2, "'((\\\\'|[^'\\r\\n])*)$", 1));
@@ -34,9 +34,8 @@ public class Strings extends CorePlugin {
     }
 
     @Override
-    public Token consume(String name, int chars) {
-        String text = Compiler.buffer().subSequence(0, chars).toString();
-        return super.consume(name, chars, text, "java.lang.String");
+    public Token consume(String name, int chars, Object value, String type) {
+        return super.consume(name, chars, value, "java.lang.String");
     }
 
 }

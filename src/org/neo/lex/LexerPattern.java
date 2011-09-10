@@ -28,7 +28,7 @@ public class LexerPattern extends LexerBase {
     }
 
     public LexerPattern(Plugin plugin, String name, String regex, int group) {
-        this(plugin, name, toPattern(regex), group);
+        this(plugin, name, toPattern(regex), group);// + (regex.startsWith("(") ? 0 : 1));
     }
 
     public static Pattern toPattern(String regex) {

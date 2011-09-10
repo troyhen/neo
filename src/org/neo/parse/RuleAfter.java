@@ -3,9 +3,9 @@ package org.neo.parse;
 import java.util.List;
 import org.neo.Node;
 
-class RulePeek extends RuleGroup {
+class RuleAfter extends RuleGroup {
     
-    RulePeek(List<Rule> rules) {
+    RuleAfter(List<Rule> rules) {
         super(rules);
     }
 

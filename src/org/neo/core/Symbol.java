@@ -13,9 +13,9 @@ public class Symbol extends CorePlugin {
     public static final String SYMBOL = "symbol";
 
     @Override
-    public Token consume(String name, int chars) {
-        final String text = Compiler.buffer().subSequence(0, chars).toString();
-        return super.consume(name + '.' + text, chars);
+    public Token consume(String name, int chars, Object value, String text) {
+        text = Compiler.buffer().subSequence(0, chars).toString();
+        return super.consume(name + '.' + text, chars, value, text);
     }
     
     @Override

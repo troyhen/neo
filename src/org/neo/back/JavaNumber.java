@@ -13,6 +13,8 @@ public class JavaNumber implements Backend {
     public void render(Node node) {
         CodeBuilder buff = JavaCompilation.output(Segment.inside);
         buff.append(node.getValue());
+        if (node.getValue() instanceof Float) buff.append("f");
+        if (node.getValue() instanceof Long) buff.append("l");
     }
 
 }

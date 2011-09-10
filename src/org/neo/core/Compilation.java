@@ -32,7 +32,7 @@ public class Compilation extends CorePlugin {
         } else if (name.equals("statement")) {
             type = node.getFirst().getType();
         }
-        node.setType(type);
+        if (type != null) node.setType(type);
         return node;
     }
 

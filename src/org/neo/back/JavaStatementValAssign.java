@@ -24,7 +24,7 @@ public class JavaStatementValAssign implements Backend {
             }
             buff.append(" ");
         } else {
-            buff.append(node1.getFirst().getType()).append(" ");
+            buff.append(node1.getType()).append(" ");
         }
         buff.append(node0.getText()).append(" = ");
         node1.getFirst().render("java");

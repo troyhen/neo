@@ -13,18 +13,20 @@ public class Numbers extends CorePlugin {
 
     public static final String TRUE = "number.true";
     public static final String FALSE = "number.false";
+    public static final String LONG = "number.long";
     public static final String INTEGER = "number.integer";
     public static final String REAL = "number.real";
-    public static final String REAL_FORCED = "number.real.forced";
+//    public static final String REAL_FORCED = "number.real.forced";
 
     @Override
-    public Token consume(String name, int chars) {
-        String text = Compiler.buffer().subSequence(0, chars).toString();
-        Object value;
-        String type;
+    public Token consume(String name, int chars, Object value, String type) {
+        String text = Compiler.chars(chars).toString();
         if (name.equals(TRUE) || name.equals(FALSE)) {
             value = text;
             type = "boolean";
+        } else if (name.equals(LONG)) {
+            value = new Long(text.substring(0, text.length() - 1));
+            type = "long";
         } else if (name.equals(INTEGER)) {
             value = new Integer(text);
             type = "int";
@@ -47,9 +49,10 @@ public class Numbers extends CorePlugin {
         names.add("number");
         add(new LexerString(this, TRUE, "true"));
         add(new LexerString(this, FALSE, "false"));
-        add(new LexerPattern(this, REAL, "-?[0-9_]+\\.[0-9_]([eE]-?[0-9_]+)?[fF]?"));
-        add(new LexerPattern(this, REAL, "-?[0-9_]+[fF]"));
-        add(new LexerPattern(this, INTEGER, "-?[0-9_]+"));
+        add(new LexerPattern(this, REAL, "[0-9_]+\\.[0-9_]([eE]-?[0-9_]+)?[fF]?"));
+        add(new LexerPattern(this, REAL, "[0-9_]+[fF]"));
+        add(new LexerPattern(this, LONG, "[0-9_]+[lL]"));
+        add(new LexerPattern(this, INTEGER, "[0-9_]+"));
     }
 
 }

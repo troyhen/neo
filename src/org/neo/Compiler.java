@@ -43,6 +43,10 @@ public class Compiler {
 
     public CharSequence getBuffer() { return buffer; }
     
+    public static Object chars(int chars) {
+        return compiler.get().getChars(chars);
+    }
+
     public void close() {
         buffer = null;
         root = null;
@@ -77,20 +81,21 @@ public class Compiler {
 
     public static Compiler compiler() { return (Compiler) compiler.get(); }
 
-    public Token consume(Plugin plugin, String name, int chars) {
-        Token token = new Token(plugin, name, buffer.subSequence(0, chars), line);
-        buffer.position(buffer.position() + chars);
-        return token;
-    }
-
-    public Token consume(Plugin plugin, String name, int chars, Object value) {
-        Token token = new Token(plugin, name, buffer.subSequence(0, chars), line, value);
-        buffer.position(buffer.position() + chars);
-        return token;
-    }
+//    public Token consume(Plugin plugin, String name, int chars) {
+//        Token token = new Token(plugin, name, buffer.subSequence(0, chars), line);
+//        buffer.position(buffer.position() + chars);
+//        return token;
+//    }
+//
+//    public Token consume(Plugin plugin, String name, int chars, Object value) {
+//        Token token = new Token(plugin, name, buffer.subSequence(0, chars), line, value);
+//        buffer.position(buffer.position() + chars);
+//        return token;
+//    }
 
     public Token consume(Plugin plugin, String name, int chars, Object value, String type) {
-        Token token = new Token(plugin, name, buffer.subSequence(0, chars), line, value, type);
+        CharSequence text = getChars(chars);
+        Token token = new Token(plugin, name, text, line, value == null ? text : value, type);
         buffer.position(buffer.position() + chars);
         return token;
     }
@@ -107,6 +112,11 @@ public class Compiler {
     private String get(String key, String defValue) {
         if (config.containsKey(key)) return config.get(key);
         return defValue;
+    }
+
+    public CharSequence getChars(int chars) {
+        chars = Math.min(chars, buffer.length());
+        return buffer.subSequence(0, chars);
     }
 
     public String set(String key, String value) { return config.put(key, value); }

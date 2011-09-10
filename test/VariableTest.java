@@ -30,11 +30,11 @@ public class VariableTest {
     @Test
     public void implicitVar() {
         final String expr = "var a = 1";
-Log.logger.setLevel(Level.ALL);
+//Log.logger.setLevel(Level.ALL);
         lang.compile(expr);
-lang.printTree();
+//lang.printTree();
         String program = lang.get("output");
-System.out.println(program);
+//System.out.println(program);
         assertTrue("missing declaration", program.indexOf("int a = 1;") > 0);
     }
 
@@ -63,11 +63,11 @@ System.out.println(program);
     @Test
     public void implicitVal() {
         final String expr = "val a = 1";
-Log.logger.setLevel(Level.ALL);
+//Log.logger.setLevel(Level.ALL);
         lang.compile(expr);
-lang.printTree();
+//lang.printTree();
         String program = lang.get("output");
-System.out.println(program);
+//System.out.println(program);
         assertTrue("missing declaration", program.indexOf("final int a = 1;") > 0);
     }
 
@@ -84,12 +84,12 @@ System.out.println(program);
 
     @Test
     public void explicitValAssign() {
-Log.logger.setLevel(Level.ALL);
+//Log.logger.setLevel(Level.ALL);
         final String expr = "val a~long = 0";
         lang.compile(expr);
-lang.printTree();
+//lang.printTree();
         String program = lang.get("output");
-System.out.println(program);
+//System.out.println(program);
         assertTrue("missing declaration", program.indexOf("final long a = 0;") > 0);
     }
 

@@ -14,7 +14,8 @@ public class Expression extends CorePlugin {
         addParser("expression", "string");
         addParser("expression", "array");
         addParser("expression", "!start.paren @expression !end.paren");
-        addParser("expression", "@expression ^operator.as (symbol operator.dot)* symbol");
+        addParser("expression", "@expression ^operator.as (symbol operator.dot)* symbol "
+                + "(start.bracket end.bracket)*"); // must come before array
         addParser("expression", "@expression ^operator.pow @expression");
         addParser("expression", "@expression ^operator.mul @expression");
         addParser("expression", "@expression ^operator.add @expression");
@@ -22,7 +23,8 @@ public class Expression extends CorePlugin {
         addParser("expression", "access");
         addParser("access.dot", "@expression ^operator.dot access");
         addParser("access.call", "symbol !start.paren (@expression (!comma? @expression)*)? !end.paren");
-        addParser("access.call", "symbol (@expression (!comma? @expression)*)?");
+        addParser("access.call", "symbol @expression (!comma? @expression)*");
+        addParser("access.call", "operator.as- < symbol");
         addParser("access.array", "@expression !start.bracket @expression !end.bracket");
         addParser("expression", "keyword.if @expression !symbol.then statement elseClause? !symbol.end?");
         addParser("expression", "keyword.if @expression !symbol.then? !terminator @block elseClause?");
@@ -34,7 +36,7 @@ public class Expression extends CorePlugin {
         addParser("expression", "keyword.until @expression !symbol.do? !terminator @block elseClause? !symbol.end");
         addParser("elseClause", "!symbol.else statement");
         addParser("elseClause", "!symbol.else !terminator @block");
-        addParser("array", "!start.bracket (@expression !comma?)* @expression? !end.bracket");
+        addParser("array", "expression- symbol- < !start.bracket (@expression !comma?)* @expression? !end.bracket");
     }
 
     @Override
@@ -45,10 +47,10 @@ public class Expression extends CorePlugin {
             type = node.getValue().toString().equals("<=>") ? "int" : "boolean";
         } else if (name.equals("array")) {
             type = commonType(node.getFirst()) + "[]";
-        } else if (name.startsWith("operator")) {
+        } else if (name.startsWith("operator") || name.startsWith("expression")) {
             type = commonType(node.getFirst());
         }
-        node.setType(type);
+        if (type != null) node.setType(type);
         return node;
     }
 
@@ -86,9 +88,10 @@ public class Expression extends CorePlugin {
         String common = node.getType();
         while (node != null) {
             String type = node.getType();
-            if (type == null) common = "java.lang.Object";
-            else if (type.equals(common)) continue;
-            else {
+            if (type == null)
+                common = "java.lang.Object";
+            else if (!type.equals(common)) {
+                boolean found = false;
                 for (int ix = 0, iz = conversions.length; ix < iz; ) {
                     String type1 = conversions[ix++];
                     String type2 = conversions[ix++];
@@ -96,9 +99,10 @@ public class Expression extends CorePlugin {
                     if (common.equals(type1) && type.equals(type2)
                             || common.equals(type2) && type.equals(type1)) {
                         common = type3;
+                        found = true;
                     }
                 }
-                common = "java.lang.Object";
+                if (!found) common = "java.lang.Object";
             }
             node = node.getNext();
         }

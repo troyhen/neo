@@ -1,5 +1,6 @@
 package org.neo.lex;
 
+import org.neo.Compiler;
 import org.neo.Plugin;
 
 /**
@@ -23,10 +24,10 @@ public abstract class LexerBase implements Lexer {
     public Plugin getPlugin() { return plugin; }
 
     public Token consume(int chars) {
-        return plugin.consume(name, chars);
+        return consume(chars, null);
     }
 
     public Token consume(int chars, Object value) {
-        return plugin.consume(name, chars, value);
+        return plugin.consume(name, chars, value, null);
     }
 }

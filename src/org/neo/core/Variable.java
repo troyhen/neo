@@ -11,11 +11,13 @@ public class Variable extends CorePlugin {
     @Override
     public void open() {
         addParser("statement.varDeclare",
-                "!keyword.var symbol (operator.as (symbol operator.dot)* symbol)?");
+                "!keyword.var symbol (operator.as (symbol operator.dot)* symbol)? "
+                + "(start.bracket end.bracket)* (start.bracket @expression end.bracket)?");
         addParser("statement.varAssign",
                 "@statement.varDeclare !operator.eq expression");
         addParser("statement.valDeclare",
-                "!keyword.val symbol (operator.as (symbol operator.dot)* symbol)?");
+                "!keyword.val symbol (operator.as (symbol operator.dot)* symbol)? "
+                + "(start.bracket end.bracket)* (start.bracket @expression end.bracket)?");
         addParser("statement.valAssign",
                 "@statement.valDeclare !operator.eq expression");
     }
