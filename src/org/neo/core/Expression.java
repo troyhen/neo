@@ -10,44 +10,44 @@ public class Expression extends CorePlugin {
     
     @Override
     public void open() {
+        addParser("array", "expression- reference- symbol- < !start.bracket (@expression !comma?)* @expression? !end.bracket");
         addParser("expression", "number");
         addParser("expression", "string");
         addParser("expression", "array");
+        addParser("call", "symbol !start.paren (@expression (!comma? @expression)*)? !end.paren");
+        addParser("call", "symbol @expression (!comma? @expression)*");
+        addParser("expression", "call");
         addParser("expression", "!start.paren @expression !end.paren");
         addParser("expression", "@expression ^operator.as (symbol operator.dot)* symbol "
-                + "(start.bracket end.bracket)*"); // must come before array
+                + "(start.bracket end.bracket)*"); // must come before reference
+        addParser("reference", "symbol > (operator.eq | operator.assign | start | keyword | terminator)");
+        addParser("reference.dot", "@expression ^operator.dot symbol");
+        addParser("reference.array", "@expression !start.bracket @expression !end.bracket");
         addParser("expression", "@expression ^operator.pow @expression");
         addParser("expression", "@expression ^operator.mul @expression");
         addParser("expression", "@expression ^operator.add @expression");
         addParser("expression", "@expression ^operator.compare @expression");
-        addParser("expression", "access");
-        addParser("access.dot", "@expression ^operator.dot access");
-        addParser("access.call", "symbol !start.paren (@expression (!comma? @expression)*)? !end.paren");
-        addParser("access.call", "symbol @expression (!comma? @expression)*");
-        addParser("access.call", "operator.as- < symbol");
-        addParser("access.array", "@expression !start.bracket @expression !end.bracket");
-        addParser("expression", "keyword.if @expression !symbol.then statement elseClause? !symbol.end?");
-        addParser("expression", "keyword.if @expression !symbol.then? !terminator @block elseClause?");
-        addParser("expression", "keyword.unless @expression !symbol.then statement elseClause?");
-        addParser("expression", "keyword.unless @expression !symbol.then? !terminator @block elseClause? !symbol.end?");
-        addParser("expression", "keyword.while @expression !symbol.do statement elseClause?");
-        addParser("expression", "keyword.while @expression !symbol.do? !terminator @block elseClause? !symbol.end");
-        addParser("expression", "keyword.until @expression !symbol.do statement elseClause?");
-        addParser("expression", "keyword.until @expression !symbol.do? !terminator @block elseClause? !symbol.end");
-        addParser("elseClause", "!symbol.else statement");
-        addParser("elseClause", "!symbol.else !terminator @block");
-        addParser("array", "expression- symbol- < !start.bracket (@expression !comma?)* @expression? !end.bracket");
+        addParser("expression", "expression- < keyword.if @expression !keyword.then statement elseClause? !symbol.end?");
+        addParser("expression", "expression- < keyword.if @expression !keyword.then? !terminator @block elseClause?");
+        addParser("expression", "expression- < keyword.unless @expression !keyword.then statement elseClause?");
+        addParser("expression", "expression- < keyword.unless @expression !keyword.then? !terminator @block elseClause? !symbol.end?");
+        addParser("expression", "expression- < keyword.while @expression !keyword.do statement elseClause?");
+        addParser("expression", "expression- < keyword.while @expression !keyword.do? !terminator @block elseClause? !symbol.end");
+        addParser("expression", "expression- < keyword.until @expression !keyword.do statement elseClause?");
+        addParser("expression", "expression- < keyword.until @expression !keyword.do? !terminator @block elseClause? !symbol.end");
+        addParser("expression", "reference (^operator.assign | ^operator.eq) @expression");
+        addParser("expression", "reference");
+        addParser("elseClause", "!keyword.else statement");
+        addParser("elseClause", "!keyword.else !terminator @block");
     }
 
     @Override
     public Node transform(Node node) {
         String name = node.getName();
         String type = null;
-        if (name.equals("operator.compare")) {
-            type = node.getValue().toString().equals("<=>") ? "int" : "boolean";
-        } else if (name.equals("array")) {
+        if (name.equals("array")) {
             type = commonType(node.getFirst()) + "[]";
-        } else if (name.startsWith("operator") || name.startsWith("expression")) {
+        } else if (name.startsWith("expression")) {
             type = commonType(node.getFirst());
         }
         if (type != null) node.setType(type);
@@ -84,7 +84,7 @@ public class Expression extends CorePlugin {
         "double", "java.lang.Double", "double",
     };
 
-    private String commonType(Node node) {
+    public static String commonType(Node node) {
         String common = node.getType();
         while (node != null) {
             String type = node.getType();

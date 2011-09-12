@@ -41,7 +41,7 @@ public class Loader extends ClassLoader {
                 in.close();
             }
         } catch (IOException ex) {
-            Log.logger.severe(ex.toString());
+            Log.error(ex);
             throw new ClassNotFoundException(name);
         }
     }

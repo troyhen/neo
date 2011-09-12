@@ -1,3 +1,5 @@
+import org.neo.Log;
+import org.junit.After;
 import org.neo.core.Strings;
 import org.neo.NeoLang;
 import org.neo.Node;
@@ -17,6 +19,11 @@ public class StringTest {
     @Before
     public void setUp() {
         lang = new NeoLang();
+    }
+
+    @After
+    public void tearDown() {
+        Log.testStop();
     }
 
     @Test

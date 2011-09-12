@@ -1,3 +1,5 @@
+import org.neo.Log;
+import org.junit.After;
 import org.neo.Node;
 
 import org.neo.NeoLang;
@@ -20,7 +22,12 @@ public class XmlTest {
     public void setUp() {
         lang = new NeoLang();
     }
-    
+
+    @After
+    public void tearDown() {
+        Log.testStop();
+    }
+
     @Test
     public void testSimple() throws Exception {
         final String simple = "<test/>";

@@ -80,7 +80,7 @@ public class JavaCompilation implements Backend {
                         run(cl);
                     }
                 } catch (ClassNotFoundException ex) {
-                    Log.logger.severe(ex.toString());
+                    Log.error(ex);
                     throw new NeoException(ex);
                 }
             }
@@ -173,7 +173,7 @@ public class JavaCompilation implements Backend {
                 }
                 javac(saveName);
             } catch (IOException ex) {
-                Log.logger.severe(ex.toString());
+                Log.error(ex);
                 throw new NeoException(ex);
             }
         }
@@ -187,7 +187,7 @@ public class JavaCompilation implements Backend {
                     method.invoke(null, (Object)new String[0]);
                     break;
                 } catch (Exception ex) {
-                    Log.logger.severe(ex.toString());
+                    Log.error(ex);
                     throw new NeoException(ex);
                 }
             }

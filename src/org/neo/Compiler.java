@@ -145,7 +145,7 @@ public class Compiler {
             try {
                 load(file);
             } catch (IOException ex) {
-                Log.logger.severe(ex.toString());
+                Log.error(ex);
                 throw new NeoException(ex);
             }
         }
@@ -258,7 +258,7 @@ public class Compiler {
     loop:
         for (;;) {
             Node node = root.getFirst();
-            Log.logger.info("current state: " + root.childNames());
+            Log.info("current state: " + root.childNames());
             for (Plugin plugin : plugins) {
                 Node next = plugin.match(node, matched);
                 if (next != null) continue loop;
@@ -266,12 +266,12 @@ public class Compiler {
             break;
         }
         state = State.parsed;
-        Log.logger.info("parse complete with " + root.childNames());
+        Log.info("parse complete with " + root.childNames());
         return root;
     }
 
-    public void printTree() {
-        root.printTree();
+    public String toTree() {
+        return root.toTree();
     }
     
     private void render() throws NeoException {

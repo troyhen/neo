@@ -22,10 +22,9 @@ public class Variable extends CorePlugin {
                 "@statement.valDeclare !operator.eq expression");
     }
 
-    @Override
-    public Node transform(Node node) {
-//        if (no)
-        return super.transform(node);
-    }
+//    @Override
+//    public Node transform(Node node) {
+//        return super.transform(node);
+//    }
 
 }

@@ -1,3 +1,4 @@
+import org.junit.After;
 import java.util.logging.Level;
 import org.neo.Log;
 import org.neo.NeoLang;
@@ -21,8 +22,9 @@ public class CastTest {
         lang = new NeoLang();
     }
 
+    @After
     public void tearDown() {
-        Log.logger.setLevel(Level.WARNING);
+        Log.testStop();
     }
 
     @Test
@@ -69,9 +71,9 @@ public class CastTest {
     public void compileCast1() {
         final String expr = "1+2~float";
         lang.compile(expr);
-//lang.printTree();
+        Log.info(lang.toTree());
         String program = lang.get("output");
-//System.err.println(program);
+        Log.info(program);
         assertTrue(program.indexOf("class Main") > 0);
         assertTrue(program.indexOf("public static void main") > 0);
         assertTrue(program.indexOf("tofloat(2)") > 0);
@@ -82,9 +84,9 @@ public class CastTest {
     public void compileCast2() {
         final String expr = "2~float+1";
         lang.compile(expr);
-//lang.printTree();
+        Log.info(lang.toTree());
         String program = lang.get("output");
-//System.err.println(program);
+        Log.info(program);
         assertTrue(program.indexOf("class Main") > 0);
         assertTrue(program.indexOf("public static void main") > 0);
         assertTrue(program.indexOf("tofloat(2)") > 0);
@@ -96,7 +98,7 @@ public class CastTest {
         final String expr = "2~java.lang.Float";
         lang.compile(expr);
         String program = lang.get("output");
-//        System.err.println(program);
+        Log.info(program);
         assertTrue(program.indexOf("class Main") > 0);
         assertTrue(program.indexOf("public static void main") > 0);
         assertTrue(program.indexOf("to(2, (java.lang.Float) null)") > 0);

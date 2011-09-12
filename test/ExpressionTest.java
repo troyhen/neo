@@ -1,3 +1,6 @@
+import org.junit.After;
+import java.util.logging.Level;
+import org.neo.Log;
 import org.neo.NeoLang;
 import org.neo.Node;
 import org.junit.Before;
@@ -17,6 +20,11 @@ public class ExpressionTest {
     @Before
     public void setUp() {
         lang = new NeoLang();
+    }
+
+    @After
+    public void tearDown() {
+        Log.testStop();
     }
 
     @Test
@@ -58,7 +66,7 @@ public class ExpressionTest {
         final String expr = "1+2*5";
         lang.compile(expr);
         String program = lang.get("output");
-//        System.out.println(program);
+        Log.info(program);
         assertTrue(program.indexOf("class Main") > 0);
         assertTrue(program.indexOf("public static void main") > 0);
         assertTrue(program.indexOf("2 * 5") > 0);
@@ -70,7 +78,7 @@ public class ExpressionTest {
         final String expr = "2*5+1";
         lang.compile(expr);
         String program = lang.get("output");
-//        System.out.println(program);
+        Log.info(program);
         assertTrue(program.indexOf("class Main") > 0);
         assertTrue(program.indexOf("public static void main") > 0);
         assertTrue(program.indexOf("2 * 5") > 0);
@@ -82,7 +90,7 @@ public class ExpressionTest {
         final String expr = "1 <=> 2";
         lang.compile(expr);
         String program = lang.get("output");
-//        System.out.println(program);
+        Log.info(program);
         assertTrue("missing comare", program.indexOf("compare(1, 2)") > 0);
     }
 }

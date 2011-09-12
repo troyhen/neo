@@ -1,6 +1,7 @@
 package org.neo;
 
 import java.util.List;
+import org.neo.back.CodeBuilder;
 
 /**
  *
@@ -177,20 +178,23 @@ public class Node {
         }
     }
 
-    public void printTree() {
-        printTree(this, "");
+    public String toTree() {
+        final CodeBuilder buff = new CodeBuilder();
+        toTree(this, buff);
+        return buff.toString();
     }
 
-    protected static void printTree(Node node, String tab) {
+    protected static void toTree(Node node, CodeBuilder buff) {
         while (node != null) {
-            System.out.print(tab);
-            System.out.print(node.name);
+            buff.tab().append(node.name);
             if (node.value != null) {
-                System.out.print(" (" + node.value + ')');
+                buff.append(" (").append(node.value).append(')');
             }
-            System.out.println();
+            buff.eol();
             if (node.first != null) {
-                printTree(node.first, tab + "    ");
+                buff.tabMore();
+                toTree(node.first, buff);
+                buff.tabLess();
             }
             node = node.next;
         }

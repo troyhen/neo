@@ -1,3 +1,5 @@
+import org.neo.Log;
+import org.junit.After;
 import org.neo.NeoLang;
 import org.neo.Node;
 import org.junit.Before;
@@ -17,6 +19,11 @@ public class PruneTest {
     @Before
     public void setUp() {
         lang = new NeoLang();
+    }
+
+    @After
+    public void tearDown() {
+        Log.testStop();
     }
 
     @Test

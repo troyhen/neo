@@ -1,3 +1,4 @@
+import org.neo.Log;
 import org.neo.lex.LexerEof;
 import org.neo.Node;
 import org.neo.NeoLang;
@@ -18,14 +19,6 @@ public class CommentTest {
 
     private NeoLang lang;
 
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
     @Before
     public void setUp() {
         lang = new NeoLang();
@@ -33,6 +26,7 @@ public class CommentTest {
 
     @After
     public void tearDown() {
+        Log.testStop();
     }
 
     @Test

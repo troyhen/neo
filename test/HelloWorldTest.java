@@ -27,20 +27,19 @@ public class HelloWorldTest {
 
     @After
     public void tearDown() {
-        Log.logger.setLevel(Level.WARNING);
+        Log.testStop();
         javaFile.delete();
         classFile.delete();
     }
 
     @Test
     public void compileHelloWorld() {
-//        Log.logger.setLevel(Level.ALL);
+//Log.testStart();
         lang.set("file", "examples/helloWorld.neo");
         lang.compile();
-//lang.printTree();
+        Log.info(lang.toTree());
         String result = lang.get("output");
-//System.err.println(result);
-        Log.logger.info(result);
+        Log.info(result);
         assertTrue("missing import static", result.contains("import static "));
         assertTrue("missing path to Console", result.contains("neo.os.N.*"));
         assertTrue("missing call to println", result.contains("println("));

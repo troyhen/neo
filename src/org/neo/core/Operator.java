@@ -1,5 +1,6 @@
 package org.neo.core;
 
+import org.neo.Node;
 import org.neo.lex.LexerChar;
 import org.neo.lex.LexerPattern;
 
@@ -32,6 +33,34 @@ public class Operator extends CorePlugin {
         add(new LexerChar(this, OPERATOR_POW, '^'));
         add(new LexerChar(this, OPERATOR_DOT, '.'));
         add(new LexerPattern(this, OPERATOR_OTHER, "[-+~!@$%^&*/?:]+"));
+    }
+
+    @Override
+    public Node transform(Node node) {
+        String name = node.getName();
+        String type = null;
+        if (name.equals("operator.compare")) {
+            type = node.getValue().toString().equals("<=>") ? "int" : "boolean";
+        } else if (name.equals("operator.as")) {
+            type = collectType(node);
+        } else if (name.equals("array")) {
+            type = Expression.commonType(node.getFirst()) + "[]";
+        } else if (!name.startsWith("operator.dot")) {
+            type = Expression.commonType(node.getFirst());
+        }
+        if (type != null) node.setType(type);
+        return node;
+    }
+
+    private String collectType(Node node) {
+        StringBuilder buff = new StringBuilder();
+        if (node.getFirst() != null) node = node.get(1);    // for var/val declarations
+        else node = node.getNext(); // for type casting
+        while (node != null && !node.getName().startsWith("expression")) {
+            buff.append(node.getText());
+            node = node.getNext();
+        }
+        return buff.toString();
     }
 
 }

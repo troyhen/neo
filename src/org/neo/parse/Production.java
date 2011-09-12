@@ -56,7 +56,7 @@ public class Production extends RuleGroup {
             for (Node n : matched) {
                 newNode.add(n);
             }
-            Log.logger.info("production " + name + " matched "
+            Log.info("production " + name + " matched "
                     + newNode.childNames());
         }
         matched.clear();

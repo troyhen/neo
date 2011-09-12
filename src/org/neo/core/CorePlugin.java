@@ -1,13 +1,10 @@
 package org.neo.core;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.neo.Log;
 import org.neo.NeoException;
 import org.neo.Node;
 import org.neo.PluginBase;
 import org.neo.back.Backend;
-import org.neo.back.Render;
 
 /**
  *
@@ -27,7 +24,7 @@ public class CorePlugin extends PluginBase {
             Backend render = type.newInstance();
             render.render(node);
         } catch (Exception ex) {
-            Log.logger.log(Level.SEVERE, ex.toString(), ex);
+            Log.error(ex);
             throw new NeoException(ex);
         }
     }

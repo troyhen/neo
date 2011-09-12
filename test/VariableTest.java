@@ -24,7 +24,7 @@ public class VariableTest {
 
     @After
     public void tearDown() {
-        Log.logger.setLevel(Level.WARNING);
+        Log.testStop();
     }
 
     @Test
@@ -34,7 +34,7 @@ public class VariableTest {
         lang.compile(expr);
 //lang.printTree();
         String program = lang.get("output");
-//System.out.println(program);
+//Log.info(program);
         assertTrue("missing declaration", program.indexOf("int a = 1;") > 0);
     }
 
@@ -45,7 +45,7 @@ public class VariableTest {
         lang.compile(expr);
 //lang.printTree();
         String program = lang.get("output");
-//System.out.println(program);
+//Log.info(program);
         assertTrue("missing declaration", program.indexOf("String a;") > 0);
     }
 
@@ -56,7 +56,7 @@ public class VariableTest {
         lang.compile(expr);
 //lang.printTree();
         String program = lang.get("output");
-//System.out.println(program);
+//Log.info(program);
         assertTrue("missing declaration", program.indexOf("long a = 0;") > 0);
     }
 
@@ -67,7 +67,7 @@ public class VariableTest {
         lang.compile(expr);
 //lang.printTree();
         String program = lang.get("output");
-//System.out.println(program);
+//Log.info(program);
         assertTrue("missing declaration", program.indexOf("final int a = 1;") > 0);
     }
 
@@ -78,7 +78,7 @@ public class VariableTest {
         lang.compile(expr);
 //lang.printTree();
         String program = lang.get("output");
-//System.out.println(program);
+//Log.info(program);
         assertTrue("missing declaration", program.indexOf("final String a;") > 0);
     }
 
@@ -89,7 +89,7 @@ public class VariableTest {
         lang.compile(expr);
 //lang.printTree();
         String program = lang.get("output");
-//System.out.println(program);
+//Log.info(program);
         assertTrue("missing declaration", program.indexOf("final long a = 0;") > 0);
     }
 

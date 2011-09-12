@@ -12,15 +12,16 @@ public class JavaOperator implements Backend {
     @Override
     public void render(Node node) {
         CodeBuilder buff = JavaCompilation.output(Segment.inside);
+        boolean needParens = node.getParent().getName().startsWith("operator");
         if (node.getValue().toString().equals("<=>")) renderCompare(node, buff);
         else {
-            buff.append("(");
+            if (needParens) buff.append("(");
             node.get(0).render("java");
             buff.append(" ");
             buff.append(node.getValue());
             buff.append(" ");
             node.get(1).render("java");
-            buff.append(")");
+            if (needParens) buff.append(")");
         }
     }
 
