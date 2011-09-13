@@ -18,4 +18,9 @@ class RuleAfter extends RuleGroup {
         return node;
     }
 
+    @Override
+    public String toString() {
+        return " > " + super.toString();
+    }
+
 }

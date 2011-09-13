@@ -15,25 +15,27 @@ public class LexerIndent extends LexerEof {
 
     private final Deque<CharSequence> indents = new ArrayDeque<CharSequence>();
     private final String startBlock;
+    private final String sameBlock;
     private final String endBlock;
     private final String eol;
 
-    public LexerIndent(Plugin plugin, String eol, String start, String end) {
+    public LexerIndent(Plugin plugin, String eol, String start, String same, String end) {
         super(plugin);
         this.eol = eol;
         startBlock = start;
+        sameBlock = same;
         endBlock = end;
     }
 
     public boolean atBol() {
-        Node last = Compiler.compiler().getRoot().getLast();
+        Node last = Compiler.compiler().lastToken;
         return last == null || last.getName().equals(eol);
     }
 
-    private void checkMatch(CharSequence indent, CharSequence lastIndent) {
-        if (indent.equals(lastIndent)) return;
+    private boolean checkMatch(CharSequence indent, CharSequence lastIndent) {
+        if (indent.toString().equals(lastIndent.toString())) return true;
         int len = Math.min(indent.length(), lastIndent.length());
-        if (indent.subSequence(0, len).equals(lastIndent.subSequence(0, len))) return;
+        if (indent.subSequence(0, len).equals(lastIndent.subSequence(0, len))) return false;
         throw new LexException("Indentation characters don't match");
     }
     
@@ -41,6 +43,9 @@ public class LexerIndent extends LexerEof {
     public Token nextToken() {
         if (atEof()) {
             if (indents.isEmpty()) return super.nextToken();
+            if (!atBol()) {
+                return getPlugin().consume(eol, 0, null, null);
+            }
             indents.pop();
             return getPlugin().consume(endBlock, 0, null, null);
         }
@@ -52,14 +57,15 @@ public class LexerIndent extends LexerEof {
             return getPlugin().consume(startBlock, indent.length(), null, null);
         }
         CharSequence lastIndent = indents.peek();
-        checkMatch(indent, lastIndent);
-        if (indent.equals(lastIndent)) return null;
+        if (checkMatch(indent, lastIndent)) {
+            return getPlugin().consume(sameBlock, indent.length(), null, null);
+        }
         if (indent.length() > lastIndent.length()) {
             indents.push(indent);
             return getPlugin().consume(startBlock, indent.length(), null, null);
         }
         indents.pop();
-        return getPlugin().consume(endBlock, 0, null, null);
+        return getPlugin().consume(endBlock, indent.length(), null, null);
     }
 
     public CharSequence getIndent() {

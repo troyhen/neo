@@ -28,23 +28,38 @@ public class JavaCompilation implements Backend {
 
     public static ThreadLocal<List<CodeBuilder>> output = new ThreadLocal<List<CodeBuilder>>();
 
-    private static int segments;
-    public static enum Segment {outside, inside;
-        int index = segments++;
-    };
+//    private static int segments;
+    private static int segment;
+//    public static enum Segment {outside, members, main, current;
+//        int index = segments++;
+//    };
 
-    public static CodeBuilder output(Segment segment) {
+    public static CodeBuilder output() {
+        return output(segment);
+    }
+    
+    public static CodeBuilder output(int segment) {//Segment segment) {
         List<CodeBuilder> list = output.get();
         if (list == null) {
             output.set(list = new ArrayList<CodeBuilder>());
         }
         CodeBuilder buf;
-        while (segment.index >= list.size()) {
+        while (segment/*.index*/ >= list.size()) {
             buf = new CodeBuilder();
             list.add(buf);
+            if (segment > 2) buf.tabMore();
         }
-        buf = list.get(segment.index);
+        buf = list.get(segment/*.index*/);
         return buf;
+    }
+
+    public static void closeSegment() {
+        segment--;
+    }
+
+    public static CodeBuilder openSegment() {
+        segment++;
+        return output();
     }
 
 //    private JavaExpression expression = new JavaExpression();
@@ -90,23 +105,25 @@ public class JavaCompilation implements Backend {
     @Override
     public void render(Node node) {
         output.set(null);
-        CodeBuilder outside  = output(Segment.outside);
+        CodeBuilder outside  = output();//Segment.outside);
         renderHeader(outside);
 //        renderPackage(buff);
 //        renderImports(buff, node);
-        CodeBuilder inside  = output(Segment.inside);
+        CodeBuilder inside  = openSegment();//output(Segment.main);
         renderClassOpen(inside);
         renderMainOpen(inside);
         node.getFirst().render("java");//renderStatements(buff, node);
         renderBlockClose(inside);
-        renderBlockClose(inside);
+        List<CodeBuilder> list = output.get();
+        CodeBuilder last = list.get(list.size() - 1);
+        renderBlockClose(last);
         String result = toString();
         Compiler.compiler().set("output", result);
         save(result);
     }
 
     private void renderBlockClose(CodeBuilder buff) {
-        buff.tabLess().println("}");
+        buff.tabLess().println("}").println("");
     }
 
     private void renderClassOpen(CodeBuilder buff) {

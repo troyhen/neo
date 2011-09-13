@@ -1,7 +1,6 @@
 package org.neo.back;
 
 import org.neo.Node;
-import org.neo.back.JavaCompilation.Segment;
 
 /**
  *
@@ -11,11 +10,10 @@ public class JavaOperatorAs implements Backend {
 
     @Override
     public void render(Node node) {
-        CodeBuilder buff = JavaCompilation.output(Segment.inside);
+        CodeBuilder buff = JavaCompilation.output();
         buff.append("to");
-        if (node.get(2) == null) {
-            buff.append(node.get(1).getValue());
-            buff.append("(");
+        if (node.get(2) == null && node.getType().indexOf('.') < 0) {
+            buff.append(node.getType()).append("(");
             node.get(0).render("java");
             buff.append(")");
         } else {
@@ -23,8 +21,7 @@ public class JavaOperatorAs implements Backend {
             node.get(0).render("java");
             buff.append(", (");
             JavaStatementImport imp = new JavaStatementImport();
-            buff.append(imp.getPath(node.get(1)));
-            buff.append(") null)");
+            buff.append(node.getType()).append(") null)");
         }
     }
 

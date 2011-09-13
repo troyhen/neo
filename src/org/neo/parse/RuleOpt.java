@@ -17,4 +17,9 @@ class RuleOpt implements Rule {
         return node;
     }
 
+    @Override
+    public String toString() {
+        return child.toString() + '?';
+    }
+
 }

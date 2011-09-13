@@ -54,9 +54,9 @@ public class Operator extends CorePlugin {
 
     private String collectType(Node node) {
         StringBuilder buff = new StringBuilder();
-        if (node.getFirst() != null) node = node.get(1);    // for var/val declarations
-        else node = node.getNext(); // for type casting
-        while (node != null && !node.getName().startsWith("expression")) {
+        /*if (node.getFirst() != null)*/ node = node.getFirst();    // for cast
+        //else node = node.getNext(); // for type casting
+        while (node != null) {// && !node.getName().startsWith("expression")) {
             buff.append(node.getText());
             node = node.getNext();
         }

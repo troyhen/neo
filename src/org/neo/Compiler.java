@@ -38,6 +38,7 @@ public class Compiler {
     private int line, offset;
     private CharBuffer buffer;
     private Node root;
+    public Token lastToken; // needed by LexerIndent
     
     public static CharSequence buffer() { return compiler().buffer; }
 
@@ -194,6 +195,7 @@ public class Compiler {
             for (Plugin plugin : plugins) {
                 Token token = plugin.nextToken();
                 if (token != null) {
+                    lastToken = token;
                     line += token.countLines();
                     if (token.isIgnored()) continue loop;
                     return token;

@@ -25,4 +25,17 @@ class RuleOr implements Rule {
         return null;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder buff = new StringBuilder("(");
+        String space = "";
+        for (Rule rule : rules) {
+            buff.append(space);
+            space = " | ";
+            buff.append(rule);
+        }
+        buff.append(")");
+        return buff.toString();
+    }
+
 }

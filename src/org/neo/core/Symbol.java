@@ -22,7 +22,7 @@ public class Symbol extends CorePlugin {
     public void open() {
         super.open();
         names.add(SYMBOL);
-        add(new LexerPattern(this, "keyword", "(do|else|if|then|unless|until|var|val|while)"));
+        add(new LexerPattern(this, "keyword", "(def|do|else|if|then|unless|until|return|var|val|while)"));
         add(new LexerPattern(this, SYMBOL, "[A-Za-z_$][A-Za-z0-9_$]*\\??"));
     }
 

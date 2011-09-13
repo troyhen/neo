@@ -205,13 +205,19 @@ public class Node {
         if (isIgnored()) {
             unlink();
         } else if (isRoot()) {
-            Node node = parent.first;
-            while (node != null) {
-                Node nextNode = node.next;
-                if (node != this) {
-                    this.add(node);
-                }
-                node = nextNode;
+//            Node node = parent.first;
+//            while (node != null) {
+//                Node nextNode = node.next;
+//                if (node != this) {
+//                    this.add(node);
+//                }
+//                node = nextNode;
+//            }
+            while (prev != null) {
+                addFirst(prev);
+            }
+            while (next != null) {
+                add(next);
             }
         } else if (isSubsumed()) {
             while (last != null) {

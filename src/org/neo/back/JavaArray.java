@@ -1,7 +1,6 @@
 package org.neo.back;
 
 import org.neo.Node;
-import org.neo.back.JavaCompilation.Segment;
 
 /**
  *
@@ -11,7 +10,7 @@ public class JavaArray implements Backend {
 
     @Override
     public void render(Node node) {
-        CodeBuilder buff = JavaCompilation.output(Segment.inside);
+        CodeBuilder buff = JavaCompilation.output();
         buff.append("new ").append(node.getType()).append(" {").eol().tabMore().tab();
         node = node.getFirst();
         String comma = "";

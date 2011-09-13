@@ -1,7 +1,6 @@
 package org.neo.back;
 
 import org.neo.Node;
-import org.neo.back.JavaCompilation.Segment;
 
 /**
  *
@@ -11,7 +10,7 @@ public class JavaReferenceArray implements Backend {
 
     @Override
     public void render(Node node) {
-        CodeBuilder buff = JavaCompilation.output(Segment.inside);
+        CodeBuilder buff = JavaCompilation.output();
         node.get(0).render("java");
         buff.append("[");
         node.get(1).render("java");

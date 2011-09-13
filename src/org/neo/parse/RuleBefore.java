@@ -33,4 +33,9 @@ class RuleBefore extends RuleGroup {
         return start;
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + " < ";
+    }
+
 }

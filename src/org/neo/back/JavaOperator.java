@@ -1,7 +1,6 @@
 package org.neo.back;
 
 import org.neo.Node;
-import org.neo.back.JavaCompilation.Segment;
 
 /**
  *
@@ -11,7 +10,7 @@ public class JavaOperator implements Backend {
 
     @Override
     public void render(Node node) {
-        CodeBuilder buff = JavaCompilation.output(Segment.inside);
+        CodeBuilder buff = JavaCompilation.output();
         boolean needParens = node.getParent().getName().startsWith("operator");
         if (node.getValue().toString().equals("<=>")) renderCompare(node, buff);
         else {

@@ -14,19 +14,20 @@ public class Expression extends CorePlugin {
         addParser("expression", "number");
         addParser("expression", "string");
         addParser("expression", "array");
-        addParser("call", "symbol !start.paren (@expression (!comma? @expression)*)? !end.paren");
-        addParser("call", "symbol @expression (!comma? @expression)*");
+        addParser("call", "keyword.def- < symbol !start.paren (@expression (!comma? @expression)*)? !end.paren");
         addParser("expression", "call");
         addParser("expression", "!start.paren @expression !end.paren");
-        addParser("expression", "@expression ^operator.as (symbol operator.dot)* symbol "
-                + "(start.bracket end.bracket)*"); // must come before reference
-        addParser("reference", "symbol > (operator.eq | operator.assign | start | keyword | terminator)");
+        addParser("expression", "@expression ^cast"); // must come before reference
+        addParser("reference", "symbol > (operator | start | keyword | terminator)");
         addParser("reference.dot", "@expression ^operator.dot symbol");
         addParser("reference.array", "@expression !start.bracket @expression !end.bracket");
         addParser("expression", "@expression ^operator.pow @expression");
         addParser("expression", "@expression ^operator.mul @expression");
         addParser("expression", "@expression ^operator.add @expression");
         addParser("expression", "@expression ^operator.compare @expression");
+        addParser("expression", "reference (^operator.assign | ^operator.eq) @expression");
+        addParser("expression", "reference");
+        addParser("call", "keyword.def- < symbol @expression (!comma? @expression)*");
         addParser("expression", "expression- < keyword.if @expression !keyword.then statement elseClause? !symbol.end?");
         addParser("expression", "expression- < keyword.if @expression !keyword.then? !terminator @block elseClause?");
         addParser("expression", "expression- < keyword.unless @expression !keyword.then statement elseClause?");
@@ -35,8 +36,6 @@ public class Expression extends CorePlugin {
         addParser("expression", "expression- < keyword.while @expression !keyword.do? !terminator @block elseClause? !symbol.end");
         addParser("expression", "expression- < keyword.until @expression !keyword.do statement elseClause?");
         addParser("expression", "expression- < keyword.until @expression !keyword.do? !terminator @block elseClause? !symbol.end");
-        addParser("expression", "reference (^operator.assign | ^operator.eq) @expression");
-        addParser("expression", "reference");
         addParser("elseClause", "!keyword.else statement");
         addParser("elseClause", "!keyword.else !terminator @block");
     }
@@ -49,6 +48,8 @@ public class Expression extends CorePlugin {
             type = commonType(node.getFirst()) + "[]";
         } else if (name.startsWith("expression")) {
             type = commonType(node.getFirst());
+        } else if (name.startsWith("call")) {
+            type = "void";  // TODO look up actual return type
         }
         if (type != null) node.setType(type);
         return node;

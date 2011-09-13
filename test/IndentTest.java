@@ -55,6 +55,8 @@ public class IndentTest {
         node = node.getNext();
         assertEquals("number.integer", node.getName());
         node = node.getNext();
+        assertEquals("eol", node.getName());
+        node = node.getNext();
         assertEquals("end.block", node.getName());
         node = node.getNext();
         assertEquals("eof", node.getName());
@@ -97,6 +99,8 @@ public class IndentTest {
         assertEquals("end.block", node.getName());
         node = node.getNext();
         assertEquals("number.integer", node.getName());
+        node = node.getNext();
+        assertEquals("eol", node.getName());
         node = node.getNext();
         assertEquals("end.block", node.getName());
         node = node.getNext();

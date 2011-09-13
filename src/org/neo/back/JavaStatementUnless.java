@@ -1,7 +1,6 @@
 package org.neo.back;
 
 import org.neo.Node;
-import org.neo.back.JavaCompilation.Segment;
 
 /**
  *
@@ -11,7 +10,7 @@ public class JavaStatementUnless implements Backend {
 
     @Override
     public void render(Node node) {
-        CodeBuilder buff = JavaCompilation.output(Segment.inside);
+        CodeBuilder buff = JavaCompilation.output();
         boolean needBoolean = !"boolean".equals(node.get(1).getType());
         buff.tab().append("if (!");
         if (needBoolean) buff.append("toboolean(");

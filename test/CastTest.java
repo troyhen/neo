@@ -1,5 +1,4 @@
 import org.junit.After;
-import java.util.logging.Level;
 import org.neo.Log;
 import org.neo.NeoLang;
 import org.neo.Node;
@@ -40,36 +39,52 @@ public class CastTest {
     @Test
     public void parseCast() {
         final String expr = "1~float";
+//Log.testStart();
         lang.load(expr);
         Node node = lang.parse();
         assertNotNull(node);
         assertEquals("Wrong number of children: " + node.childNames(), 1, node.countChildren());
-        assertEquals("Top of tree", "statements", node.get(0).getName());
-        assertEquals("Second level", "statement", node.get(0).get(0).getName());
-        assertEquals("Third level", "expression", node.get(0).get(0).get(0).getName());
-        assertEquals("Forth level", "operator.as", node.get(0).get(0).get(0).get(1).getName());
+        node = node.get(0);
+        assertEquals("Top of tree", "statements", node.getName());
+        node = node.get(0);
+        assertEquals("Second level", "statement", node.getName());
+        node = node.get(0);
+        assertEquals("Third level", "expression", node.getName());
+        node = node.get(0);
+        assertEquals("Forth level", "expression", node.getName());
+        node = node.getNext();
+        assertEquals("Forth level", "cast", node.getName());
     }
 
     @Test
-    public void parseCast2() {
+    public void pruneCast() {
         final String expr = "'10.4'~int~float";
+//Log.testStart();
         lang.load(expr);
-        Node node = lang.parse();
+        Node node = lang.prune();
+        Log.info(node.toTree());
         assertNotNull(node);
         assertEquals("Wrong number of children: " + node.childNames(), 1, node.countChildren());
-        assertEquals("Top of tree", "statements", node.get(0).getName());
-        assertEquals("Second level", "statement", node.get(0).get(0).getName());
-        assertEquals("Third level", "expression", node.get(0).get(0).get(0).getName());
-        assertEquals("Forth level", "operator.as", node.get(0).get(0).get(0).get(1).getName());
-        assertEquals("Forth level", "symbol.float", node.get(0).get(0).get(0).get(2).getName());
-        assertEquals("Fifth level", "string.single", node.get(0).get(0).get(0).get(0).get(0).get(0).getName());
-        assertEquals("Fifth level", "operator.as", node.get(0).get(0).get(0).get(0).get(1).getName());
-        assertEquals("Fifth level", "symbol.int", node.get(0).get(0).get(0).get(0).get(2).getName());
+        node = node.get(0);
+        assertEquals("Top of tree", "statements", node.getName());
+        node = node.get(0);
+        assertEquals("Second level", "statement", node.getName());
+        node = node.get(0);
+        assertEquals("Third level", "cast", node.getName());
+        node = node.get(0);
+        assertEquals("Forth level", "cast", node.getName());
+        assertEquals("Forth level", "operator.as", node.getNext().getName());
+        node = node.get(0);
+        assertEquals("Fifth level", "string.single", node.getName());
+        assertEquals("Fifth level", "operator.as", node.getNext().getName());
+        node = node.getNext().get(0);
+        assertEquals("Sixth level", "symbol.int", node.getName());
     }
 
     @Test
     public void compileCast1() {
         final String expr = "1+2~float";
+//Log.testStart();
         lang.compile(expr);
         Log.info(lang.toTree());
         String program = lang.get("output");
@@ -96,6 +111,7 @@ public class CastTest {
     @Test
     public void compileCastFloat() {
         final String expr = "2~java.lang.Float";
+//Log.testStart();
         lang.compile(expr);
         String program = lang.get("output");
         Log.info(program);

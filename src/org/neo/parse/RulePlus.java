@@ -16,4 +16,9 @@ class RulePlus extends RuleStar {
         return super.match(node, matched);
     }
 
+    @Override
+    public String toString() {
+        return child.toString() + '+';
+    }
+
 }
