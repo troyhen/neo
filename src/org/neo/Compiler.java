@@ -49,9 +49,13 @@ public class Compiler {
     }
 
     public void close() {
+        close(null);
+    }
+
+    public void close(Compiler previous) {
         buffer = null;
         root = null;
-        compiler.set(null);
+        compiler.set(previous);
         state = State.closed;
     }
 
@@ -292,6 +296,10 @@ public class Compiler {
 
     public Node getRoot() { return root; }
     public void setRoot(Node root) { this.root = root; }
+
+    public Compiler subcompile(String string) {
+        return new Compiler();
+    }
 
     public void symbolAdd(String name, String type) {
         Map<String, String> map = symbols.peek();

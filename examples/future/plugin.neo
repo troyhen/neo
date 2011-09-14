@@ -1,0 +1,10 @@
+# Plugin implementation
+import java.util.regex
+
+plugin RegularExpression
+    def name -> 'regex'
+    def abrev -> 're'
+
+    regex: /\/((\[(\\\]|[^\]])+|\/|[^/])+)\/[iop]?/ -> text
+        Pattern.new text
+end

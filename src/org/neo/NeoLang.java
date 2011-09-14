@@ -2,6 +2,7 @@ package org.neo;
 
 import org.neo.core.Delimiter;
 import org.neo.core.Compilation;
+import org.neo.core.CorePlugin;
 import org.neo.core.Expression;
 import org.neo.core.Group;
 import org.neo.core.Import;
@@ -22,16 +23,21 @@ import org.neo.core.Xml;
  */
 public class NeoLang extends Compiler {
     
-    private final Compilation main;
+    private CorePlugin main;
 
     public NeoLang() {
+        this("statements");
+    }
+    
+    public NeoLang(String top) {
+        boolean full = "statements".equals(top);
         plugins.add(new Whitespace());
         plugins.add(new Delimiter());
-        plugins.add(new Import());  // must come before Expression
+        if (full) plugins.add(new Import());  // must come before Expression
         plugins.add(new Numbers()); // must come before Expression
-        plugins.add(new Variable()); // must come before Expression
-        plugins.add(new Methods());  // must come before Expression
-        plugins.add(new Expression());
+        if (full) plugins.add(new Variable()); // must come before Expression
+        if (full) plugins.add(new Methods());  // must come before Expression
+        plugins.add(main = new Expression());
         plugins.add(new Group());
         plugins.add(new Symbol());
         plugins.add(new Range());
@@ -39,13 +45,18 @@ public class NeoLang extends Compiler {
         plugins.add(new Operator());
         plugins.add(new Strings());
         plugins.add(new RegEx());
-        plugins.add(main = new Compilation()); // must be last
+        if (full) plugins.add(main = new Compilation()); // must be last
     }
 
     @Override
     public void open() {
         super.open();
         setRoot(new Node(main, "compilation"));
+    }
+
+    @Override
+    public Compiler subcompile(String top) {
+        return new NeoLang(top);
     }
 
 }

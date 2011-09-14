@@ -18,8 +18,8 @@ public class Expression extends CorePlugin {
         addParser("expression", "call");
         addParser("expression", "!start.paren @expression !end.paren");
         addParser("expression", "@expression ^cast"); // must come before reference
-        addParser("reference", "symbol > (operator | start | keyword | terminator)");
-        addParser("reference.dot", "@expression ^operator.dot symbol");
+        addParser("reference", "operator- < symbol > (operator | start | keyword | terminator)");
+        addParser("reference.dot", "@expression !operator.dot symbol");
         addParser("reference.array", "@expression !start.bracket @expression !end.bracket");
         addParser("expression", "@expression ^operator.pow @expression");
         addParser("expression", "@expression ^operator.mul @expression");

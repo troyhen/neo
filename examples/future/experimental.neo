@@ -7,7 +7,7 @@ a.?run  # or does it mean `a.run() unless a.nil?`
 
 a b c   # same as `a.b.c` (ala Scala)
 a b c   # or does it mean a(b, c)
-a b c   # or does is it an error
+a b c   # or is it an error
 a b c d e f # what does this mean???
 
 a.b c   # same as a.b.c (ala Scala)
@@ -18,7 +18,7 @@ a <= b <= c # `a <= b && b <= c`
 
 # Plugins
 # Literals
-a = %map {   # or %m Map Literals
+a = %map{   # or %m Map Literals
     'Rhode Island':'Providence'
     'Utah':'Salt Lake City'
 }
@@ -35,18 +35,4 @@ a = %xml   # or %x
     <phone>321-245-2345</phone>
 </person>
 
-a = /[A-Z_]+/i  # regular expressions
 a = %re([A-Z_]+)
-a = %a[1, 2, 3, 5, 8, 13, 21] # Array literals
-
-# Plugin implementation
-use java.util.regex.Pattern
-
-plugin RegularExpression
-    def name -> 'regex'
-    def abrev -> 're'
-
-    regex: /\/((\[(\\\]|[^\]])+|\/|[^/])+)\/[iop]?/ -> (text) {
-        Pattern.new text
-    }
-end
