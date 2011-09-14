@@ -51,7 +51,7 @@ public class StringExpressionTest {
     @Test
     public void compileExpressions() {
         final String expr = "\"Your name is #{person.name} and age is #{person.birth.age + 1}.\"";
-Log.testStart();
+//Log.testStart();
         lang.compile(expr);
         Log.info(lang.toTree());
         String program = lang.get("output");

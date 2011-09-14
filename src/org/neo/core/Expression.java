@@ -10,23 +10,25 @@ public class Expression extends CorePlugin {
     
     @Override
     public void open() {
+        // literals
         addParser("array", "expression- reference- symbol- < !start.bracket (@expression !comma?)* @expression? !end.bracket");
         addParser("expression", "number");
         addParser("expression", "string");
         addParser("expression", "array");
+
         addParser("call", "keyword.def- < symbol !start.paren (@expression (!comma? @expression)*)? !end.paren");
         addParser("expression", "call");
         addParser("expression", "!start.paren @expression !end.paren");
         addParser("expression", "@expression ^cast"); // must come before reference
-        addParser("reference", "operator- < symbol > (operator | start | keyword | terminator)");
+        addParser("expression", "reference > operator.assign- operator.eq-");
         addParser("reference.dot", "@expression !operator.dot symbol");
+        addParser("reference", "symbol > (operator | start | keyword | terminator)");
         addParser("reference.array", "@expression !start.bracket @expression !end.bracket");
         addParser("expression", "@expression ^operator.pow @expression");
         addParser("expression", "@expression ^operator.mul @expression");
         addParser("expression", "@expression ^operator.add @expression");
         addParser("expression", "@expression ^operator.compare @expression");
         addParser("expression", "reference (^operator.assign | ^operator.eq) @expression");
-        addParser("expression", "reference");
         addParser("call", "keyword.def- < symbol @expression (!comma? @expression)*");
         addParser("expression", "expression- < keyword.if @expression !keyword.then statement elseClause? !symbol.end?");
         addParser("expression", "expression- < keyword.if @expression !keyword.then? !terminator @block elseClause?");
