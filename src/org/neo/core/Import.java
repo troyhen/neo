@@ -13,7 +13,8 @@ public class Import extends CorePlugin {
     public void open() {
         super.open();
         names.add(NAME);
-        addParser(STATEMENT, "!symbol.import (symbol operator.dot)* symbol");
+        addKeyword(NAME);
+        addParser(STATEMENT, "!keyword.import (symbol operator.dot)* symbol");
     }
 
 }

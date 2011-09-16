@@ -6,7 +6,7 @@ import org.neo.Node;
  *
  * @author Troy Heninger
  */
-public class JavaCall implements Backend {
+public class JavaCallThis implements Backend {
 
     @Override
     public void render(Node node) {

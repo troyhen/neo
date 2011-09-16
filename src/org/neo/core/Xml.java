@@ -1,12 +1,8 @@
 package org.neo.core;
 
-import java.io.StringReader;
 import java.util.regex.Pattern;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.neo.Compiler;
-import org.neo.NeoException;
 import org.neo.lex.Token;
 
 //import org.xml.sax.InputSource;

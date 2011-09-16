@@ -10,36 +10,47 @@ public class Expression extends CorePlugin {
     
     @Override
     public void open() {
-        // literals
-        addParser("array", "expression- reference- symbol- < !start.bracket (@expression !comma?)* @expression? !end.bracket");
-        addParser("expression", "number");
-        addParser("expression", "string");
+        addKeyword("def");
+        addKeyword("then");
+        addKeyword("do");
+        addKeyword("else");
+        addKeyword("end");
+
+        addParser("expression.symbol", "symbol");
+        addParser("expression", "reference > operator.assign- operator.eq-");
+        addParser("expression", "call");
+        addParser("array", "expression- reference- < !start.bracket (@expression !comma?)* @expression? !end.bracket");
         addParser("expression", "array");
 
-        addParser("call", "keyword.def- < symbol !start.paren (@expression (!comma? @expression)*)? !end.paren");
-        addParser("expression", "call");
-        addParser("expression", "!start.paren @expression !end.paren");
-        addParser("expression", "@expression ^cast"); // must come before reference
-        addParser("expression", "reference > operator.assign- operator.eq-");
-        addParser("reference.dot", "@expression !operator.dot symbol");
-        addParser("reference", "symbol > (operator | start | keyword | terminator)");
-        addParser("reference.array", "@expression !start.bracket @expression !end.bracket");
+        addParser("expression", "expression.symbol- < !start.paren @expression !end.paren");
+        addParser("expression", "@expression ^cast"); // must precede reference
+
+        addParser("call.dot", "@expression !operator.dot @expression.symbol !start.paren (@expression (!comma? @expression)*)? !end.paren");
+        addParser("call.dot", " start.bracket- < @expression !operator.dot @expression.symbol @expression (!comma? @expression)*");
+        addParser("reference.dot", "@expression !operator.dot @expression.symbol > start.paren- expression-");
+        addParser("reference.array", "@expression !start.bracket @expression (!comma? @expression)* !end.bracket");
+
         addParser("expression", "@expression ^operator.pow @expression");
         addParser("expression", "@expression ^operator.mul @expression");
         addParser("expression", "@expression ^operator.add @expression");
         addParser("expression", "@expression ^operator.compare @expression");
-        addParser("expression", "reference (^operator.assign | ^operator.eq) @expression");
-        addParser("call", "keyword.def- < symbol @expression (!comma? @expression)*");
-        addParser("expression", "expression- < keyword.if @expression !keyword.then statement elseClause? !symbol.end?");
-        addParser("expression", "expression- < keyword.if @expression !keyword.then? !terminator @block elseClause?");
-        addParser("expression", "expression- < keyword.unless @expression !keyword.then statement elseClause?");
-        addParser("expression", "expression- < keyword.unless @expression !keyword.then? !terminator @block elseClause? !symbol.end?");
-        addParser("expression", "expression- < keyword.while @expression !keyword.do statement elseClause?");
-        addParser("expression", "expression- < keyword.while @expression !keyword.do? !terminator @block elseClause? !symbol.end");
-        addParser("expression", "expression- < keyword.until @expression !keyword.do statement elseClause?");
-        addParser("expression", "expression- < keyword.until @expression !keyword.do? !terminator @block elseClause? !symbol.end");
+        addParser("expression", "@expression ^operator.other @expression");
+        addParser("expression.assign", "(reference | @expression.symbol | @expression.assign) "
+                + "(^operator.assign | ^operator.eq) @expression"); // must precede expression: reference
+        addParser("expression", "expression- < keyword.if @expression !keyword.then statement elseClause? (!keyword.end keyword.if?)?");
+        addParser("expression", "expression- < keyword.if @expression !keyword.then? !terminator @block elseClause? (!keyword.end keyword.if?)?");
+        addParser("expression", "expression- < keyword.unless @expression !keyword.then statement elseClause? (!keyword.end keyword.unless?)?");
+        addParser("expression", "expression- < keyword.unless @expression !keyword.then? !terminator @block elseClause? (!keyword.end keyword.unless?)?");
+        addParser("expression", "expression- < keyword.while @expression !keyword.do statement elseClause? (!keyword.end keyword.while?)?");
+        addParser("expression", "expression- < keyword.while @expression !keyword.do? !terminator @block elseClause? (!keyword.end keyword.while?)?");
+        addParser("expression", "expression- < keyword.until @expression !keyword.do statement elseClause? (!keyword.end keyword.until?)?");
+        addParser("expression", "expression- < keyword.until @expression !keyword.do? !terminator @block elseClause? (!keyword.end keyword.until?)?");
+
         addParser("elseClause", "!keyword.else statement");
         addParser("elseClause", "!keyword.else !terminator @block");
+
+        addParser("call.this", "keyword.def- operator.dot- < @expression.symbol !start.paren (@expression (!comma? @expression)*)? !end.paren");
+        addParser("call.this", "keyword.def- start.bracket- operator.dot- < @expression.symbol @expression (!comma? @expression)*");
     }
 
     @Override

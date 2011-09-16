@@ -203,6 +203,8 @@ public class JavaCompilation implements Backend {
                 try {
                     method.invoke(null, (Object)new String[0]);
                     break;
+                } catch (NeoException e) {
+                    throw e;
                 } catch (Exception ex) {
                     Log.error(ex);
                     throw new NeoException(ex);

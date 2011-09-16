@@ -35,6 +35,10 @@ public class PluginBase implements Plugin {
         Compiler.compiler().literals.add(lexer.getName());
     }
 
+    protected void addKeyword(String word) {
+        Compiler.compiler().addKeyword(word);
+    }
+    
     protected void addParser(String name) {
         addParser(name, "");
     }

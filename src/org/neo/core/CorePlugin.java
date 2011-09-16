@@ -23,6 +23,8 @@ public class CorePlugin extends PluginBase {
             Class<Backend> type = findClass(node, backend);
             Backend render = type.newInstance();
             render.render(node);
+        } catch (NeoException e) {
+            throw e;
         } catch (Exception ex) {
             Log.error(ex);
             throw new NeoException(ex);

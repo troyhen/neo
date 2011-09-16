@@ -34,6 +34,7 @@ public class StringExpressionTest {
         Log.info(lang.toTree());
         String program = lang.get("output");
         Log.info(program);
+        assertTrue("missing string", program.indexOf("\"\" + ") > 0);
         assertTrue("missing 1", program.indexOf("(1);") > 0);
     }
 

@@ -33,18 +33,18 @@ public class NeoLang extends Compiler {
         boolean full = "statements".equals(top);
         plugins.add(new Whitespace());
         plugins.add(new Delimiter());
-        if (full) plugins.add(new Import());  // must come before Expression
-        plugins.add(new Numbers()); // must come before Expression
-        if (full) plugins.add(new Variable()); // must come before Expression
-        if (full) plugins.add(new Methods());  // must come before Expression
-        plugins.add(main = new Expression());
-        plugins.add(new Group());
-        plugins.add(new Symbol());
-        plugins.add(new Range());
-        plugins.add(new Xml());  // must come before Operator
-        plugins.add(new Operator());
+        if (full) plugins.add(new Import());  // must precede Expression
+        plugins.add(new Numbers()); // must precede Expression
         plugins.add(new Strings());
         plugins.add(new RegEx());
+        if (full) plugins.add(new Variable()); // must precede Expression
+        if (full) plugins.add(new Methods());  // must precede Expression
+        plugins.add(new Range()); // must precede expression
+        plugins.add(new Xml());  // must precede Operator
+        plugins.add(new Operator());
+        plugins.add(new Group());
+        plugins.add(new Symbol());
+        plugins.add(main = new Expression());
         if (full) plugins.add(main = new Compilation()); // must be last
     }
 

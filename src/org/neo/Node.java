@@ -15,7 +15,7 @@ public class Node {
     
     private final CharSequence text;
     private final Plugin plugin;
-    private final String name;
+    private String name;
     private final Object value;
     private String type;
     private Node parent;
@@ -140,6 +140,7 @@ public class Node {
     }
 
     public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
     public Node getNext() { return next; }
     public Node getParent() { return parent; }
     public Plugin getPlugin() { return plugin; }

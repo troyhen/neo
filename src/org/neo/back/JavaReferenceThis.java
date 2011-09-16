@@ -6,7 +6,7 @@ import org.neo.Node;
  *
  * @author Troy Heninger
  */
-public class JavaReference implements Backend {
+public class JavaReferenceThis implements Backend {
 
     @Override
     public void render(Node node) {

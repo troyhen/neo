@@ -8,7 +8,7 @@ class RuleOr implements Rule {
     
     private List<Rule> rules = new ArrayList<Rule>();
 
-    RuleOr(List<List<Rule>> lists) {
+    public RuleOr(List<List<Rule>> lists) {
         for (List<Rule> list : lists) {
             rules.add(new RuleGroup(list));
         }

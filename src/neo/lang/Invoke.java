@@ -23,6 +23,8 @@ public class Invoke {
             }
             Object[] args2 = staticArgs(object, args);
             return packageMethod.invoke(null, args2);
+        } catch (NeoException e) {
+            throw e;
         } catch (Exception ex) {
             Logger.getLogger(Invoke.class.getName()).log(Level.SEVERE, null, ex);
             throw new NeoException(ex);
@@ -62,6 +64,8 @@ public class Invoke {
                 types[ix++] = arg == null ? Object.class : arg.getClass();
             }
             meth = type.getMethod(name, types);
+        } catch (NeoException e) {
+            throw e;
         } catch (Exception ex) {
             Logger.getLogger(Invoke.class.getName()).log(Level.SEVERE, null, ex);
             throw new NeoException(ex);

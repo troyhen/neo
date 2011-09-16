@@ -32,7 +32,7 @@ public class Operator extends CorePlugin {
         add(new LexerPattern(this, OPERATOR_MUL, "[*/%]"));
         add(new LexerChar(this, OPERATOR_POW, '^'));
         add(new LexerChar(this, OPERATOR_DOT, '.'));
-        add(new LexerPattern(this, OPERATOR_OTHER, "[-+~!@$%^&*/?:]+"));
+        add(new LexerPattern(this, OPERATOR_OTHER, "[-+~!@$%^&*/?:|]+"));
     }
 
     @Override
@@ -43,6 +43,15 @@ public class Operator extends CorePlugin {
             type = node.getValue().toString().equals("<=>") ? "int" : "boolean";
         } else if (name.equals("operator.as")) {
             type = collectType(node);
+        } else if (name.equals("operator.assign") || name.equals("operator.eq")) {
+            Node left = node.getFirst();
+            type = node.getLast().getType();
+            if (left.getName().startsWith("operator")) {
+                node.insertBefore(left);
+                node.addFirst(left.getLast());
+                left.add(node);
+                if (type != null) left.setType(type);
+            }
         } else if (name.equals("array")) {
             type = Expression.commonType(node.getFirst()) + "[]";
         } else if (!name.startsWith("operator.dot")) {

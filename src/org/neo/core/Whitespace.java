@@ -25,7 +25,7 @@ public class Whitespace extends CorePlugin {
         addParser("terminator", "semi");
         addParser("terminator", "eol");
         addParser("terminator", "eof");
-        addParser("block", "!start.block statements !end.block !symbol.end?");
+        addParser("block", "!start.block statements !end.block");
     }
 
 }

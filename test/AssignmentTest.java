@@ -1,12 +1,9 @@
 import org.junit.After;
-import java.util.logging.Level;
 import org.neo.Log;
 import org.neo.NeoLang;
-import org.neo.Node;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.neo.core.Operator.*;
 import static org.junit.Assert.*;
 
 /**
@@ -30,7 +27,7 @@ public class AssignmentTest {
     @Test
     public void compileAssign() {
         final String expr = "a = 1";
-//Log.logger.setLevel(Level.INFO);
+//Log.testStart();
         lang.compile(expr);
         Log.info(lang.toTree());
         String program = lang.get("output");
@@ -41,7 +38,7 @@ public class AssignmentTest {
     @Test
     public void compileAssign2() {
         final String expr = "a = 1 + 2";
-//Log.logger.setLevel(Level.INFO);
+//Log.testStart();
         lang.compile(expr);
         Log.info(lang.toTree());
         String program = lang.get("output");
@@ -52,7 +49,7 @@ public class AssignmentTest {
     @Test
     public void compileAssign3() {
         final String expr = "b = c = 2";
-//Log.logger.setLevel(Level.INFO);
+//Log.testStart();
         lang.compile(expr);
         Log.info(lang.toTree());
         String program = lang.get("output");
@@ -64,7 +61,7 @@ public class AssignmentTest {
     @Test
     public void compileAssignComplex() {
         final String expr = "a = (b = 1) + 2";
-//Log.logger.setLevel(Level.INFO);
+//Log.testStart();
         lang.compile(expr);
         Log.info(lang.toTree());
         String program = lang.get("output");
@@ -75,7 +72,7 @@ public class AssignmentTest {
     @Test
     public void compileAssignElement() {
         final String expr = "a[1] = 2";
-//Log.logger.setLevel(Level.INFO);
+//Log.testStart();
         lang.compile(expr);
         Log.info(lang.toTree());
         String program = lang.get("output");

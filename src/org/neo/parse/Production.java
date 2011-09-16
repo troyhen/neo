@@ -56,7 +56,7 @@ public class Production extends RuleGroup {
             for (Node n : matched) {
                 newNode.add(n);
             }
-            Log.info("production " + name + " matched "
+            Log.info(name + " matched "
                     + newNode.childNames());
         }
         matched.clear();
@@ -97,6 +97,14 @@ public class Production extends RuleGroup {
                     local.add(new RuleGroup(parseRules()));
                     break;
                 case ')':
+                    addIdent(ident, local);
+                    local = addAlternatives(local, alternatives);
+                    return local;
+                case '[':
+                    addIdent(ident, local);
+                    local.add(new RuleInside(parseRules()));
+                    break;
+                case ']':
                     addIdent(ident, local);
                     local = addAlternatives(local, alternatives);
                     return local;

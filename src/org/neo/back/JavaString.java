@@ -1,6 +1,7 @@
 package org.neo.back;
 
 import org.neo.Node;
+import org.neo.core.Strings;
 
 /**
  *
@@ -26,7 +27,7 @@ public class JavaString implements Backend {
             }
         } else {
             buff.append("\"");
-            buff.append(node.getValue());   // TODO escape double quotes
+            buff.append(Strings.encode((CharSequence) node.getValue()));
             buff.append("\"");
         }
     }

@@ -39,6 +39,11 @@ public class Compiler {
     private CharBuffer buffer;
     private Node root;
     public Token lastToken; // needed by LexerIndent
+    private Set<String> keywords = new HashSet<String>();
+
+    public void addKeyword(String word) {
+        keywords.add(word);
+    }
     
     public static CharSequence buffer() { return compiler().buffer; }
 
@@ -137,6 +142,10 @@ public class Compiler {
     }
 
     public int getLine() { return line; }
+
+    public boolean isKeyword(String text) {
+        return keywords.contains(text);
+    }
 
     public static int line() { return compiler().line; }
 

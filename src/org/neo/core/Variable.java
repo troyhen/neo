@@ -10,6 +10,8 @@ public class Variable extends CorePlugin {
     
     @Override
     public void open() {
+        addKeyword("var");
+        addKeyword("val");
         addParser("cast", "^operator.as (symbol operator.dot)* symbol (start.bracket end.bracket)*");
         addParser("statement.varDeclare",
                 "!keyword.var symbol @cast?");// (start.bracket @expression end.bracket)?");

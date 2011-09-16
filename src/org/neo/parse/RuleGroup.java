@@ -7,7 +7,7 @@ class RuleGroup implements Rule {
     
     protected List<Rule> rules;
 
-    RuleGroup(List<Rule> rules) {
+    public RuleGroup(List<Rule> rules) {
         this.rules = rules;
     }
 

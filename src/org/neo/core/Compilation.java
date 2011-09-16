@@ -14,6 +14,10 @@ public class Compilation extends CorePlugin {
 //        addParser("statement", "callWithBlock");
 //        addParser("statement", "alias");
 
+        addKeyword("if");
+        addKeyword("unless");
+        addKeyword("while");
+        addKeyword("until");
         addParser("statement.if", "statement !keyword.if @expression");
         addParser("statement.unless", "statement !keyword.unless @expression");
         addParser("statement.while", "statement !keyword.while @expression");
