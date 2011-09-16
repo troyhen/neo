@@ -7,6 +7,48 @@ import org.neo.Node;
  * @author Troy Heninger
  */
 public class Expression extends CorePlugin {
+
+    public Node array(Node node) {
+        String type = commonType(node.getFirst()) + "[]";
+        if (type != null) node.setType(type);
+        return node;
+    }
+
+    public Node call(Node node) {
+        node.setType("void");
+        return node;
+    }
+
+    public static String commonType(Node node) {
+        String common = node.getType();
+        while (node != null) {
+            String type = node.getType();
+            if (type == null)
+                common = "java.lang.Object";
+            else if (!type.equals(common)) {
+                boolean found = false;
+                for (int ix = 0, iz = conversions.length; ix < iz; ) {
+                    String type1 = conversions[ix++];
+                    String type2 = conversions[ix++];
+                    String type3 = conversions[ix++];
+                    if (common.equals(type1) && type.equals(type2)
+                            || common.equals(type2) && type.equals(type1)) {
+                        common = type3;
+                        found = true;
+                    }
+                }
+                if (!found) common = "java.lang.Object";
+            }
+            node = node.getNext();
+        }
+        return common;
+    }
+
+    public Node expression(Node node) {
+        String type = commonType(node.getFirst());
+        if (type != null) node.setType(type);
+        return node;
+    }
     
     @Override
     public void open() {
@@ -16,57 +58,64 @@ public class Expression extends CorePlugin {
         addKeyword("else");
         addKeyword("end");
 
-        addParser("expression.symbol", "symbol");
-        addParser("expression", "reference > operator.assign- operator.eq-");
+        addParser("expression_symbol", "symbol");
+        addParser("expression", "reference > operator_assign- operator_eq-");
         addParser("expression", "call");
-        addParser("array", "expression- reference- < !start.bracket (@expression !comma?)* @expression? !end.bracket");
+        addParser("array", "expression- reference- < !start_bracket (@expression !comma?)* @expression? !end_bracket");
         addParser("expression", "array");
 
-        addParser("expression", "expression.symbol- < !start.paren @expression !end.paren");
+        addParser("expression", "expression_symbol- < !start_paren @expression !end_paren");
         addParser("expression", "@expression ^cast"); // must precede reference
 
-        addParser("call.dot", "@expression !operator.dot @expression.symbol !start.paren (@expression (!comma? @expression)*)? !end.paren");
-        addParser("call.dot", " start.bracket- < @expression !operator.dot @expression.symbol @expression (!comma? @expression)*");
-        addParser("reference.dot", "@expression !operator.dot @expression.symbol > start.paren- expression-");
-        addParser("reference.array", "@expression !start.bracket @expression (!comma? @expression)* !end.bracket");
+        addParser("call_dot", "@expression !operator_dot @expression_symbol !start_paren (@expression (!comma? @expression)*)? !end_paren");
+        addParser("call_dot", " start_bracket- < @expression !operator_dot @expression_symbol @expression (!comma? @expression)*");
+        addParser("reference_dot", "@expression !operator_dot @expression_symbol > start_paren- expression-");
+        addParser("reference_array", "@expression !start_bracket @expression (!comma? @expression)* !end_bracket");
 
-        addParser("expression", "@expression ^operator.pow @expression");
-        addParser("expression", "@expression ^operator.mul @expression");
-        addParser("expression", "@expression ^operator.add @expression");
-        addParser("expression", "@expression ^operator.compare @expression");
-        addParser("expression", "@expression ^operator.other @expression");
-        addParser("expression.assign", "(reference | @expression.symbol | @expression.assign) "
-                + "(^operator.assign | ^operator.eq) @expression"); // must precede expression: reference
-        addParser("expression", "expression- < keyword.if @expression !keyword.then statement elseClause? (!keyword.end keyword.if?)?");
-        addParser("expression", "expression- < keyword.if @expression !keyword.then? !terminator @block elseClause? (!keyword.end keyword.if?)?");
-        addParser("expression", "expression- < keyword.unless @expression !keyword.then statement elseClause? (!keyword.end keyword.unless?)?");
-        addParser("expression", "expression- < keyword.unless @expression !keyword.then? !terminator @block elseClause? (!keyword.end keyword.unless?)?");
-        addParser("expression", "expression- < keyword.while @expression !keyword.do statement elseClause? (!keyword.end keyword.while?)?");
-        addParser("expression", "expression- < keyword.while @expression !keyword.do? !terminator @block elseClause? (!keyword.end keyword.while?)?");
-        addParser("expression", "expression- < keyword.until @expression !keyword.do statement elseClause? (!keyword.end keyword.until?)?");
-        addParser("expression", "expression- < keyword.until @expression !keyword.do? !terminator @block elseClause? (!keyword.end keyword.until?)?");
+        addParser("expression", "@expression ^operator_pow @expression");
+        addParser("expression", "@expression ^operator_mul @expression");
+        addParser("expression", "@expression ^operator_add @expression");
+        addParser("expression", "@expression ^operator_compare @expression");
+        addParser("expression", "@expression ^operator_other @expression");
+        addParser("expression_assign", "(reference | @expression_symbol | @expression_assign) "
+                + "(^operator_assign | ^operator_eq) @expression"); // must precede expression: reference
+        addParser("expression", "expression- < keyword_if @expression !keyword_then statement elseClause? (!keyword_end keyword_if?)?");
+        addParser("expression", "expression- < keyword_if @expression !keyword_then? !terminator @block elseClause? (!keyword_end keyword_if?)?");
+        addParser("expression", "expression- < keyword_unless @expression !keyword_then statement elseClause? (!keyword_end keyword_unless?)?");
+        addParser("expression", "expression- < keyword_unless @expression !keyword_then? !terminator @block elseClause? (!keyword_end keyword_unless?)?");
+        addParser("expression", "expression- < keyword_while @expression !keyword_do statement elseClause? (!keyword_end keyword_while?)?");
+        addParser("expression", "expression- < keyword_while @expression !keyword_do? !terminator @block elseClause? (!keyword_end keyword_while?)?");
+        addParser("expression", "expression- < keyword_until @expression !keyword_do statement elseClause? (!keyword_end keyword_until?)?");
+        addParser("expression", "expression- < keyword_until @expression !keyword_do? !terminator @block elseClause? (!keyword_end keyword_until?)?");
 
-        addParser("elseClause", "!keyword.else statement");
-        addParser("elseClause", "!keyword.else !terminator @block");
+        addParser("elseClause", "!keyword_else statement");
+        addParser("elseClause", "!keyword_else !terminator @block");
 
-        addParser("call.this", "keyword.def- operator.dot- < @expression.symbol !start.paren (@expression (!comma? @expression)*)? !end.paren");
-        addParser("call.this", "keyword.def- start.bracket- operator.dot- < @expression.symbol @expression (!comma? @expression)*");
+        addParser("call_this", "keyword_def- operator_dot- < @expression_symbol !start_paren (@expression (!comma? @expression)*)? !end_paren");
+        addParser("call_this", "keyword_def- start_bracket- operator_dot- < @expression_symbol @expression (!comma? @expression)*");
     }
 
-    @Override
-    public Node transform(Node node) {
-        String name = node.getName();
-        String type = null;
-        if (name.equals("array")) {
-            type = commonType(node.getFirst()) + "[]";
-        } else if (name.startsWith("expression")) {
-            type = commonType(node.getFirst());
-        } else if (name.startsWith("call")) {
-            type = "void";  // TODO look up actual return type
-        }
-        if (type != null) node.setType(type);
+    public Node reference(Node node) {
+        node.setType("void");
         return node;
     }
+
+//    @Override
+//    public Node transform(Node node) {
+//        String name = node.getName();
+//        String type = null;
+//        if (name.equals("array")) {
+//            type = commonType(node.getFirst()) + "[]";
+//        } else if (name.startsWith("expression")) {
+//            type = commonType(node.getFirst());
+//        } else if (name.startsWith("reference")) {
+//            type = "void";  // TODO look up actual type
+//        } else if (name.startsWith("call")) {
+//            type = "void";  // TODO look up actual return type
+//        }
+//        if (type != null) node.setType(type);
+//        return node;
+//    }
 
     private static final String[] conversions = new String[] {
         "char", "byte", "int",
@@ -97,30 +146,5 @@ public class Expression extends CorePlugin {
         "float", "java.lang.Float", "float",
         "double", "java.lang.Double", "double",
     };
-
-    public static String commonType(Node node) {
-        String common = node.getType();
-        while (node != null) {
-            String type = node.getType();
-            if (type == null)
-                common = "java.lang.Object";
-            else if (!type.equals(common)) {
-                boolean found = false;
-                for (int ix = 0, iz = conversions.length; ix < iz; ) {
-                    String type1 = conversions[ix++];
-                    String type2 = conversions[ix++];
-                    String type3 = conversions[ix++];
-                    if (common.equals(type1) && type.equals(type2)
-                            || common.equals(type2) && type.equals(type1)) {
-                        common = type3;
-                        found = true;
-                    }
-                }
-                if (!found) common = "java.lang.Object";
-            }
-            node = node.getNext();
-        }
-        return common;
-    }
 
 }

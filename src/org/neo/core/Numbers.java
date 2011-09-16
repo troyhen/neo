@@ -12,13 +12,13 @@ import org.neo.lex.Token;
  */
 public class Numbers extends CorePlugin {
 
-    public static final String TRUE = "number.true";
-    public static final String FALSE = "number.false";
-    public static final String NULL = "number.null";
-    public static final String LONG = "number.long";
-    public static final String INTEGER = "number.integer";
-    public static final String REAL = "number.real";
-//    public static final String REAL_FORCED = "number.real.forced";
+    public static final String TRUE = "number_true";
+    public static final String FALSE = "number_false";
+    public static final String NULL = "number_null";
+    public static final String LONG = "number_long";
+    public static final String INTEGER = "number_integer";
+    public static final String REAL = "number_real";
+//    public static final String REAL_FORCED = "number_real_forced";
 
     @Override
     public Token consume(String name, int chars, Object value, String type) {

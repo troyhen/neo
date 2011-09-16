@@ -10,15 +10,32 @@ import org.neo.lex.LexerPattern;
  */
 public class Operator extends CorePlugin {
     
-    public static final String OPERATOR_OTHER = "operator.other";
-    public static final String OPERATOR_AS = "operator.as";
-    public static final String OPERATOR_COMPARE = "operator.compare";
-    public static final String OPERATOR_ADD = "operator.add";
-    public static final String OPERATOR_EQ = "operator.eq";
-    public static final String OPERATOR_ASSIGN = "operator.assign";
-    public static final String OPERATOR_MUL = "operator.mul";
-    public static final String OPERATOR_POW = "operator.pow";
-    public static final String OPERATOR_DOT = "operator.dot";
+    public static final String OPERATOR_OTHER = "operator_other";
+    public static final String OPERATOR_AS = "operator_as";
+    public static final String OPERATOR_COMPARE = "operator_compare";
+    public static final String OPERATOR_ADD = "operator_add";
+    public static final String OPERATOR_EQ = "operator_eq";
+    public static final String OPERATOR_ASSIGN = "operator_assign";
+    public static final String OPERATOR_MUL = "operator_mul";
+    public static final String OPERATOR_POW = "operator_pow";
+    public static final String OPERATOR_DOT = "operator_dot";
+
+    public Node array(Node node) {
+        String type = Expression.commonType(node.getFirst()) + "[]";
+        if (type != null) node.setType(type);
+        return node;
+    }
+
+    private String collectType(Node node) {
+        StringBuilder buff = new StringBuilder();
+        /*if (node.getFirst() != null)*/ node = node.getFirst();    // for cast
+        //else node = node.getNext(); // for type casting
+        while (node != null) {// && !node.getName().startsWith("expression")) {
+            buff.append(node.getText());
+            node = node.getNext();
+        }
+        return buff.toString();
+    }
 
     @Override
     public void open() {
@@ -35,41 +52,124 @@ public class Operator extends CorePlugin {
         add(new LexerPattern(this, OPERATOR_OTHER, "[-+~!@$%^&*/?:|]+"));
     }
 
-    @Override
-    public Node transform(Node node) {
-        String name = node.getName();
-        String type = null;
-        if (name.equals("operator.compare")) {
-            type = node.getValue().toString().equals("<=>") ? "int" : "boolean";
-        } else if (name.equals("operator.as")) {
-            type = collectType(node);
-        } else if (name.equals("operator.assign") || name.equals("operator.eq")) {
-            Node left = node.getFirst();
-            type = node.getLast().getType();
-            if (left.getName().startsWith("operator")) {
-                node.insertBefore(left);
-                node.addFirst(left.getLast());
-                left.add(node);
-                if (type != null) left.setType(type);
-            }
-        } else if (name.equals("array")) {
-            type = Expression.commonType(node.getFirst()) + "[]";
-        } else if (!name.startsWith("operator.dot")) {
-            type = Expression.commonType(node.getFirst());
+    public Node operator_as(Node node) {
+        combineBrackets(node.getFirst(), node.getLast());
+        String type = collectType(node);
+        if (type != null) node.setType(type);
+        return node;
+    }
+
+    /*
+     * Convert:
+     * ~
+     *     [
+     *     [
+     *     symbol
+     *     .
+     *     symbol
+     *     ]
+     *     ]
+     * into:
+     * ~
+     *     symbol
+     *     .
+     *     symbol
+     *     [
+     *     ]
+     *     [
+     *     ]
+     */
+    private void combineBrackets(Node first, Node last) {
+        if (first.getName().equals("start_bracket") && last.getName().equals("end_bracket")) {
+            combineBrackets(first.getNext(), last.getPrev());
+            last.insertBefore(first);
+        }
+    }
+
+    public Node operator_assign(Node node) {
+        Node left = node.getFirst();
+        String type = node.getLast().getType();
+        if (left.getName().startsWith("operator")) {
+            /*
+             * Convert:
+             * =
+             *     =
+             *         reference1
+             *         reference2
+             *     @expression
+             * into:
+             * =
+             *     reference1
+             *     =
+             *         reference2
+             *         @expression
+             */
+            node.insertBefore(left);
+            node.addFirst(left.getLast());
+            left.add(node);
+            if (type != null) left.setType(type);
         }
         if (type != null) node.setType(type);
         return node;
     }
 
-    private String collectType(Node node) {
-        StringBuilder buff = new StringBuilder();
-        /*if (node.getFirst() != null)*/ node = node.getFirst();    // for cast
-        //else node = node.getNext(); // for type casting
-        while (node != null) {// && !node.getName().startsWith("expression")) {
-            buff.append(node.getText());
-            node = node.getNext();
-        }
-        return buff.toString();
+    public Node operator_compare(Node node) {
+        String type = node.getValue().toString().equals("<=>") ? "int" : "boolean";
+        if (type != null) node.setType(type);
+        return node;
     }
+
+    public Node operator_dot(Node node) {
+        if (node.getFirst() != null) {
+            String type = Expression.commonType(node.getFirst());
+            if (type != null) node.setType(type);
+        }
+        return node;
+    }
+
+    public Node operator_eq(Node node) {
+        return operator_assign(node);
+    }
+
+
+//    @Override
+//    public Node transform(Node node) {
+//        String name = node.getName();
+//        String type = null;
+//        if (name.equals("operator_compare")) {
+//            type = node.getValue().toString().equals("<=>") ? "int" : "boolean";
+//        } else if (name.equals("operator_as")) {
+//            type = collectType(node);
+//        } else if (name.equals("operator_assign") || name.equals("operator_eq")) {
+//            Node left = node.getFirst();
+//            type = node.getLast().getType();
+//            if (left.getName().startsWith("operator")) {
+//                /*
+//                 * Convert:
+//                 * =
+//                 *     =
+//                 *         reference1
+//                 *         reference2
+//                 *     @expression
+//                 * into:
+//                 * =
+//                 *     reference1
+//                 *     =
+//                 *         reference2
+//                 *         @expression
+//                 */
+//                node.insertBefore(left);
+//                node.addFirst(left.getLast());
+//                left.add(node);
+//                if (type != null) left.setType(type);
+//            }
+//        } else if (name.equals("array")) {
+//            type = Expression.commonType(node.getFirst()) + "[]";
+//        } else if (!name.startsWith("operator_dot")) {
+//            type = Expression.commonType(node.getFirst());
+//        }
+//        if (type != null) node.setType(type);
+//        return node;
+//    }
 
 }

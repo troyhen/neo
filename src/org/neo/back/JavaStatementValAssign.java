@@ -16,7 +16,7 @@ public class JavaStatementValAssign implements Backend {
         Node node1 = node.get(1);
         buff.append("final ");
         buff.append(node1.getType()).append(" ");
-        if (node1.getName().equals("operator.as")) {
+        if (node1.getName().equals("operator_as")) {
             node1 = node1.getNext();
         }
         buff.append(node0.getText()).append(" = ");

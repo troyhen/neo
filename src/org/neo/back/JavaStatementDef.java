@@ -16,7 +16,7 @@ public class JavaStatementDef implements Backend {
         child.render("java");
         buff.append("(");
         child = child.getNext();
-        if (child.getName().equals("operator.as")) child = child.getNext();
+        if (child.getName().equals("operator_as")) child = child.getNext();
         String comma = "";
         while (child != node.getLast()) {
             buff.append(comma).append(child.getNext().getType()).append(" ");

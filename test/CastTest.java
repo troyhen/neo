@@ -73,12 +73,12 @@ public class CastTest {
         assertEquals("Third level", "cast", node.getName());
         node = node.get(0);
         assertEquals("Forth level", "cast", node.getName());
-        assertEquals("Forth level", "operator.as", node.getNext().getName());
+        assertEquals("Forth level", "operator_as", node.getNext().getName());
         node = node.get(0);
-        assertEquals("Fifth level", "string.single", node.getName());
-        assertEquals("Fifth level", "operator.as", node.getNext().getName());
+        assertEquals("Fifth level", "string_single", node.getName());
+        assertEquals("Fifth level", "operator_as", node.getNext().getName());
         node = node.getNext().get(0);
-        assertEquals("Sixth level", "symbol.int", node.getName());
+        assertEquals("Sixth level", "symbol_int", node.getName());
     }
 
     @Test
@@ -98,6 +98,7 @@ public class CastTest {
     @Test
     public void compileCast2() {
         final String expr = "2~float+1";
+//Log.testStart();
         lang.compile(expr);
         Log.info(lang.toTree());
         String program = lang.get("output");

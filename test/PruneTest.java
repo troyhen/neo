@@ -42,7 +42,7 @@ public class PruneTest {
         final Node integer1 = operator.get(0);
         final Node integer2 = operator.get(1);
         assertNull(operator.get(2));
-        assertEquals("number.integer", integer1.getName());
-        assertEquals("number.integer", integer2.getName());
+        assertEquals("number_integer", integer1.getName());
+        assertEquals("number_integer", integer2.getName());
     }
 }

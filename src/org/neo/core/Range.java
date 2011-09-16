@@ -11,8 +11,8 @@ import org.neo.parse.ParseException;
 public class Range extends CorePlugin {
 
     public static final String NAME = "range";
-    public static final String RANGE_INCLUSIVE = "range.inclusive";
-    public static final String RANGE_EXCLUSIVE = "range.exclusive";
+    public static final String RANGE_INCLUSIVE = "range_inclusive";
+    public static final String RANGE_EXCLUSIVE = "range_exclusive";
     
     @Override
     public void open() {
@@ -20,7 +20,7 @@ public class Range extends CorePlugin {
         names.add(NAME);
         add(new LexerString(this, RANGE_INCLUSIVE, "..."));
         add(new LexerString(this, RANGE_EXCLUSIVE, ".."));
-        addParser("expression.range", "@expression ^range @expression");
+        addParser("expression_range", "@expression ^range @expression");
     }
 
     @Override

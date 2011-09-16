@@ -145,6 +145,15 @@ public class Node {
     public Node getParent() { return parent; }
     public Plugin getPlugin() { return plugin; }
     public Node getPrev() { return prev; }
+
+    public String getShortName() {
+        int ix = name.indexOf('_');
+        if (ix > 0) {
+            return name.substring(0, ix);
+        }
+        return name;
+    }
+
     public CharSequence getText() { return text; }
     public String getType() { return type; }
     public void setType(String type) { this.type = type; }

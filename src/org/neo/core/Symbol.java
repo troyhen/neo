@@ -20,7 +20,7 @@ public class Symbol extends CorePlugin {
     @Override
     public Token consume(String name, int chars, Object value, String text) {
         text = Compiler.buffer().subSequence(0, chars).toString();
-        return super.consume(name + '.' + text, chars, value, text);
+        return super.consume(name + '_' + text, chars, value, text);
     }
     
     @Override

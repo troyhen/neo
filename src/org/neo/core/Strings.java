@@ -16,14 +16,14 @@ public class Strings extends CorePlugin {
     
     public static final String CLASS = "java.lang.String";
 
-    public static final String STRING_DOUBLE = "string.double";
-//    public static final String STRING_DOUBLE_BAD = "string.double.bad";
-//    public static final String STRING_DOUBLE_BAD2 = "string.double.bad2";
-    public static final String STRING_MULTILINE = "string.multiline";
-    public static final String STRING_SINGLE = "string.single";
-//    public static final String STRING_SINGLE_BAD = "string.single.bad";
-//    public static final String STRING_SINGLE_BAD2 = "string.single.bad2";
-    public static final String STRING_WORD = "string.word";
+    public static final String STRING_DOUBLE = "string_double";
+//    public static final String STRING_DOUBLE_BAD = "string_double_bad";
+//    public static final String STRING_DOUBLE_BAD2 = "string_double_bad2";
+    public static final String STRING_MULTILINE = "string_multiline";
+    public static final String STRING_SINGLE = "string_single";
+//    public static final String STRING_SINGLE_BAD = "string_single_bad";
+//    public static final String STRING_SINGLE_BAD2 = "string_single_bad2";
+    public static final String STRING_WORD = "string_word";
 
     private static final Pattern expession = Pattern.compile("#\\{((\\\\}|[^}])*)}");
     

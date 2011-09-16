@@ -10,34 +10,45 @@ public class Compilation extends CorePlugin {
 
     @Override
     public void open() {
-//        add(new LexerEof(this));
-//        addParser("statement", "callWithBlock");
 //        addParser("statement", "alias");
 
         addKeyword("if");
         addKeyword("unless");
         addKeyword("while");
         addKeyword("until");
-        addParser("statement.if", "statement !keyword.if @expression");
-        addParser("statement.unless", "statement !keyword.unless @expression");
-        addParser("statement.while", "statement !keyword.while @expression");
-        addParser("statement.until", "statement !keyword.until @expression");
+        
+        addParser("statement_if", "statement !keyword_if @expression");
+        addParser("statement_unless", "statement !keyword_unless @expression");
+        addParser("statement_while", "statement !keyword_while @expression");
+        addParser("statement_until", "statement !keyword_until @expression");
         addParser("statement", "@expression");
 //        addParser("callWithBlock", "call");
         addParser("statements", "!terminator* (statement !terminator+)+");
     }
 
-    @Override
-    public Node transform(Node node) {
-        String name = node.getName();
-        String type = null;
-        if (name.equals("statements")) {
-            type = node.getLast().getType();
-        } else if (name.equals("statement")) {
-            type = node.getFirst().getType();
-        }
+    public Node statement(Node node) {
+        String type = node.getFirst().getType();
         if (type != null) node.setType(type);
         return node;
     }
+
+    public Node statements(Node node) {
+        String type = node.getLast().getType();
+        if (type != null) node.setType(type);
+        return node;
+    }
+    
+//    @Override
+//    public Node transform(Node node) {
+//        String name = node.getName();
+//        String type = null;
+//        if (name.equals("statements")) {
+//            type = node.getLast().getType();
+//        } else if (name.equals("statement")) {
+//            type = node.getFirst().getType();
+//        }
+//        if (type != null) node.setType(type);
+//        return node;
+//    }
 
 }

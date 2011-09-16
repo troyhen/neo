@@ -34,7 +34,7 @@ public class CorePlugin extends PluginBase {
     private static Class<Backend> findClass(Node node, String backend) throws ClassNotFoundException {
         String nodeName = node.getName();
         String nodeVar = "";
-        int dot = nodeName.indexOf('.');
+        int dot = nodeName.indexOf('_');
         if (dot > 0) {
             nodeVar = nodeName.substring(dot + 1);
             nodeName = nodeName.substring(0, dot);

@@ -16,7 +16,7 @@ class RuleIdent implements Rule {
                 (ident.startsWith("!") ? Node.IGNORE : 0) +
                 (ident.startsWith("@") ? Node.SUBSUME : 0);
         this.identBase = flags != 0 ? ident.substring(1) : ident;
-        this.identDot = this.identBase + '.';
+        this.identDot = this.identBase + '_';
     }
 
     @Override

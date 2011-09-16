@@ -7,14 +7,14 @@ package org.neo.core;
 public class Import extends CorePlugin {
 
     public static final String NAME = "import";
-    public static final String STATEMENT = "statement.import";
+    public static final String STATEMENT = "statement_import";
 
     @Override
     public void open() {
         super.open();
         names.add(NAME);
         addKeyword(NAME);
-        addParser(STATEMENT, "!keyword.import (symbol operator.dot)* symbol");
+        addParser(STATEMENT, "!keyword_import (symbol operator_dot)* symbol");
     }
 
 }

@@ -1,34 +1,27 @@
 # This is not yet finished
 
-trait OrderedList(T) {
+trait OrderedList[T]
 
-    append:(item:T)
+    def append item~T
         add item
-    end
 
-    prepend:(item:T)
+    def prepend item~T
         add item
-    end
 
-    `<<`:(item:T)
+    def << item~T
         append item
-    end
 
-    `:+`:(item:T)
+    def :+ item~T
         append item
-    end
 
-    `:+`:(list:List[T])
+    def :+ list~List[T]
         append list
-    end
 
-    `::`:(item:T)
+    def :: item~T
         prepend item
-    end
 
-    `?`:(item:T)
+    def ? item~T
         contains item
-    end
-}
 
-list = String.new with List
+
+list = List[1 2 3 5]

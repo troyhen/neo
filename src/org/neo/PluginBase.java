@@ -1,10 +1,13 @@
 package org.neo;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.neo.lex.Lexer;
 import org.neo.lex.Token;
@@ -75,6 +78,14 @@ public class PluginBase implements Plugin {
             if (cache.containsKey(name)) return null;
             try {
                 method = getClass().getMethod(name, matchedSig);
+            } catch (NoSuchMethodException e) {
+                try {
+                    method = getClass().getDeclaredMethod(name, matchedSig);
+                    if (method != null) {
+                        method.setAccessible(true);
+                    }
+                } catch(Exception e2) {
+                }
             } catch(Exception e) {
             }
             cache.put(name, method);
@@ -100,11 +111,19 @@ public class PluginBase implements Plugin {
 
     @Override
     public Node transform(Node node) {
-//        Method method = lookup(name);
-//        if (method == null) return node;
-//        return (Node) method.invoke(this, node);
-        // subclasses should override this for nodes they care to modify
-        return node;
+        Method method = lookup(node.getName());
+        if (method == null) {
+            method = lookup(node.getShortName());
+        }
+        if (method == null) return node;
+        try {
+            return (Node) method.invoke(this, node);
+        } catch (NeoException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            Log.error(ex);
+            throw new NeoException(ex);
+        }
     }
 
     @Override

@@ -55,7 +55,7 @@ public class ArrayTest {
 
     @Test
     public void explicitIntArray() {
-        final String expr = "var a~int[]";
+        final String expr = "var a~[int]";
 //Log.testStart();
         lang.compile(expr);
         Log.info(lang.toTree());
@@ -66,7 +66,7 @@ public class ArrayTest {
 
     @Test
     public void explicitArrayAssign() {
-        final String expr = "var a~long[] = [0l 1l 2l 3l]";
+        final String expr = "var a~[long] = [0l 1l 2l 3l]";
 //Log.testStart();
         lang.compile(expr);
         Log.info(lang.toTree());
@@ -80,7 +80,7 @@ public class ArrayTest {
     @Test
     public void stringArray() {
 //Log.testStart();
-        final String expr = "var a~String[] = [`a \"b\" 'c']";
+        final String expr = "var a~[String] = [`a \"b\" 'c']";
         lang.compile(expr);
         Log.info(lang.toTree());
         String program = lang.get("output");
