@@ -123,6 +123,10 @@ public class Production extends RuleGroup {
                         local.add(new RuleAfter(after));
                     }
                     break;
+                case '/':
+                    addIdent(ident, local);
+                    local.add(new RuleEnforce(parseRules()));
+                    break;
 //                case ']':
 //                    addIdent(ident, local);
 //                    local = addAlternatives(local, alternatives);

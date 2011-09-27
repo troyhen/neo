@@ -40,7 +40,7 @@ public class NeoLang extends Compiler {
         plugins.add(new RegEx());
         if (full) plugins.add(new Variable()); // must precede Expression
         if (full) plugins.add(new Methods());  // must precede Expression and follow Variable
-        plugins.add(new Range()); // must precede expression
+        plugins.add(new Range()); // must precede Expression
         plugins.add(new Xml());  // must precede Operator
         plugins.add(new Percent()); // must precede Operator
         plugins.add(new Operator());

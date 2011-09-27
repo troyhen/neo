@@ -1,5 +1,6 @@
 import neo.os                        # Import gets the entire package without the need for ".*", like Nice (see nice.sourceforge.net)
 println 'Hello World'                # Simplest
+'Hello World'.println                # Same as above, since println is a multimethod
 
 println %w(Hello World).join(' ')    # Neo has the word array syntax and methods from Ruby (see www.ruby-lang.org)
 

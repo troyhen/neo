@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.neo.lex.Lexer;
 import org.neo.lex.Token;
+import org.neo.parse.InvalidProduction;
 import org.neo.parse.Production;
 
 /**
@@ -36,6 +37,10 @@ public class PluginBase implements Plugin {
 
     protected void addParser(String name, String structure) {
         grammar.add(new Production(this, name, structure));
+    }
+
+    protected void addInvalidParser(String message, String structure) {
+        grammar.add(new InvalidProduction(this, message, structure));
     }
 
     public void close() {
@@ -69,6 +74,7 @@ public class PluginBase implements Plugin {
         Node.class
     };
 
+    @Override
     public Object invoke(String prefix, Node node) {
         Method method = lookup(prefix + node.getName());
         if (method == null) {

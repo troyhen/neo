@@ -24,10 +24,14 @@ public class Variable extends CorePlugin {
                 "!keyword_var symbol @cast?");// (start_bracket @expression end_bracket)?");
         addParser("statement_varAssign",
                 "@statement_varDeclare !operator_eq expression");
-        addParser("statement_valDeclare",
-                "!keyword_val symbol @cast?");// (start_bracket @expression end_bracket)?");
+        addParser("statement_varDeclare",
+                "(statement_varDeclare | statement_varAssign) < !comma symbol @cast?");
         addParser("statement_valAssign",
-                "@statement_valDeclare !operator_eq expression");
+                "!keyword_val symbol @cast? !operator_eq expression");
+        addParser("statement_valAssign",
+                "statement_valAssign < !comma symbol @cast? !operator_eq expression");
+        addInvalidParser("val statement requires an initial assignment",
+                "!keyword_val symbol @cast? terminator");// (start_bracket @expression end_bracket)?");
     }
 
     public void refine_statement(Node node) {

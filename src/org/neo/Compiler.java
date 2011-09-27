@@ -27,7 +27,7 @@ public class Compiler {
     
     public static final String DEFAULT_BACKEND = "java";
 
-    enum State { closed, opened, loaded, tokenized, parsed, pruned, transformed, validated, rendered, error };
+    enum State { closed, opened, loaded, tokenized, parsed, pruned, transformed, refined, rendered, error };
 
     private static ThreadLocal<Compiler> compiler = new ThreadLocal<Compiler>();
 
@@ -37,7 +37,7 @@ public class Compiler {
     private final LinkedList<Map<String, ClassDef>> symbols = new LinkedList<Map<String, ClassDef>>();
     private final LinkedList<Map<String, List<MethodDef>>> methods = new LinkedList<Map<String, List<MethodDef>>>();
 
-    private ClassLoader loader;
+//    private ClassLoader loader;
     private List<String> imports = new ArrayList<String>();
     private State state = State.closed;
     private Map<String, String> config = new HashMap<String, String>();
@@ -53,8 +53,6 @@ public class Compiler {
     }
     
     public static CharSequence buffer() { return compiler().buffer; }
-
-    public CharSequence getBuffer() { return buffer; }
     
     public static Object chars(int chars) {
         return compiler.get().getChars(chars);
@@ -98,18 +96,6 @@ public class Compiler {
 
     public static Compiler compiler() { return (Compiler) compiler.get(); }
 
-//    public Token consume(Plugin plugin, String name, int chars) {
-//        Token token = new Token(plugin, name, buffer.subSequence(0, chars), line);
-//        buffer.position(buffer.position() + chars);
-//        return token;
-//    }
-//
-//    public Token consume(Plugin plugin, String name, int chars, Object value) {
-//        Token token = new Token(plugin, name, buffer.subSequence(0, chars), line, value);
-//        buffer.position(buffer.position() + chars);
-//        return token;
-//    }
-
     public Token consume(Plugin plugin, String name, int chars, Object value, String type) {
         CharSequence text = getChars(chars);
         Token token = new Token(plugin, name, text, line, value == null ? text : value, type);
@@ -134,6 +120,8 @@ public class Compiler {
         if (config.containsKey(key)) return config.get(key);
         return defValue;
     }
+
+    public CharSequence getBuffer() { return buffer; }
 
     public CharSequence getChars(int chars) {
         chars = Math.min(chars, buffer.length());
@@ -175,8 +163,6 @@ public class Compiler {
 //        }
     }
 
-    public String set(String key, String value) { return config.put(key, value); }
-
     public CharSequence limit(CharSequence text, int limit) {
         limit = Math.min(text.length(), limit);
         int index = 0;
@@ -188,6 +174,8 @@ public class Compiler {
     }
 
     public int getLine() { return line; }
+
+    public Node getRoot() { return root; }
 
     public boolean isKeyword(String text) {
         return keywords.contains(text);
@@ -240,37 +228,16 @@ public class Compiler {
 //        return loader.loadClass(name);
     }
 
-    public static int offset() { return compiler().offset; }
-    public static void offset(int offset) { compiler().offset = offset; }
-
-    public void open() {
-//        loader = NeoClassLoader.getInstance();
-//        Thread.currentThread().setContextClassLoader(loader);
-        compiler.set(this);
-        for (Plugin plugin : plugins) {
-            plugin.open();
+    public MemberDef memberFind(ClassDef type, String symbol, String assignmentType) {
+        MemberDef reference = null;
+        reference = methodFind(type, symbol, assignmentType);
+        if (reference == null) {
+            reference = methodFind(type, "set" + N.capitalize(symbol), assignmentType);
         }
-        line = 1;
-        offset = 0;
-        symbolsPush();
-        state = State.opened;
-    }
-
-    public Token nextToken() throws LexException {
-    loop:
-        for (;;) {
-            for (Plugin plugin : plugins) {
-                Token token = plugin.nextToken();
-                if (token != null) {
-                    lastToken = token;
-                    line += token.countLines();
-                    if (token.isIgnored()) continue loop;
-                    return token;
-                }
-            }
-            throw new LexException(String.format("Unrecognized input at line "
-                    + line + " (" + limit(buffer, 80) + ')'));
+        if (reference == null) {
+            reference = type.findField(symbol);
         }
+        return reference;
     }
 
     public void methodAdd(String name, MethodDef type) {
@@ -310,6 +277,39 @@ public class Compiler {
         return null;
     }
 
+    public Token nextToken() throws LexException {
+    loop:
+        for (;;) {
+            for (Plugin plugin : plugins) {
+                Token token = plugin.nextToken();
+                if (token != null) {
+                    lastToken = token;
+                    line += token.countLines();
+                    if (token.isIgnored()) continue loop;
+                    return token;
+                }
+            }
+            throw new LexException(String.format("Unrecognized input at line "
+                    + line + " (" + limit(buffer, 80) + ')'));
+        }
+    }
+
+    public static int offset() { return compiler().offset; }
+    public static void offset(int offset) { compiler().offset = offset; }
+
+    public void open() {
+//        loader = NeoClassLoader.getInstance();
+//        Thread.currentThread().setContextClassLoader(loader);
+        compiler.set(this);
+        for (Plugin plugin : plugins) {
+            plugin.open();
+        }
+        line = 1;
+        offset = 0;
+        symbolsPush();
+        state = State.opened;
+    }
+
     public Node prune() throws NeoException {
         switch (state) {
             case closed: open();
@@ -329,21 +329,6 @@ public class Compiler {
             }
             node = node.prune();
         }
-    }
-
-    private void render() throws NeoException {
-        switch (state) {
-            case closed: open();
-            case opened: load();
-            case loaded: tokenize();
-            case tokenized: parse();
-            case parsed: prune();
-            case pruned: transform();
-            case transformed: refine();
-        }
-        String backend = get("backend", DEFAULT_BACKEND);
-        root.render(backend);
-        state = State.rendered;
     }
 
     public Node parse() throws NeoException {
@@ -384,16 +369,19 @@ public class Compiler {
         return reference;
     }
 
-    public MemberDef referenceFind(ClassDef type, String symbol, String assignmentType) {
-        MemberDef reference = null;
-        reference = methodFind(type, symbol, assignmentType);
-        if (reference == null) {
-            reference = methodFind(type, "set" + N.capitalize(symbol), assignmentType);
+    private void render() throws NeoException {
+        switch (state) {
+            case closed: open();
+            case opened: load();
+            case loaded: tokenize();
+            case tokenized: parse();
+            case parsed: prune();
+            case pruned: transform();
+            case transformed: refine();
         }
-        if (reference == null) {
-            reference = type.findField(symbol);
-        }
-        return reference;
+        String backend = get("backend", DEFAULT_BACKEND);
+        root.render(backend);
+        state = State.rendered;
     }
 
     public Node refine() throws NeoException {
@@ -406,7 +394,7 @@ public class Compiler {
             case pruned: transform();
         }
         refine(root);
-        state = State.validated;
+        state = State.refined;
         return root;
     }
 
@@ -420,7 +408,7 @@ public class Compiler {
         }
     }
 
-    public Node getRoot() { return root; }
+    public String set(String key, String value) { return config.put(key, value); }
     public void setRoot(Node root) { this.root = root; }
 
     public Compiler subcompile(String string) {
