@@ -12,7 +12,7 @@ class RuleStar implements Rule {
     }
 
     @Override
-    public Node match(Node node, List<Node> matched) {
+    public Node match(Node node, List<Node.Match> matched) {
         for (;;) {
             Node next = child.match(node, matched);
             if (next == null) break;

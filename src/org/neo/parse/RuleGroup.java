@@ -12,7 +12,7 @@ class RuleGroup implements Rule {
     }
 
     @Override
-    public Node match(Node node, List<Node> matched) {
+    public Node match(Node node, List<Node.Match> matched) {
         for (Rule rule : rules) {
             node = rule.match(node, matched);
             if (node == null) break;

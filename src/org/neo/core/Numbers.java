@@ -28,6 +28,7 @@ public class Numbers extends CorePlugin {
             type = "boolean";
         } else if (name.equals(NULL)) {
         } else if (name.equals(LONG)) {
+                // Note, Java won't ignore the trailing 'l' here
             value = new Long(text.substring(0, text.length() - 1));
             type = "long";
         } else if (name.equals(INTEGER)) {
@@ -60,13 +61,9 @@ public class Numbers extends CorePlugin {
         addParser("expression", "number");
     }
 
-    @Override
-    public Node transform(Node node) {
-        String type = null;
-        if (node.getName().equals("expression")) {
-            type = node.getFirst().getType();
-        }
-        if (type != null) node.setType(type);
+    public Node transform_expression(Node node) {
+        String type = node.getFirst().getTypeName();
+        if (type != null) node.setTypeName(type);
         return node;
     }
 

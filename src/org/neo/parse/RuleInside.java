@@ -14,7 +14,7 @@ class RuleInside extends RuleGroup {
     }
 
     @Override
-    public Node match(Node start, List<Node> matched) {
+    public Node match(Node start, List<Node.Match> matched) {
         int size = matched.size();
         if (size == 0) return null;
         Node node = matched.get(size - 1).getFirst();

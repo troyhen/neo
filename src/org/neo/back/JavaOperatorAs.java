@@ -12,8 +12,8 @@ public class JavaOperatorAs implements Backend {
     public void render(Node node) {
         CodeBuilder buff = JavaCompilation.output();
         buff.append("to");
-        if (node.get(2) == null && node.getType().indexOf('.') < 0) {
-            buff.append(node.getType()).append("(");
+        if (node.get(2) == null && node.getTypeName().indexOf('.') < 0) {
+            buff.append(node.getTypeName()).append("(");
             node.get(0).render("java");
             buff.append(")");
         } else {
@@ -21,7 +21,7 @@ public class JavaOperatorAs implements Backend {
             node.get(0).render("java");
             buff.append(", (");
             JavaStatementImport imp = new JavaStatementImport();
-            buff.append(node.getType()).append(") null)");
+            buff.append(node.getTypeName()).append(") null)");
         }
     }
 

@@ -51,16 +51,16 @@ public class StringExpressionTest {
     
     @Test
     public void compileExpressions() {
-        final String expr = "\"Your name is #{person.name} and age is #{person.birth.age + 1}.\"";
+        final String expr = "\"Your name is #{'Troy'} and age is #{49 + 1}.\"";
 //Log.testStart();
         lang.compile(expr);
         Log.info(lang.toTree());
         String program = lang.get("output");
         Log.info(program);
         assertTrue("missing string 1", program.indexOf("\"Your name is \"") > 0);
-        assertTrue("missing name", program.indexOf("person.name") > 0);
+        assertTrue("missing name", program.indexOf("\"Troy\"") > 0);
         assertTrue("missing string 2", program.indexOf("\" and age is \"") > 0);
-        assertTrue("missing birth", program.indexOf("(person.birth.age + 1)") > 0);
+        assertTrue("missing birth", program.indexOf("(49 + 1)") > 0);
         assertTrue("missing string 3", program.indexOf("\".\"") > 0);
     }
 

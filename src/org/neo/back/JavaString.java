@@ -18,7 +18,7 @@ public class JavaString implements Backend {
             while (node != null) {
                 buff.append(add);
                 add = " + ";
-                if (!node.getName().startsWith("string")) {
+                if (!node.isNamed("string")) {
                     buff.append("(");
                     node.render("java");
                     buff.append(")");

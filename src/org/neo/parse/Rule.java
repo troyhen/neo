@@ -5,7 +5,7 @@ import org.neo.Node;
 
 public interface Rule {
 
-    Node match(Node node, List<Node> matched);
+    Node match(Node node, List<Node.Match> matched);
 
 }
 

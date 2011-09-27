@@ -23,15 +23,14 @@ public class Range extends CorePlugin {
         addParser("expression_range", "@expression ^range @expression");
     }
 
-    @Override
-    public Node transform(Node node) {
+    public Node transform_range(Node node) {
         String type = "neo.lang.Range";
-        final String type1 = node.get(0).getType();
-        final String type2 = node.get(1).getType();
+        final String type1 = node.get(0).getTypeName();
+        final String type2 = node.get(1).getTypeName();
         if (!type1.equals(type2)) {
             throw new ParseException("Range limit types do not match: " + type1 + " and " + type2);
         }
-        if (type != null) node.setType(type);
+        if (type != null) node.setTypeName(type);
         return node;
     }
 

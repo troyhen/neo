@@ -4,7 +4,9 @@ package org.neo;
  *
  * @author Troy Heninger
  */
-interface Transform {
+public interface Transform {
+
+    void prepare(Node node);
 
     Node transform(Node node);
     

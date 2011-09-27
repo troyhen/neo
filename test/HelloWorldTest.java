@@ -15,13 +15,15 @@ public class HelloWorldTest {
 
     private NeoLang lang;
     private File neoFile, javaFile, classFile;
+    private File classFile2;
 
     @Before
     public void setUp() {
         lang = new NeoLang();
-        neoFile = new File("examples/helloWorld.neo");
-        javaFile = new File("examples/helloWorld.java");
-        classFile = new File("examples/helloWorld.class");
+        neoFile = new File("examples/HelloWorld.neo");
+        javaFile = new File("examples/HelloWorld.java");
+        classFile = new File("examples/HelloWorld.class");
+        classFile2 = new File("examples/HelloWorld$1.class");
     }
 
     @After
@@ -29,6 +31,7 @@ public class HelloWorldTest {
         Log.testStop();
         javaFile.delete();
         classFile.delete();
+        classFile2.delete();
     }
 
     @Test
@@ -42,7 +45,7 @@ public class HelloWorldTest {
         assertTrue("missing import static", result.contains("import static "));
         assertTrue("missing path to Console", result.contains("neo.os.N.*"));
         assertTrue("missing call to println", result.contains("println("));
-        assertTrue("missing message string", result.contains("\"hello world\""));
+        assertTrue("missing message string", result.contains("\"Hello World\""));
     }
 
     @Test

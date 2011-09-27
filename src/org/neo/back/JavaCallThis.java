@@ -15,7 +15,10 @@ public class JavaCallThis implements Backend {
         node.render("java");
         node = node.getNext();
         buff.append("(");
+        String comma = "";
         while (node != null) {
+            buff.append(comma);
+            comma = ", ";
             node.render("java");
             node = node.getNext();
         }

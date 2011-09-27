@@ -1,5 +1,7 @@
 package org.neo.core;
 
+import neo.lang.N;
+import org.neo.Compiler;
 import org.neo.Log;
 import org.neo.NeoException;
 import org.neo.Node;
@@ -12,9 +14,23 @@ import org.neo.back.Backend;
  */
 public class CorePlugin extends PluginBase {
 
-    private static String capitalize(String word) {
-        if (word == null || word.length() == 0) return word;
-        return Character.toUpperCase(word.charAt(0)) + word.substring(1);
+    private static Class<Backend> findClass(Node node, String backend) throws ClassNotFoundException {
+        String nodeName = node.getName();
+        String nodeVar = "";
+        int dot = nodeName.indexOf('_');
+        if (dot > 0) {
+            nodeVar = nodeName.substring(dot + 1);
+            nodeName = nodeName.substring(0, dot);
+        }
+        String className = "org.neo.back." + N.capitalize(backend) + N.capitalize(nodeName) + N.capitalize(nodeVar);
+        Class<Backend> type;
+        try {
+            type = (Class<Backend>) Compiler.compiler().loadClass(className);
+        } catch (ClassNotFoundException ex) {
+            className = "org.neo.back." + N.capitalize(backend) + N.capitalize(nodeName);
+            type = (Class<Backend>) Compiler.compiler().loadClass(className);
+        }
+        return type;
     }
 
     @Override
@@ -26,28 +42,10 @@ public class CorePlugin extends PluginBase {
         } catch (NeoException e) {
             throw e;
         } catch (Exception ex) {
+            while (ex.getCause() != null) ex = (Exception) ex.getCause();
             Log.error(ex);
             throw new NeoException(ex);
         }
-    }
-
-    private static Class<Backend> findClass(Node node, String backend) throws ClassNotFoundException {
-        String nodeName = node.getName();
-        String nodeVar = "";
-        int dot = nodeName.indexOf('_');
-        if (dot > 0) {
-            nodeVar = nodeName.substring(dot + 1);
-            nodeName = nodeName.substring(0, dot);
-        }
-        String className = "org.neo.back." + capitalize(backend) + capitalize(nodeName) + capitalize(nodeVar);
-        Class<Backend> type;
-        try {
-            type = (Class<Backend>) Class.forName(className);
-        } catch (ClassNotFoundException ex) {
-            className = "org.neo.back." + capitalize(backend) + capitalize(nodeName);
-            type = (Class<Backend>) Class.forName(className);
-        }
-        return type;
     }
 
 }

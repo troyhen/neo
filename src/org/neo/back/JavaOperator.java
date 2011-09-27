@@ -11,7 +11,7 @@ public class JavaOperator implements Backend {
     @Override
     public void render(Node node) {
         CodeBuilder buff = JavaCompilation.output();
-        boolean needParens = node.getParent().getName().startsWith("operator");
+        boolean needParens = node.getParent().isNamed("operator");
         if (node.getValue().toString().equals("<=>")) renderCompare(node, buff);
         else {
             if (needParens) buff.append("(");

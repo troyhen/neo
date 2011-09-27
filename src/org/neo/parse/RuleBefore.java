@@ -15,7 +15,7 @@ class RuleBefore extends RuleGroup {
     }
 
     @Override
-    public Node match(Node start, List<Node> matched) {
+    public Node match(Node start, List<Node.Match> matched) {
         Node node = start;
         for (int ix = rules.size() - 1; ix >= 0; ix--) {
             Rule rule = rules.get(ix);

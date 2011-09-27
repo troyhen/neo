@@ -11,7 +11,7 @@ class RuleOpt implements Rule {
     }
 
     @Override
-    public Node match(Node node, List<Node> matched) {
+    public Node match(Node node, List<Node.Match> matched) {
         Node next = child.match(node, matched);
         if (next != null) return next;
         return node;

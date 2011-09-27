@@ -10,7 +10,7 @@ class RulePlus extends RuleStar {
     }
 
     @Override
-    public Node match(Node node, List<Node> matched) {
+    public Node match(Node node, List<Node.Match> matched) {
         node = child.match(node, matched);
         if (node == null) return null;
         return super.match(node, matched);

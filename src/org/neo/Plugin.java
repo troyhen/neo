@@ -9,12 +9,12 @@ import org.neo.parse.Rule;
  *
  * @author Troy Heninger
  */
-public interface Plugin extends Lexer, Render, Rule, Transform {
+public interface Plugin extends Lexer, Render, Rule, Transform, Refine {
 
 //    Token consume(String name, int chars);
 //    Token consume(String name, int chars, Object value);
     Token consume(String name, int chars, Object value, String type);
-
+    Object invoke(String prefix, Node node);
     void open();
 
 }

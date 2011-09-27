@@ -16,8 +16,8 @@ public class Node {
     private final CharSequence text;
     private final Plugin plugin;
     private String name;
-    private final Object value;
-    private String type;
+    private Object value;
+    private String typeName;
     private Node parent;
     private Node first;
     private Node last;
@@ -37,13 +37,13 @@ public class Node {
         this(plugin, name, text, null, null);
     }
 
-    public Node(Plugin plugin, String name, CharSequence text, Object value, String type) {
+    public Node(Plugin plugin, String name, CharSequence text, Object value, String typeName) {
         this.plugin = plugin;
         this.name = name;
         flags |= name.startsWith("!") ? IGNORE : 0; // lexers use this for ignored tokens
         this.value = value;
         this.text = text;
-        this.type = type;
+        this.typeName = typeName;
     }
 
     public void add(Node child) {
@@ -155,10 +155,15 @@ public class Node {
     }
 
     public CharSequence getText() { return text; }
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
+    public String getTypeName() { return typeName; }
+    public void setTypeName(String typeName) { this.typeName = typeName; }
     public Object getValue() { return value; }
     public boolean isIgnored() { return (flags & IGNORE) != 0; }
+
+    public boolean isNamed(String name) {
+        return this.name.equals(name) || this.name.startsWith(name + '_');
+    }
+
     public boolean isRoot() { return (flags & ROOT) != 0; }
     public boolean isSubsumed() { return (flags & SUBSUME) != 0; }
 
@@ -188,26 +193,12 @@ public class Node {
         }
     }
 
-    public String toTree() {
-        final CodeBuilder buff = new CodeBuilder();
-        toTree(this, buff);
-        return buff.toString();
+    public Match newMatch(byte flags) {
+        return new Match(flags);
     }
 
-    protected static void toTree(Node node, CodeBuilder buff) {
-        while (node != null) {
-            buff.tab().append(node.name);
-            if (node.value != null) {
-                buff.append(" (").append(node.value).append(')');
-            }
-            buff.eol();
-            if (node.first != null) {
-                buff.tabMore();
-                toTree(node.first, buff);
-                buff.tabLess();
-            }
-            node = node.next;
-        }
+    public void prepare() {
+        plugin.prepare(this);
     }
 
     public Node prune() {
@@ -242,9 +233,31 @@ public class Node {
         plugin.render(this, backend);
     }
 
-    public static void revert(List<Node> matched, int size) {
+    public static void revert(List<Match> matched, int size) {
         while (matched.size() > size) {
             matched.remove(matched.size() - 1);
+        }
+    }
+
+    public String toTree() {
+        final CodeBuilder buff = new CodeBuilder();
+        toTree(this, buff);
+        return buff.toString();
+    }
+
+    protected static void toTree(Node node, CodeBuilder buff) {
+        while (node != null) {
+            buff.tab().append(node.name);
+            if (node.value != null) {
+                buff.append(" (").append(node.value).append(')');
+            }
+            buff.eol();
+            if (node.first != null) {
+                buff.tabMore();
+                toTree(node.first, buff);
+                buff.tabLess();
+            }
+            node = node.next;
         }
     }
 
@@ -265,6 +278,35 @@ public class Node {
         if (this.prev != null) this.prev.next = this.next;
         if (this.next != null) this.next.prev = this.prev;
         this.prev = this.next = this.parent = null;
+    }
+
+    public void refine() {
+        plugin.refine(this);
+    }
+
+    public void setValue(Object value) {
+        this.value = value;
+    }
+
+    public class Match {
+        private byte flags;
+
+        public Match(byte flags) {
+            this.flags = flags;
+        }
+
+        public byte getFlags() {
+            return flags;
+        }
+
+        public Node node() {
+            Node.this.setFlags(flags);
+            return Node.this;
+        }
+
+        public Node getFirst() {
+            return Node.this.getFirst();
+        }
     }
 
 }

@@ -1,13 +1,10 @@
 package org.neo;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.neo.lex.Lexer;
 import org.neo.lex.Token;
@@ -24,15 +21,6 @@ public class PluginBase implements Plugin {
     protected List<String> names = new ArrayList<String>();
     private Map<String, Method> cache = new HashMap<String, Method>();
 
-    @Override
-    public String getName() {
-        if (names.isEmpty()) return getClass().getSimpleName();
-        return names.get(0);
-    }
-
-    @Override
-    public Plugin getPlugin() { return this; }
-
     public void add(Lexer lexer) {
         lexers.add(lexer);
         Compiler.compiler().literals.add(lexer.getName());
@@ -42,9 +30,9 @@ public class PluginBase implements Plugin {
         Compiler.compiler().addKeyword(word);
     }
     
-    protected void addParser(String name) {
-        addParser(name, "");
-    }
+//    protected void addParser(String name) {
+//        addParser(name, "");
+//    }
 
     protected void addParser(String name, String structure) {
         grammar.add(new Production(this, name, structure));
@@ -68,9 +56,35 @@ public class PluginBase implements Plugin {
         return Compiler.compiler().consume(this, name, chars, value, type);
     }
 
+    @Override
+    public String getName() {
+        if (names.isEmpty()) return getClass().getSimpleName();
+        return names.get(0);
+    }
+
+    @Override
+    public Plugin getPlugin() { return this; }
+
     private static final Class<?>[] matchedSig = new Class<?>[] {
         Node.class
     };
+
+    public Object invoke(String prefix, Node node) {
+        Method method = lookup(prefix + node.getName());
+        if (method == null) {
+            method = lookup(prefix + node.getShortName());
+        }
+        if (method == null) return node;
+        try {
+            return method.invoke(this, node);
+        } catch (NeoException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            while (ex.getCause() != null) ex = (Exception) ex.getCause();
+            Log.error(ex);
+            throw new NeoException(ex);
+        }
+    }
 
     private Method lookup(String name) {
         Method method = cache.get(name);
@@ -84,9 +98,8 @@ public class PluginBase implements Plugin {
                     if (method != null) {
                         method.setAccessible(true);
                     }
-                } catch(Exception e2) {
+                } catch(NoSuchMethodException e2) {
                 }
-            } catch(Exception e) {
             }
             cache.put(name, method);
         }
@@ -94,7 +107,7 @@ public class PluginBase implements Plugin {
     }
 
     @Override
-    public Node match(Node node, List<Node> matched) {
+    public Node match(Node node, List<Node.Match> matched) {
         Node start = node;
         for (Production production : grammar) {
             while (node != null) {
@@ -108,27 +121,6 @@ public class PluginBase implements Plugin {
         }
         return null;
     }
-
-    @Override
-    public Node transform(Node node) {
-        Method method = lookup(node.getName());
-        if (method == null) {
-            method = lookup(node.getShortName());
-        }
-        if (method == null) return node;
-        try {
-            return (Node) method.invoke(this, node);
-        } catch (NeoException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            Log.error(ex);
-            throw new NeoException(ex);
-        }
-    }
-
-    @Override
-    public void open() {
-    }
     
     @Override
     public Token nextToken() {
@@ -140,13 +132,32 @@ public class PluginBase implements Plugin {
     }
 
     @Override
+    public void prepare(Node node) {
+        invoke("prepare_", node);
+    }
+
+    @Override
+    public void open() {
+    }
+
+    @Override
     public String toString() {
         return getName();
     }
 
     @Override
+    public void refine(Node node) {
+        invoke("refine_", node);
+    }
+
+    @Override
     public void render(Node node, String backend) {
         // Do nothing. Certain subclasses will need render their nodes.
+    }
+
+    @Override
+    public Node transform(Node node) {
+        return (Node) invoke("transform_", node);
     }
 
 }

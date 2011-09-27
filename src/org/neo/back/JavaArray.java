@@ -11,7 +11,7 @@ public class JavaArray implements Backend {
     @Override
     public void render(Node node) {
         CodeBuilder buff = JavaCompilation.output();
-        buff.append("new ").append(node.getType()).append(" {").eol().tabMore().tab();
+        buff.append("new ").append(node.getTypeName()).append(" {").eol().tabMore().tab();
         node = node.getFirst();
         String comma = "";
         while (node != null) {

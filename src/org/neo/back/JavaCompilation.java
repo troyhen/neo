@@ -142,7 +142,7 @@ public class JavaCompilation implements Backend {
 
 //    private void renderImports(CodeBuilder buff, Node node) {
 //        while (node != null) {
-//            if (node.getName().equals(Import.STATEMENT)) importStmt.render(node);
+//            if (node.isNamed(Import.STATEMENT)) importStmt.render(node);
 //            else {
 //                if (node.getFirst() != null) renderImports(buff, node.getFirst());
 //            }
@@ -156,7 +156,7 @@ public class JavaCompilation implements Backend {
 
 //    private void renderStatement(CodeBuilder buff, Node node) {
 //        while (node != null) {
-//            if (node.getName().equals(Import.STATEMENT)) {
+//            if (node.isNamed(Import.STATEMENT)) {
 //                // ignore imports here
 //            } else {
 //                buff.tab();
@@ -206,6 +206,7 @@ public class JavaCompilation implements Backend {
                 } catch (NeoException e) {
                     throw e;
                 } catch (Exception ex) {
+                    while (ex.getCause() != null) ex = (Exception) ex.getCause();
                     Log.error(ex);
                     throw new NeoException(ex);
                 }
@@ -216,8 +217,8 @@ public class JavaCompilation implements Backend {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        for (CodeBuilder segment : output.get()) {
-            buf.append(segment);
+        for (CodeBuilder codeSegment : output.get()) {
+            buf.append(codeSegment);
         }
         return buf.toString();
     }

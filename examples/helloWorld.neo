@@ -1,3 +1,14 @@
-import neo.os
+import neo.os                        # Import gets the entire package without the need for ".*", like Nice (see nice.sourceforge.net)
+println 'Hello World'                # Simplest
 
-println 'hello world'
+println %w(Hello World).join(' ')    # Neo has the word array syntax and methods from Ruby (see www.ruby-lang.org)
+
+println([`Hello `World].join ' ')    # Neo has a one word String syntax with the backquote
+
+%w{Hello World}.each def word~String # Using each with a closure
+    print word + ' '
+
+val who=`World
+println "Hello #{who}"               # We also have expression injection in double quoted strings
+
+System.out.println("Hello World");   # The Java method call syntax and libraries happen to work fine as well

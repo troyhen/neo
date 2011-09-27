@@ -33,10 +33,23 @@ public class Xml extends CorePlugin {
 //        }
 //    }
 
-    @Override
-    public void open() {
-        names.add(NAME);
-        names.add(ABREV);
+    /**
+     * Find the matching end tag.
+     * TODO Each time a new opening tag is encountered it should be recursively searched so we can match the correct end tag, in case
+     * there are more than one.
+     * TODO This could exceed the buffer so there needs to be a way to refill it.
+     * @param buffer buffer to look in
+     * @param tag tag to find
+     * @return offset found or 0 if not
+     */
+    private int matchEnd(CharSequence buffer, String tag) {
+        java.util.regex.Matcher matcher = xmlEnd.matcher(buffer);
+        while (matcher.find()) {
+            if (matcher.group(1).equalsIgnoreCase(tag)) {
+                return matcher.end();
+            }
+        }
+        return 0;
     }
 
     @Override
@@ -57,23 +70,10 @@ public class Xml extends CorePlugin {
         return null;
     }
 
-    /**
-     * Find the matching end tag.
-     * TODO Each time a new opening tag is encountered it should be recursively searched so we can match the correct end tag, in case
-     * there are more than one.
-     * TODO This could exceed the buffer so there needs to be a way to refill it.
-     * @param buffer buffer to look in
-     * @param tag tag to find
-     * @return offset found or 0 if not
-     */
-    private int matchEnd(CharSequence buffer, String tag) {
-        java.util.regex.Matcher matcher = xmlEnd.matcher(buffer);
-        while (matcher.find()) {
-            if (matcher.group(1).equalsIgnoreCase(tag)) {
-                return matcher.end();
-            }
-        }
-        return 0;
+    @Override
+    public void open() {
+        names.add(NAME);
+        names.add(ABREV);
     }
 
 }

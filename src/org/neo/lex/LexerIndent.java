@@ -29,7 +29,7 @@ public class LexerIndent extends LexerEof {
 
     public boolean atBol() {
         Node last = Compiler.compiler().lastToken;
-        return last == null || last.getName().equals(eol);
+        return last == null || last.isNamed(eol);
     }
 
     private boolean checkMatch(CharSequence indent, CharSequence lastIndent) {

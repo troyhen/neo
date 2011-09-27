@@ -6,8 +6,12 @@ package neo.os;
  */
 public class N {
 
-    public static void println(CharSequence text) {
-        System.out.println(text);
+    public static void print(Object val) {
+        System.out.print(val);
+    }
+
+    public static void println(Object val) {
+        System.out.println(val);
     }
 
 }

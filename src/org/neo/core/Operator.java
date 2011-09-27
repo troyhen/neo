@@ -1,5 +1,6 @@
 package org.neo.core;
 
+import org.neo.Compiler;
 import org.neo.Node;
 import org.neo.lex.LexerChar;
 import org.neo.lex.LexerPattern;
@@ -20,17 +21,11 @@ public class Operator extends CorePlugin {
     public static final String OPERATOR_POW = "operator_pow";
     public static final String OPERATOR_DOT = "operator_dot";
 
-    public Node array(Node node) {
-        String type = Expression.commonType(node.getFirst()) + "[]";
-        if (type != null) node.setType(type);
-        return node;
-    }
-
     private String collectType(Node node) {
         StringBuilder buff = new StringBuilder();
         /*if (node.getFirst() != null)*/ node = node.getFirst();    // for cast
         //else node = node.getNext(); // for type casting
-        while (node != null) {// && !node.getName().startsWith("expression")) {
+        while (node != null) {// && !node.isNamed("expression")) {
             buff.append(node.getText());
             node = node.getNext();
         }
@@ -50,13 +45,6 @@ public class Operator extends CorePlugin {
         add(new LexerChar(this, OPERATOR_POW, '^'));
         add(new LexerChar(this, OPERATOR_DOT, '.'));
         add(new LexerPattern(this, OPERATOR_OTHER, "[-+~!@$%^&*/?:|]+"));
-    }
-
-    public Node operator_as(Node node) {
-        combineBrackets(node.getFirst(), node.getLast());
-        String type = collectType(node);
-        if (type != null) node.setType(type);
-        return node;
     }
 
     /*
@@ -80,16 +68,36 @@ public class Operator extends CorePlugin {
      *     ]
      */
     private void combineBrackets(Node first, Node last) {
-        if (first.getName().equals("start_bracket") && last.getName().equals("end_bracket")) {
+        if (first.isNamed("start_bracket") && last.isNamed("end_bracket")) {
             combineBrackets(first.getNext(), last.getPrev());
             last.insertBefore(first);
         }
     }
 
-    public Node operator_assign(Node node) {
+    public Node transform_array(Node node) {
+        String type = Expression.commonType(node.getFirst()) + "[]";
+        if (type != null) node.setTypeName(type);
+        return node;
+    }
+
+    public Node transform_operator_as(Node node) {
+        combineBrackets(node.getFirst(), node.getLast());
+        String type = collectType(node);
+        if (type != null) node.setTypeName(type);
+//        Node parent = node.getParent();
+//        if (parent.isNamed("closureTop") || parent.isNamed("statement_def") || parent.isNamed("statement_var") || parent.isNamed("statement_val")) {
+//            Node prev = node.getPrev();
+//            if (prev.isNamed("symbol")) {
+//                Compiler.compiler().symbolAdd(prev.getValue().toString(), Compiler.compiler().symbolFind(type));
+//            }
+//        }
+        return node;
+    }
+
+    public Node transform_operator_assign(Node node) {
         Node left = node.getFirst();
-        String type = node.getLast().getType();
-        if (left.getName().startsWith("operator")) {
+        String type = node.getLast().getTypeName();
+        if (left.isNamed("operator")) {
             /*
              * Convert:
              * =
@@ -107,28 +115,28 @@ public class Operator extends CorePlugin {
             node.insertBefore(left);
             node.addFirst(left.getLast());
             left.add(node);
-            if (type != null) left.setType(type);
+            if (type != null) left.setTypeName(type);
         }
-        if (type != null) node.setType(type);
+        if (type != null) node.setTypeName(type);
         return node;
     }
 
-    public Node operator_compare(Node node) {
+    public Node transform_operator_compare(Node node) {
         String type = node.getValue().toString().equals("<=>") ? "int" : "boolean";
-        if (type != null) node.setType(type);
+        if (type != null) node.setTypeName(type);
         return node;
     }
 
-    public Node operator_dot(Node node) {
+    public Node transform_operator_dot(Node node) {
         if (node.getFirst() != null) {
             String type = Expression.commonType(node.getFirst());
-            if (type != null) node.setType(type);
+            if (type != null) node.setTypeName(type);
         }
         return node;
     }
 
-    public Node operator_eq(Node node) {
-        return operator_assign(node);
+    public Node transform_operator_eq(Node node) {
+        return transform_operator_assign(node);
     }
 
 
@@ -143,7 +151,7 @@ public class Operator extends CorePlugin {
 //        } else if (name.equals("operator_assign") || name.equals("operator_eq")) {
 //            Node left = node.getFirst();
 //            type = node.getLast().getType();
-//            if (left.getName().startsWith("operator")) {
+//            if (left.isNamed("operator")) {
 //                /*
 //                 * Convert:
 //                 * =

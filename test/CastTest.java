@@ -31,8 +31,8 @@ public class CastTest {
         String simple = "1+2.0~int-8d";
         lang.load(simple);
         Node tokens = lang.tokenize();
-        assertEquals(OPERATOR_AS, tokens.get(3).getName());
-        assertEquals("~", tokens.get(3).getValue().toString());
+        assertTrue("missing ~", tokens.get(3).isNamed(OPERATOR_AS));
+        assertEquals("missing ~", "~", tokens.get(3).getValue().toString());
     }
 
 
@@ -45,15 +45,15 @@ public class CastTest {
         assertNotNull(node);
         assertEquals("Wrong number of children: " + node.childNames(), 1, node.countChildren());
         node = node.get(0);
-        assertEquals("Top of tree", "statements", node.getName());
+        assertTrue("Top of tree", node.isNamed("statements"));
         node = node.get(0);
-        assertEquals("Second level", "statement", node.getName());
+        assertTrue("Second level", node.isNamed("statement"));
         node = node.get(0);
-        assertEquals("Third level", "expression", node.getName());
+        assertTrue("Third level", node.isNamed("expression"));
         node = node.get(0);
-        assertEquals("Forth level", "expression", node.getName());
+        assertTrue("Forth level", node.isNamed("expression"));
         node = node.getNext();
-        assertEquals("Forth level", "cast", node.getName());
+        assertTrue("Forth level", node.isNamed("cast"));
     }
 
     @Test
@@ -66,19 +66,19 @@ public class CastTest {
         assertNotNull(node);
         assertEquals("Wrong number of children: " + node.childNames(), 1, node.countChildren());
         node = node.get(0);
-        assertEquals("Top of tree", "statements", node.getName());
+        assertTrue("Top of tree", node.isNamed("statements"));
         node = node.get(0);
-        assertEquals("Second level", "statement", node.getName());
+        assertTrue("Second level", node.isNamed("statement"));
         node = node.get(0);
-        assertEquals("Third level", "cast", node.getName());
+        assertTrue("Third level", node.isNamed("cast"));
         node = node.get(0);
-        assertEquals("Forth level", "cast", node.getName());
-        assertEquals("Forth level", "operator_as", node.getNext().getName());
+        assertTrue("Forth level", node.isNamed("cast"));
+        assertTrue("Forth level", node.getNext().isNamed("operator_as"));
         node = node.get(0);
-        assertEquals("Fifth level", "string_single", node.getName());
-        assertEquals("Fifth level", "operator_as", node.getNext().getName());
+        assertTrue("Fifth level", node.isNamed("string_single"));
+        assertTrue("Fifth level", node.getNext().isNamed("operator_as"));
         node = node.getNext().get(0);
-        assertEquals("Sixth level", "symbol_int", node.getName());
+        assertTrue("Sixth level", node.isNamed("symbol_int"));
     }
 
     @Test

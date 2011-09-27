@@ -34,13 +34,15 @@ public class OpenClassTest {
                 + "    return value if value == null || value.isEmpty()\n"
                 + "    Character.toUpperCase(value.charAt 0) + value.substring 1\n"
                 + "\n"
-                + "\"this is a test\".capitalize()";
+                + "\"this is a test\".capitalize";
 //Log.testStart();
         lang.compile(expr);
         Log.info(lang.toTree());
         String program = lang.get("output");
         Log.info(program);
         int i0 = 0, i1;
+        assertTrue("call to method", (i1 = program.indexOf("capitalize(\"this is a test\");")) > i0);
+        i0 = i1;
         assertTrue("missing declaration", (i1 = program.indexOf("String capitalize(String value)")) > i0);
         i0 = i1;
         assertTrue("missing if", (i1 = program.indexOf("if (")) > i0);

@@ -1,5 +1,7 @@
 package org.neo.core;
 
+import org.neo.ClassDef;
+import org.neo.Compiler;
 import org.neo.Node;
 
 /**
@@ -7,28 +9,6 @@ import org.neo.Node;
  * @author Troy Heninger
  */
 public class Variable extends CorePlugin {
-
-    public Node cast(Node node) {
-            /*
-             * Convert:
-             * cast
-             *     @expression
-             *     operator.as
-             *         symbol
-             *         ...
-             * into:
-             * operator.as
-             *     @expression
-             */
-            Node operatorAs = node.get(1);
-            while (operatorAs.getFirst() != null) {
-                operatorAs.getFirst().unlink();
-            }
-            operatorAs.addFirst(node.getFirst());
-            node.insertAfter(operatorAs);
-            node.unlink();
-            return operatorAs;
-    }
     
     @Override
     public void open() {
@@ -50,9 +30,42 @@ public class Variable extends CorePlugin {
                 "@statement_valDeclare !operator_eq expression");
     }
 
+    public void refine_statement(Node node) {
+        String name = node.getFirst().getValue().toString();
+        String type = node.getTypeName();
+        Compiler.compiler().symbolAdd(name, ClassDef.get(type));
+    }
+
+    public Node transform_cast(Node node) {
+            /*
+             * Convert:
+             * cast
+             *     @expression
+             *     operator.as
+             *         symbol
+             *         ...
+             * into:
+             * operator.as
+             *     @expression
+             */
+            Node operatorAs = node.get(1);
+            while (operatorAs.getFirst() != null) {
+                operatorAs.getFirst().unlink();
+            }
+            operatorAs.addFirst(node.getFirst());
+            node.insertAfter(operatorAs);
+            node.unlink();
+            return operatorAs;
+    }
+
+    public Node transform_statement(Node node) {
+        node.setTypeName(node.get(1).getTypeName());
+        return node;
+    }
+
 //    @Override
 //    public Node transform(Node node) {
-//        if (node.getName().equals("cast")) {    // see expression: @expression ^cast
+//        if (node.isNamed("cast")) {    // see expression: @expression ^cast
 //            /*
 //             * Convert:
 //             * cast

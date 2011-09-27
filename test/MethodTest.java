@@ -27,7 +27,8 @@ public class MethodTest {
     @Test
     public void emptyParens() {
         final String expr
-                = "def test()\n"
+                = "import neo.os\n"
+                + "def test()\n"
                 + "    println 'hello'";
 //Log.testStart();
         lang.compile(expr);
@@ -43,7 +44,8 @@ public class MethodTest {
     @Test
     public void noParens() {
         final String expr
-                = "def test\n"
+                = "import neo.os\n"
+                + "def test\n"
                 + "    println 'hello'\n";
 //Log.testStart();
         lang.compile(expr);
@@ -59,7 +61,8 @@ public class MethodTest {
     @Test
     public void splitArgs() {
         final String expr
-                = "def test(a~int\n"
+                = "import neo.os\n"
+                + "def test(a~int\n"
                 + "b~String)\n"
                 + "    println a + b\n"
                 + "    0\n";
@@ -78,7 +81,8 @@ public class MethodTest {
     @Test
     public void noParenArgs() {
         final String expr
-                = "def test a~int b~String\n"
+                = "import neo.os\n"
+                + "def test a~int b~String\n"
                 + "    println a + b\n";
 //Log.testStart();
         lang.compile(expr);
@@ -94,7 +98,8 @@ public class MethodTest {
     @Test
     public void typeDeclared() {
         final String expr
-                = "def test~int c~int b~String\n"
+                = "import neo.os\n"
+                + "def test~int c~int b~String\n"
                 + "    println b + c\n"
                 + "    0";
 //Log.testStart();

@@ -9,6 +9,7 @@ import org.neo.core.Import;
 import org.neo.core.Methods;
 import org.neo.core.Numbers;
 import org.neo.core.Operator;
+import org.neo.core.Percent;
 import org.neo.core.Range;
 import org.neo.core.RegEx;
 import org.neo.core.Strings;
@@ -38,9 +39,10 @@ public class NeoLang extends Compiler {
         plugins.add(new Strings());
         plugins.add(new RegEx());
         if (full) plugins.add(new Variable()); // must precede Expression
-        if (full) plugins.add(new Methods());  // must precede Expression
+        if (full) plugins.add(new Methods());  // must precede Expression and follow Variable
         plugins.add(new Range()); // must precede expression
         plugins.add(new Xml());  // must precede Operator
+        plugins.add(new Percent()); // must precede Operator
         plugins.add(new Operator());
         plugins.add(new Group());
         plugins.add(new Symbol());

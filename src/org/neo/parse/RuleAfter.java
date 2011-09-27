@@ -10,7 +10,7 @@ class RuleAfter extends RuleGroup {
     }
 
     @Override
-    public Node match(Node node, List<Node> matched) {
+    public Node match(Node node, List<Node.Match> matched) {
         int size = matched.size();
         Node next = super.match(node, matched);
         Node.revert(matched, size);

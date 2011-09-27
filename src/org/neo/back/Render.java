@@ -8,6 +8,6 @@ import org.neo.Node;
  */
 public interface Render {
 
-    public void render(Node node, String backend);
+    void render(Node node, String backend);
 
 }

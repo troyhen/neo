@@ -26,64 +26,10 @@ public class Strings extends CorePlugin {
     public static final String STRING_WORD = "string_word";
 
     private static final Pattern expession = Pattern.compile("#\\{((\\\\}|[^}])*)}");
-    
-    @Override
-    public void open() {
-        super.open();
-        names.add("string");
-        add(new LexerPattern(this, STRING_WORD, "`([^ \\t\\r\\n,.;:#~\\[\\]\\(\\)\\{\\}']+)", 1));
-        add(new LexerPattern(this, STRING_SINGLE, "'((\\\\'|[^'\\r\\n])*)'", 1));
-//        add(new LexerPattern(this, STRING_SINGLE_BAD, "'((\\\\'|[^'\\r\\n])*)[\\r\\n]", 1));
-//        add(new LexerPattern(this, STRING_SINGLE_BAD2, "'((\\\\'|[^'\\r\\n])*)$", 1));
-            // multiline must come before double
-        add(new LexerPattern(this, STRING_MULTILINE, "\"\"\"((\"\"[^\"]|\"[^\"]|[^\"])*)\"\"\"", 1));
-        add(new LexerPattern(this, STRING_DOUBLE, "\"((\\\\\"|[^\"\\r\\n])*)\"", 1));
-//        add(new LexerPattern(this, STRING_DOUBLE_BAD, "\"((\\\"|[^\"\\r\\n])*)[\\r\\n]", 1));
-        addParser("expression", "string");
-    }
 
     @Override
     public Token consume(String name, int chars, Object value, String type) {
         return super.consume(name, chars, decode((CharSequence) value), CLASS);
-    }
-
-    @Override
-    public Node transform(Node node) {
-        String type = null;
-        if (node.getName().equals("expression")) {
-            type = node.getFirst().getType();
-        }
-        if (type != null) node.setType(type);
-        String name = node.getName();
-        if (name.equals(STRING_DOUBLE) || name.equals(STRING_MULTILINE)) {
-            final CharSequence text = (CharSequence) node.getValue();
-            Matcher match = expession.matcher(text);
-            int index = 0;
-            while (match.find()) {
-                String content = match.group(1).trim();
-                if (content.length() == 0) continue;
-                if (match.start() > index || index == 0) {  // We need the first string even if empty so the Java expression will do String conversion and concatenation
-                    CharSequence between = text.subSequence(index, match.start());
-                    Node string = new Node(this, STRING_SINGLE, between, between, CLASS);
-                    node.add(string);
-                }
-                Compiler current = Compiler.compiler();
-                Compiler comp = current.subcompile("expression");
-                comp.load(content);
-                Log.info("compiling string content: " + content);
-                Node node1 = comp.transform();
-                node.add(node1.getFirst().getFirst());
-                comp.close(current);
-                index = match.end();
-            }
-            int end = text.length();
-            if (index > 0 && index < end) {
-                CharSequence between = text.subSequence(index, end);
-                Node string = new Node(this, STRING_SINGLE, between, between, CLASS);
-                node.add(string);
-            }
-        }
-        return node;
     }
 
     public static String decode(CharSequence chars) {
@@ -195,6 +141,63 @@ public class Strings extends CorePlugin {
             }
         }
         return buff.toString();
+    }
+    
+    @Override
+    public void open() {
+        super.open();
+        names.add("string");
+        add(new LexerPattern(this, STRING_WORD, "`([^ \\t\\r\\n,.;:#~\\[\\]\\(\\)\\{\\}']+)", 1));
+        add(new LexerPattern(this, STRING_SINGLE, "'((\\\\'|[^'\\r\\n])*)'", 1));
+//        add(new LexerPattern(this, STRING_SINGLE_BAD, "'((\\\\'|[^'\\r\\n])*)[\\r\\n]", 1));
+//        add(new LexerPattern(this, STRING_SINGLE_BAD2, "'((\\\\'|[^'\\r\\n])*)$", 1));
+            // multiline must come before double
+        add(new LexerPattern(this, STRING_MULTILINE, "\"\"\"((\"\"[^\"]|\"[^\"]|[^\"])*)\"\"\"", 1));
+        add(new LexerPattern(this, STRING_DOUBLE, "\"((\\\\\"|[^\"\\r\\n])*)\"", 1));
+//        add(new LexerPattern(this, STRING_DOUBLE_BAD, "\"((\\\"|[^\"\\r\\n])*)[\\r\\n]", 1));
+        addParser("expression", "string");
+    }
+
+    @Override
+    public Node transform(Node node) {
+        String type = null;
+        if (node.isNamed("expression")) {
+            type = node.getFirst().getTypeName();
+        }
+        if (type != null) node.setTypeName(type);
+        String name = node.getName();
+        if (name.equals(STRING_DOUBLE) || name.equals(STRING_MULTILINE)) {
+            final CharSequence text = (CharSequence) node.getValue();
+            Matcher match = expession.matcher(text);
+            int index = 0;
+            while (match.find()) {
+                String content = match.group(1).trim();
+                if (content.length() == 0) continue;
+                if (match.start() > index || index == 0) {  // We need the first string even if empty so the Java expression will do String conversion and concatenation
+                    CharSequence between = text.subSequence(index, match.start());
+                    Node string = new Node(this, STRING_SINGLE, between, between, CLASS);
+                    node.add(string);
+                }
+                Compiler current = Compiler.compiler();
+                Compiler comp = current.subcompile("expression");
+                comp.load(content);
+                Log.info("compiling string content: " + content);
+                Node node1 = comp.transform();
+                do {
+                    node1 = node1.getFirst();
+                } while (node1.isNamed("expression"));
+                node.add(node1);
+                comp.close(current);
+                index = match.end();
+            }
+            int end = text.length();
+            if (index > 0 && index < end) {
+                CharSequence between = text.subSequence(index, end);
+                Node string = new Node(this, STRING_SINGLE, between, between, CLASS);
+                node.add(string);
+            }
+        }
+        return node;
     }
 
 }

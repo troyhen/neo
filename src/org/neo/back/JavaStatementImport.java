@@ -11,7 +11,7 @@ public class JavaStatementImport implements Backend {
     @Override
     public void render(Node node) {
         CodeBuilder buff = JavaCompilation.output(0);
-        String path = getPath(node.getFirst());
+        String path = node.getValue().toString();
         buff.append("import ");
 //        try {
 //            if (isStatic(path)) {
@@ -20,22 +20,8 @@ public class JavaStatementImport implements Backend {
 //        } catch (ClassNotFoundException ex) {
 //            throw new NeoException(ex);
 //        }
-        buff.append(path);
-        buff.append(".*");
-        buff.append(";").eol();
-        buff.append("import static ");
-        buff.append(path);
-        buff.append(".N.*");
-        buff.append(";").eol();
-    }
-
-    public static String getPath(Node node) {
-        StringBuilder buff = new StringBuilder();
-        while (node != null) {
-            buff.append(node.getValue());
-            node = node.getNext();
-        }
-        return buff.toString();
+        buff.append(path).append(".*;").eol();
+        buff.append("import static ").append(path).append(".N.*;").eol();
     }
 
 //    private boolean isStatic(String path) throws ClassNotFoundException {

@@ -11,7 +11,7 @@ public class JavaStatementUntil implements Backend {
     @Override
     public void render(Node node) {
         CodeBuilder buff = JavaCompilation.output();
-        boolean needBoolean = !"boolean".equals(node.get(1).getType());
+        boolean needBoolean = !"boolean".equals(node.get(1).getTypeName());
         buff.tab().append("while (!");
         if (needBoolean) buff.append("toboolean(");
         else buff.append("(");

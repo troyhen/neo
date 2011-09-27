@@ -48,13 +48,13 @@ public class Production extends RuleGroup {
     }
 
     @Override
-    public Node match(Node node, List<Node> matched) {
+    public Node match(Node node, List<Node.Match> matched) {
         Node next = super.match(node, matched);
         if (next != null) {
             Node newNode = new Node(plugin, name);
             node.insertBefore(newNode);
-            for (Node n : matched) {
-                newNode.add(n);
+            for (Node.Match n : matched) {
+                newNode.add(n.node());
             }
             Log.info(name + " matched "
                     + newNode.childNames());

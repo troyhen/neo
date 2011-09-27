@@ -12,7 +12,7 @@ class RuleNot implements Rule {
     }
 
     @Override
-    public Node match(Node node, List<Node> matched) {
+    public Node match(Node node, List<Node.Match> matched) {
         int size = matched.size();
         Node result = child.match(node, matched);
         Node.revert(matched, size);

@@ -21,20 +21,27 @@ public class Compilation extends CorePlugin {
         addParser("statement_unless", "statement !keyword_unless @expression");
         addParser("statement_while", "statement !keyword_while @expression");
         addParser("statement_until", "statement !keyword_until @expression");
-        addParser("statement", "@expression");
+        addParser("statement", "@expression > operator- closureTop-");
 //        addParser("callWithBlock", "call");
-        addParser("statements", "!terminator* (statement !terminator+)+");
+        addParser("statements", "!terminator* (statement !terminator*)+ > expression-");
+//        addParser("statements", "@statements (@statements | statement)+");
+        addParser("statements", "@statements @statements+");
     }
 
-    public Node statement(Node node) {
-        String type = node.getFirst().getType();
-        if (type != null) node.setType(type);
+    public void prepare_statements(Node node) {
+        Node parent = node.getParent();
+        parent.getPlugin().invoke("descend_", parent);
+    }
+
+    public Node transform_statement(Node node) {
+        String type = node.getFirst().getTypeName();
+        if (type != null) node.setTypeName(type);
         return node;
     }
 
-    public Node statements(Node node) {
-        String type = node.getLast().getType();
-        if (type != null) node.setType(type);
+    public Node transform_statements(Node node) {
+        String type = node.getLast().getTypeName();
+        if (type != null) node.setTypeName(type);
         return node;
     }
     

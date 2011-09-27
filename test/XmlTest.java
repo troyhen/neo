@@ -33,8 +33,8 @@ public class XmlTest {
         final String simple = "<test/>";
         lang.load(simple);
         Node tokens = lang.tokenize();
-        assertEquals(NAME, tokens.get(0).getName());
-        assertEquals(simple, tokens.get(0).getValue().toString());
+        assertTrue("Bad name", tokens.get(0).isNamed(NAME));
+        assertEquals("Bad text", simple, tokens.get(0).getValue().toString());
     }
 
     @Test

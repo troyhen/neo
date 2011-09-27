@@ -21,6 +21,7 @@ public class JavaCallDot implements Backend {
         String comma = "";
         while (param != null) {
             buff.append(comma);
+            comma = ", ";
             param.render("java");
             param = param.getNext();
         }

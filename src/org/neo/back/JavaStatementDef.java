@@ -11,15 +11,15 @@ public class JavaStatementDef implements Backend {
     @Override
     public void render(Node node) {
         CodeBuilder buff = JavaCompilation.openSegment();
-        buff.tab().append(node.getType()).append(" ");
+        buff.tab().append(node.getTypeName()).append(" ");
         Node child = node.getFirst();
         child.render("java");
         buff.append("(");
         child = child.getNext();
-        if (child.getName().equals("operator_as")) child = child.getNext();
+        if (child.isNamed("operator_as")) child = child.getNext();
         String comma = "";
         while (child != node.getLast()) {
-            buff.append(comma).append(child.getNext().getType()).append(" ");
+            buff.append(comma).append(child.getNext().getTypeName()).append(" ");
             comma = ", ";
             child.render("java");
             child = child.getNext().getNext();

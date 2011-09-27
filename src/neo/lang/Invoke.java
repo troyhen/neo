@@ -1,9 +1,8 @@
 package neo.lang;
 
 import java.lang.reflect.Method;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import org.neo.Compiler;
+import org.neo.Log;
 import org.neo.NeoException;
 
 /**
@@ -13,7 +12,7 @@ import org.neo.NeoException;
 public class Invoke {
 
     private Method classMethod;
-    private Method packageMethod;
+    private Method multiMethod;
     
     public Object invoke(Object object, String name, Object...args) {
         find(object, name, args);
@@ -22,11 +21,12 @@ public class Invoke {
                 return classMethod.invoke(object, args);
             }
             Object[] args2 = staticArgs(object, args);
-            return packageMethod.invoke(null, args2);
+            return multiMethod.invoke(null, args2);
         } catch (NeoException e) {
             throw e;
         } catch (Exception ex) {
-            Logger.getLogger(Invoke.class.getName()).log(Level.SEVERE, null, ex);
+            while (ex.getCause() != null) ex = (Exception) ex.getCause();
+            Log.error(ex);
             throw new NeoException(ex);
         }
     }
@@ -39,11 +39,11 @@ public class Invoke {
         Package[] pkgs = Package.getPackages();
         for (Package pkg : pkgs) {
             try {
-                type = Class.forName(pkg.getName() + ".N");
-                packageMethod = lookup2(type, name, args2);
-                if (packageMethod != null) return;
+                type = Compiler.compiler().loadClass(pkg.getName() + ".N");
+                multiMethod = lookup2(type, name, args2);
+                if (multiMethod != null) return;
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(Invoke.class.getName()).log(Level.SEVERE, null, ex);
+                Log.error(ex);
             }
         }
     }
@@ -67,7 +67,8 @@ public class Invoke {
         } catch (NeoException e) {
             throw e;
         } catch (Exception ex) {
-            Logger.getLogger(Invoke.class.getName()).log(Level.SEVERE, null, ex);
+            while (ex.getCause() != null) ex = (Exception) ex.getCause();
+            Log.error(ex);
             throw new NeoException(ex);
         }
         return meth;
