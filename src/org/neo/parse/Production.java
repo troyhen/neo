@@ -53,11 +53,17 @@ public class Production extends RuleGroup {
         if (next != null) {
             Node newNode = new Node(plugin, name);
             node.insertBefore(newNode);
+            StringBuilder buff = new StringBuilder();
+            buff.append(name);
+            buff.append(" matched ");
+            String space = "";
             for (Node.Match n : matched) {
                 newNode.add(n.node());
+                buff.append(space);
+                space = " ";
+                buff.append(n);
             }
-            Log.info(name + " matched "
-                    + newNode.childNames());
+            Log.info(buff.toString());
         }
         matched.clear();
         return next;

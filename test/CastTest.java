@@ -43,7 +43,7 @@ public class CastTest {
         lang.load(expr);
         Node node = lang.parse();
         assertNotNull(node);
-        assertEquals("Wrong number of children: " + node.childNames(), 1, node.countChildren());
+        assertEquals("Wrong number of children: " + node.childNames(), 2, node.countChildren());
         node = node.get(0);
         assertTrue("Top of tree", node.isNamed("statements"));
         node = node.get(0);
@@ -64,7 +64,7 @@ public class CastTest {
         Node node = lang.prune();
         Log.info(node.toTree());
         assertNotNull(node);
-        assertEquals("Wrong number of children: " + node.childNames(), 1, node.countChildren());
+        assertEquals("Wrong number of children: " + node.childNames(), 2, node.countChildren());
         node = node.get(0);
         assertTrue("Top of tree", node.isNamed("statements"));
         node = node.get(0);

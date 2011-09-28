@@ -17,15 +17,15 @@ public class Compilation extends CorePlugin {
         addKeyword("while");
         addKeyword("until");
         
-        addParser("statement_if", "statement !keyword_if @expression");
-        addParser("statement_unless", "statement !keyword_unless @expression");
-        addParser("statement_while", "statement !keyword_while @expression");
-        addParser("statement_until", "statement !keyword_until @expression");
-        addParser("statement", "@expression > operator- closureTop-");
+        addParser("statement_if", "statement_def- statement !keyword_if @expression");
+        addParser("statement_unless", "statement_def- statement !keyword_unless @expression");
+        addParser("statement_while", "statement_def- statement !keyword_while @expression");
+        addParser("statement_until", "statement_def- statement !keyword_until @expression");
+        addParser("statement", "keyword_if- keyword_unless- keyword_while- keyword_until- < @expression > operator- closureTop- keyword_else-");
 //        addParser("callWithBlock", "call");
-        addParser("statements", "!terminator* (statement !terminator*)+ > expression-");
+        addParser("statements", "(!terminator* statement)+ > terminator");
 //        addParser("statements", "@statements (@statements | statement)+");
-        addParser("statements", "@statements @statements+");
+        addParser("statements", "@statements !terminator* @statements");
     }
 
     public void prepare_statements(Node node) {

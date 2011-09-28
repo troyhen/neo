@@ -307,6 +307,17 @@ public class Node {
         public Node getFirst() {
             return Node.this.getFirst();
         }
+
+        @Override
+        public String toString() {
+            StringBuilder buff = new StringBuilder();
+            if ((flags & IGNORE) != 0) buff.append('!');
+            if ((flags & ROOT) != 0) buff.append('^');
+            if ((flags & SUBSUME) != 0) buff.append('@');
+            buff.append(Node.this.toString());
+            return buff.toString();
+        }
+
     }
 
 }

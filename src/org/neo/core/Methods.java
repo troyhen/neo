@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.neo.ClassDef;
 import org.neo.Compiler;
+import org.neo.Log;
 import org.neo.MethodDef;
 import org.neo.Node;
 
@@ -44,6 +45,8 @@ public class Methods extends CorePlugin {
         MethodDef def = buildMethod(node.getFirst());
         node.setValue(def);
         Compiler.compiler().methodAdd(def.getName(), def);
+        Log.info(def.toString());
+        Compiler.compiler().symbolsPush();
     }
     
     @Override
@@ -69,9 +72,9 @@ public class Methods extends CorePlugin {
         addParser(STATEMENT_RETURN, "!keyword_return @expression? > (terminator | keyword_if | keyword_unless | keyword_while | keyword_until)");
     }
 
-    public void prepare_statement_def(Node node) {
-        Compiler.compiler().symbolsPush();
-    }
+//    public void prepare_statement_def(Node node) {
+//        Compiler.compiler().symbolsPush();
+//    }
 
     public Node transform_closureTop(Node start) {
         String type = null;
@@ -112,8 +115,9 @@ public class Methods extends CorePlugin {
         }
         if (type != null) {
             node.setTypeName(type);
-//            MethodDef def = (MethodDef) node.getValue();
-//            def.getName();
+            MethodDef def = (MethodDef) node.getValue();
+            def.setReturnType(ClassDef.get(type));
+            Log.info(def.toString());
         }
         return node;
     }

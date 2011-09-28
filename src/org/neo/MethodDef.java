@@ -23,6 +23,15 @@ public class MethodDef extends MemberDef {
         super(owner, name, returnType, modifiers);
         this.argTypes = argTypes;
     }
+
+    public boolean isCallableWith(String...argTypes) {
+        int length = this.argTypes.length;
+        if (argTypes.length != length) return false;
+        for (int ix = 0; ix < length; ix++) {
+            if (argTypes[ix] != null && !this.argTypes[ix].isAssignableFrom(argTypes[ix])) return false;
+        }
+        return true;
+    }
     
 //    public static String signature(Method method) {
 //        StringBuilder buff = new StringBuilder();
@@ -73,15 +82,6 @@ public class MethodDef extends MemberDef {
         }
         buff.append(')');
         return buff.toString();
-    }
-
-    public boolean isCallableWith(String...argTypes) {
-        int length = this.argTypes.length;
-        if (argTypes.length != length) return false;
-        for (int ix = 0; ix < length; ix++) {
-            if (argTypes[ix] != null && !this.argTypes[ix].isAssignableFrom(argTypes[ix])) return false;
-        }
-        return true;
     }
 
 }

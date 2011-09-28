@@ -21,8 +21,8 @@ class RuleIdent implements Rule {
 
     @Override
     public Node match(Node node, List<Node.Match> matched) {
-        final String name = node.getName();
-        if (name.equals(identBase) || name.startsWith(identDot)) {
+        //final String name = node.getName();
+        if (node.isNamed(identBase)) {//name.equals(identBase) || name.startsWith(identDot)) {
             Node next = node.getNext();
             matched.add(node.newMatch(flags));
 //            node.setFlags((byte) flags);    //TODO problem because a higher rule may cancel this match

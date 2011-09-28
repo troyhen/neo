@@ -13,9 +13,13 @@ class RuleGroup implements Rule {
 
     @Override
     public Node match(Node node, List<Node.Match> matched) {
+        int size = matched.size();
         for (Rule rule : rules) {
             node = rule.match(node, matched);
-            if (node == null) break;
+            if (node == null) {
+                Node.revert(matched, size);
+                break;
+            }
         }
         return node;
     }

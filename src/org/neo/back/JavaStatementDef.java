@@ -11,7 +11,7 @@ public class JavaStatementDef implements Backend {
     @Override
     public void render(Node node) {
         CodeBuilder buff = JavaCompilation.openSegment();
-        buff.tab().append(node.getTypeName()).append(" ");
+        buff.tab().append("public ").append(node.getTypeName()).append(" ");
         Node child = node.getFirst();
         child.render("java");
         buff.append("(");

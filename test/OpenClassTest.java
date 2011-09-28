@@ -1,12 +1,9 @@
 import org.junit.After;
-import java.util.logging.Level;
 import org.neo.Log;
 import org.neo.NeoLang;
-import org.neo.Node;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.neo.core.Operator.*;
 import static org.junit.Assert.*;
 
 /**
@@ -31,7 +28,7 @@ public class OpenClassTest {
     public void openClass1() {
         final String expr
                 = "def capitalize~String value~String\n"
-                + "    return value if value == null || value.isEmpty()\n"
+                + "    return value if value == null || value.isEmpty\n"
                 + "    Character.toUpperCase(value.charAt 0) + value.substring 1\n"
                 + "\n"
                 + "\"this is a test\".capitalize";

@@ -43,7 +43,7 @@ public class ExpressionTest {
         lang.load(expr);
         Node root = lang.parse();
         assertNotNull(root);
-        assertEquals("Wrong number of children", 1, root.countChildren());
+        assertEquals("Wrong number of children", 2, root.countChildren());
         assertEquals("Top of tree should be ", "statements", root.get(0).getName());
         assertEquals("Second level should be ", "statement", root.get(0).get(0).getName());
         assertEquals("Third level should be ", "expression", root.get(0).get(0).get(0).getName());
@@ -55,7 +55,7 @@ public class ExpressionTest {
         lang.load(expr);
         Node root = lang.parse();
         assertNotNull(root);
-        assertEquals(1, root.countChildren());
+        assertEquals(2, root.countChildren());
         assertEquals("statements", root.get(0).getName());
         assertEquals("statement", root.get(0).get(0).getName());
         assertEquals("expression", root.get(0).get(0).get(0).getName());

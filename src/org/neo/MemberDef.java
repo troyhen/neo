@@ -1,6 +1,5 @@
 package org.neo;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 /**
@@ -47,6 +46,10 @@ public class MemberDef {
 
     public boolean isStatic() {
         return Modifier.isStatic(modifiers);
+    }
+
+    public void setReturnType(ClassDef type) {
+        returnType = type;
     }
 
 }
