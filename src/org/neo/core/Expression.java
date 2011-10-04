@@ -115,19 +115,6 @@ public class Expression extends CorePlugin {
         addParser("expression_assign", "(reference | @expression_symbol | @expression_assign) "
                 + "(^operator_assign | ^operator_eq) @expression"); // must precede expression: reference
 
-        addParser("expression", "control");
-        addParser("control_if", "expression- < !keyword_if @expression !keyword_then statement elseClause? (!keyword_end !keyword_if?)?");
-        addParser("control_if", "expression- < !keyword_if @expression !keyword_then? !terminator @block elseClause? (!keyword_end !keyword_if?)?");
-        addParser("control_unless", "expression- < !keyword_unless @expression !keyword_then statement elseClause? (!keyword_end !keyword_unless?)?");
-        addParser("control_unless", "expression- < !keyword_unless @expression !keyword_then? !terminator @block elseClause? (!keyword_end !keyword_unless?)?");
-        addParser("control_while", "expression- < !keyword_while @expression !keyword_do statement elseClause? (!keyword_end !keyword_while?)?");
-        addParser("control_while", "expression- < !keyword_while @expression !keyword_do? !terminator @block elseClause? (!keyword_end !keyword_while?)?");
-        addParser("control_until", "expression- < !keyword_until @expression !keyword_do statement elseClause? (!keyword_end !keyword_until?)?");
-        addParser("control_until", "expression- < !keyword_until @expression !keyword_do? !terminator @block elseClause? (!keyword_end !keyword_until?)?");
-
-        addParser("elseClause", "!keyword_else statement");
-        addParser("elseClause", "!keyword_else !terminator @block");
-
         addParser("call_this", "keyword_def- operator_dot- < @expression_symbol !start_paren (@expression (!comma? @expression)*)? !end_paren");
         addParser("call_this", "keyword_def- start_bracket- operator_dot- < @expression_symbol @expression (!comma? @expression)*");
         addParser("call_this", "@expression_symbol > keyword.def");

@@ -31,14 +31,14 @@ public class Variable extends CorePlugin {
         addParser("statement_valAssign",
                 "statement_valAssign < !comma symbol @cast? !operator_eq expression");
         addInvalidParser("val statement requires an initial assignment",
-                "!keyword_val symbol @cast? terminator");// (start_bracket @expression end_bracket)?");
+                "keyword_val symbol cast? terminator");// (start_bracket @expression end_bracket)?");
     }
 
-    public void refine_statement(Node node) {
-        String name = node.getFirst().getValue().toString();
-        String type = node.getTypeName();
-        Compiler.compiler().symbolAdd(name, ClassDef.get(type));
-    }
+//    public void refine_statement(Node node) {
+//        String name = node.getFirst().getValue().toString();
+//        String type = node.getTypeName();
+//        Compiler.compiler().symbolAdd(name, ClassDef.get(type));
+//    }
 
     public Node transform_cast(Node node) {
             /*
@@ -63,7 +63,12 @@ public class Variable extends CorePlugin {
     }
 
     public Node transform_statement(Node node) {
-        node.setTypeName(node.get(1).getTypeName());
+        final String typeName = node.get(1).getTypeName();
+        final String name = node.getFirst().getValue().toString();
+        if (typeName != null) {
+            node.setTypeName(typeName);
+            Compiler.compiler().symbolAdd(name, ClassDef.get(typeName));
+        }
         return node;
     }
 

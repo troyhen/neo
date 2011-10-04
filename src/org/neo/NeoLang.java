@@ -2,6 +2,7 @@ package org.neo;
 
 import org.neo.core.Delimiter;
 import org.neo.core.Compilation;
+import org.neo.core.Control;
 import org.neo.core.CorePlugin;
 import org.neo.core.Expression;
 import org.neo.core.Group;
@@ -46,6 +47,7 @@ public class NeoLang extends Compiler {
         plugins.add(new Operator());
         plugins.add(new Group());
         plugins.add(new Symbol());
+        plugins.add(new Control());
         plugins.add(main = new Expression());
         if (full) plugins.add(main = new Compilation()); // must be last
     }

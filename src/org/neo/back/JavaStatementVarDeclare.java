@@ -16,6 +16,8 @@ public class JavaStatementVarDeclare implements Backend {
         Node node1 = node.get(1);
         if (node1 != null && node1.isNamed("operator_as")) {
             buff.append(node1.getTypeName()).append(" ").append(node0.getText());
+        } else {
+            buff.append(node.getTypeName()).append(" ").append(node0.getText());
         }
         buff.append(";").eol();
     }

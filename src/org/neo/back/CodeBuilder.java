@@ -11,8 +11,19 @@ public class CodeBuilder {
     private StringBuilder tabs = new StringBuilder();
     private StringBuilder buff = new StringBuilder();
 
-    public CodeBuilder append(CharSequence text) {
-        buff.append(text);
+    public CodeBuilder() {
+    }
+
+    public CodeBuilder(char obj) {
+        buff.append(obj);
+    }
+
+    public CodeBuilder(Object obj) {
+        buff.append(obj);
+    }
+
+    public CodeBuilder append(char obj) {
+        buff.append(obj);
         return this;
     }
 

@@ -199,4 +199,38 @@ public class IfUnlessTest {
         i0 = i1;
     }
 
+    @Test
+    public void ifExpressionLine() {
+        final String expr
+                = "var result = if b < 0 then \"too low\" else if b > 10 then \"too high\" else \"ok\"";
+//Log.testStart();
+        lang.compile(expr);
+        Log.info(lang.toTree());
+        String program = lang.get("output");
+        Log.info(program);
+        int i0 = 0, i1;
+        assertTrue("missing control2 declaration", (i1 = program.indexOf("java.lang.String control2;", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing outer if", (i1 = program.indexOf("if (b < 0) {", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing control2 assignment 1", (i1 = program.indexOf("control2 = \"too low\";", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing outer else", (i1 = program.indexOf("} else {", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing control1 declaration", (i1 = program.indexOf("java.lang.String control1;", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing inner if", (i1 = program.indexOf("if (b > 10) {", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing control1 assignment 1", (i1 = program.indexOf("control1 = \"too high\";", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing inner else", (i1 = program.indexOf("} else {", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing control1 assignment 1", (i1 = program.indexOf("control1 = \"ok\";", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing control2 assignment 2", (i1 = program.indexOf("control2 = control1;", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing result assignment", (i1 = program.indexOf("java.lang.String result = control2;", i0)) > 0);
+        i0 = i1;
+    }
+
 }

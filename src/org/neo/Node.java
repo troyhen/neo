@@ -34,7 +34,7 @@ public class Node {
     }
     
     public Node(Plugin plugin, String name, CharSequence text, Object value) {
-        this(plugin, name, text, null, null);
+        this(plugin, name, text, value, null);
     }
 
     public Node(Plugin plugin, String name, CharSequence text, Object value, String typeName) {
@@ -239,6 +239,19 @@ public class Node {
         }
     }
 
+    public String toListTree() {
+        final CodeBuilder buff = new CodeBuilder();
+        toListTree(this, buff);
+        return buff.toString();
+    }
+
+    protected static void toListTree(Node node, CodeBuilder buff) {
+        while (node != null) {
+            toTree(node, buff);
+            node = node.next;
+        }
+    }
+
     public String toTree() {
         final CodeBuilder buff = new CodeBuilder();
         toTree(this, buff);
@@ -246,18 +259,11 @@ public class Node {
     }
 
     protected static void toTree(Node node, CodeBuilder buff) {
-        while (node != null) {
-            buff.tab().append(node.name);
-            if (node.value != null) {
-                buff.append(" (").append(node.value).append(')');
-            }
-            buff.eol();
-            if (node.first != null) {
-                buff.tabMore();
-                toTree(node.first, buff);
-                buff.tabLess();
-            }
-            node = node.next;
+        buff.tab().append(node).eol();
+        if (node.first != null) {
+            buff.tabMore();
+            toListTree(node.first, buff);
+            buff.tabLess();
         }
     }
 
@@ -267,7 +273,21 @@ public class Node {
 
     @Override
     public String toString() {
-        return getName() + (text != null ? "(" + text + ')' : "");
+        CodeBuilder buff = new CodeBuilder(getName());
+        if (value != null) {
+            buff.append('(');
+            buff.append(value);
+            buff.append(')');
+        } else if (text != null) {
+            buff.append('[');
+            buff.append(text);
+            buff.append(']');
+        }
+        if (typeName != null) {
+            buff.append('~');
+            buff.append(typeName);
+        }
+        return buff.toString();
     }
 
     public void unlink() {
