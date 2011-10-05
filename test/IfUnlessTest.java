@@ -233,4 +233,104 @@ public class IfUnlessTest {
         i0 = i1;
     }
 
+    @Test
+    public void ifExpressionMultiLine() {
+        final String expr
+                = "var result = if b < 0 then \"too low\"\n"
+                + "else if b > 10 then \"too high\"\n"
+                + "else \"ok\"";
+//Log.testStart();
+        lang.compile(expr);
+        Log.info(lang.toTree());
+        String program = lang.get("output");
+        Log.info(program);
+        int i0 = 0, i1;
+        assertTrue("missing control2 declaration", (i1 = program.indexOf("java.lang.String control2;", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing outer if", (i1 = program.indexOf("if (b < 0) {", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing control2 assignment 1", (i1 = program.indexOf("control2 = \"too low\";", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing outer else", (i1 = program.indexOf("} else {", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing control1 declaration", (i1 = program.indexOf("java.lang.String control1;", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing inner if", (i1 = program.indexOf("if (b > 10) {", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing control1 assignment 1", (i1 = program.indexOf("control1 = \"too high\";", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing inner else", (i1 = program.indexOf("} else {", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing control1 assignment 1", (i1 = program.indexOf("control1 = \"ok\";", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing control2 assignment 2", (i1 = program.indexOf("control2 = control1;", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing result assignment", (i1 = program.indexOf("java.lang.String result = control2;", i0)) > 0);
+        i0 = i1;
+    }
+
+    @Test
+    public void ifExpressionBlocks() {
+        final String expr
+                = "var result = if b < 0\n"
+                + "    \"too low\"\n"
+                + "else if b > 10\n"
+                + "    \"too high\"\n"
+                + "else\n"
+                + "    \"ok\"\n"
+                + "";
+//Log.testStart();
+        lang.compile(expr);
+        Log.info(lang.toTree());
+        String program = lang.get("output");
+        Log.info(program);
+        int i0 = 0, i1;
+        assertTrue("missing control2 declaration", (i1 = program.indexOf("java.lang.String control2;", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing outer if", (i1 = program.indexOf("if (b < 0) {", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing control2 assignment 1", (i1 = program.indexOf("control2 = \"too low\";", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing outer else", (i1 = program.indexOf("} else {", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing control1 declaration", (i1 = program.indexOf("java.lang.String control1;", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing inner if", (i1 = program.indexOf("if (b > 10) {", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing control1 assignment 1", (i1 = program.indexOf("control1 = \"too high\";", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing inner else", (i1 = program.indexOf("} else {", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing control1 assignment 1", (i1 = program.indexOf("control1 = \"ok\";", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing control2 assignment 2", (i1 = program.indexOf("control2 = control1;", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing result assignment", (i1 = program.indexOf("java.lang.String result = control2;", i0)) > 0);
+        i0 = i1;
+    }
+
+    @Test
+    public void unlessExpressionLine() {
+        final String expr
+                = "var num = unless passthru then num1 else 0";
+//Log.testStart();
+        lang.compile(expr);
+        Log.info(lang.toTree());
+        String program = lang.get("output");
+        Log.info(program);
+        int i0 = 0, i1;
+        assertTrue("missing control1 declaration", (i1 = program.indexOf("java.lang.Object control1;", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing if", (i1 = program.indexOf("if (!(toboolean(passthru))) {", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing control2 assignment 1", (i1 = program.indexOf("control1 = num1;", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing outer else", (i1 = program.indexOf("} else {", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing control1 assignment 1", (i1 = program.indexOf("control1 = 0;", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing num assignment", (i1 = program.indexOf("java.lang.Object num = control1;", i0)) > 0);
+        i0 = i1;
+    }
+
 }
