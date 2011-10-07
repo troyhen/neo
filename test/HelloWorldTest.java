@@ -1,4 +1,6 @@
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.PrintStream;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,7 +65,18 @@ public class HelloWorldTest {
         lang.set("file", neoFile.getPath());
         lang.set("save", javaFile.getPath());
         lang.set("class", "run");
+        PrintStream out = System.out;
+        final ByteArrayOutputStream newOut = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(newOut));
         lang.compile();
+        System.setOut(out);
+        String result = newOut.toString();
+        assertEquals("output doesn't match", "Hello World\r\n"
+                + "Hello World\r\n"
+                + "Hello World\r\n"
+                + "Hello World\r\n"
+                + "Hello World Hello World\r\n"
+                + "Hello World\r\n", result);
     }
 
     @Test

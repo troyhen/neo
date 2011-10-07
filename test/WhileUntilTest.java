@@ -192,6 +192,73 @@ public class WhileUntilTest {
     }
 
     @Test
+    public void whileElse2Line() {
+        final String expr
+                = "import neo.os\n"
+                + "var a = 0\n"
+                + "while a < 0 do a += 1\n"
+                + "else println \"ready\"";
+//Log.testStart();
+        lang.compile(expr);
+        Log.info(lang.toTree());
+        String program = lang.get("output");
+        Log.info(program);
+        int i0 = 0, i1;
+        assertTrue("missing if", (i1 = program.indexOf("if (a < 0) {", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing do", (i1 = program.indexOf("do {", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing increment", (i1 = program.indexOf("a += 1;", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing close while", (i1 = program.indexOf("} while (a < 0);", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing else", (i1 = program.indexOf("} else {", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing println", (i1 = program.indexOf("println(\"ready\");", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing close brace 1", (i1 = program.indexOf("}", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing close brace 2", (i1 = program.indexOf("}", i0)) > 0);
+        i0 = i1;
+    }
+
+    @Test
+    public void whileElseMultiLine() {
+        final String expr
+                = "import neo.os\n"
+                + "var a = 0\n"
+                + "while a < 0\n"
+                + "    a += 1\n"
+                + "    println \"not ready\"\n"
+                + "else\n"
+                + "    println \"ready\"";
+//Log.testStart();
+        lang.compile(expr);
+        Log.info(lang.toTree());
+        String program = lang.get("output");
+        Log.info(program);
+        int i0 = 0, i1;
+        assertTrue("missing if", (i1 = program.indexOf("if (a < 0) {", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing do", (i1 = program.indexOf("do {", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing increment", (i1 = program.indexOf("a += 1;", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing println 1", (i1 = program.indexOf("println(\"not ready\");", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing close while", (i1 = program.indexOf("} while (a < 0);", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing else", (i1 = program.indexOf("} else {", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing println 2", (i1 = program.indexOf("println(\"ready\");", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing close brace 1", (i1 = program.indexOf("}", i0)) > 0);
+        i0 = i1;
+        assertTrue("missing close brace 2", (i1 = program.indexOf("}", i0)) > 0);
+        i0 = i1;
+    }
+
+    @Test
     public void untilElseLine() {
         final String expr
                 = "import neo.os\n"
