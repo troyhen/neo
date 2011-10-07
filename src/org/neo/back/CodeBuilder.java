@@ -41,6 +41,13 @@ public class CodeBuilder {
         buff.insert(offset, string);
     }
 
+    public boolean isAtBol() {
+        final int last = buff.length() - 1;
+        if (last < 0) return true;
+        char ch = buff.charAt(last);
+        return ch == '\r' || ch == '\n';
+    }
+
     public int lastIndexOf(char ch) {
         int ix = buff.length() - 1;
         while (ix >= 0) {
@@ -82,6 +89,5 @@ public class CodeBuilder {
     public String toString() {
         return buff.toString();
     }
-
 
 }

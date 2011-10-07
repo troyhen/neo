@@ -321,7 +321,7 @@ public class IfUnlessTest {
         int i0 = 0, i1;
         assertTrue("missing control1 declaration", (i1 = program.indexOf("java.lang.Object control1;", i0)) > 0);
         i0 = i1;
-        assertTrue("missing if", (i1 = program.indexOf("if (!(toboolean(passthru))) {", i0)) > 0);
+        assertTrue("missing if", (i1 = program.indexOf("if (!toboolean(passthru)) {", i0)) > 0);
         i0 = i1;
         assertTrue("missing control2 assignment 1", (i1 = program.indexOf("control1 = num1;", i0)) > 0);
         i0 = i1;

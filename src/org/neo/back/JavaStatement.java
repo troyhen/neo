@@ -14,7 +14,8 @@ public class JavaStatement implements Backend {
         buff.tab();
         node = node.getFirst();
         node.render("java");
-        buff.append(";").eol();  // TODO not desired after end brace
+        if (!buff.isAtBol())
+            buff.append(';').eol();
     }
 
 }

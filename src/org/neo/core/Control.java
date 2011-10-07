@@ -46,10 +46,10 @@ public class Control extends CorePlugin {
         addParser("control_until",  "expression- < !keyword_until  @expression !keyword_do?   "
                 + "!terminator @block elseClause? (!keyword_end !keyword_until?)?  > keyword_else-");
 
-        addParser("statement_if",     "statement_def- statement !keyword_if     @expression");
-        addParser("statement_unless", "statement_def- statement !keyword_unless @expression");
-        addParser("statement_while",  "statement_def- statement !keyword_while  @expression");
-        addParser("statement_until",  "statement_def- statement !keyword_until  @expression");
+        addParser("statement_if",     "statement_def- statement !keyword_if     @expression > terminator");
+        addParser("statement_unless", "statement_def- statement !keyword_unless @expression > terminator");
+        addParser("statement_while",  "statement_def- statement !keyword_while  @expression > terminator");
+        addParser("statement_until",  "statement_def- statement !keyword_until  @expression > terminator");
     }
 
     public Node transform_control(Node node) {
