@@ -40,12 +40,12 @@ public class NeoLang extends Compiler {
         plugins.add(new Numbers()); // must precede Expression
         plugins.add(new Strings());
         plugins.add(new RegEx());
+        plugins.add(new Xml());  // must precede Operator
+        plugins.add(new Percent()); // must precede Operator
+        plugins.add(new Operator());    // must precede Variable
         if (full) plugins.add(new Variable()); // must precede Expression
         if (full) plugins.add(new Methods());  // must precede Expression and follow Variable
         plugins.add(new Range()); // must precede Expression
-        plugins.add(new Xml());  // must precede Operator
-        plugins.add(new Percent()); // must precede Operator
-        plugins.add(new Operator());
         plugins.add(new Group());
         plugins.add(new Symbol());
         plugins.add(new Control());

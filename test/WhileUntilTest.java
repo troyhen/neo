@@ -103,7 +103,7 @@ public class WhileUntilTest {
         String program = lang.get("output");
         Log.info(program);
         int i0 = 0, i1;
-        assertTrue("missing while", (i1 = program.indexOf("while (!(b == 1)) {", i0)) > 0);
+        assertTrue("missing while", (i1 = program.indexOf("while (!(equal(b, 1))) {", i0)) > 0);
         i0 = i1;
         assertTrue("missing decrement", (i1 = program.indexOf("b -= 1;", i0)) > 0);
         i0 = i1;
@@ -124,7 +124,7 @@ public class WhileUntilTest {
         String program = lang.get("output");
         Log.info(program);
         int i0 = 0, i1;
-        assertTrue("missing while", (i1 = program.indexOf("while (!(b == 1)) {", i0)) > 0);
+        assertTrue("missing while", (i1 = program.indexOf("while (!(equal(b, 1))) {", i0)) > 0);
         i0 = i1;
         assertTrue("missing decrement", (i1 = program.indexOf("b -= 1;", i0)) > 0);
         i0 = i1;

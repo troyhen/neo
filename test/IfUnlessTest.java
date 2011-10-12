@@ -160,7 +160,7 @@ public class IfUnlessTest {
         String program = lang.get("output");
         Log.info(program);
         int i0 = 0, i1;
-        assertTrue("missing if", (i1 = program.indexOf("if (!(b == 1)) {", i0)) > 0);
+        assertTrue("missing if", (i1 = program.indexOf("if (!(equal(b, 1))) {", i0)) > 0);
         i0 = i1;
         assertTrue("missing println 1", (i1 = program.indexOf("return;", i0)) > 0);
         i0 = i1;
@@ -187,7 +187,7 @@ public class IfUnlessTest {
         int i0 = 0, i1;
         assertTrue("missing ready method", (i1 = program.indexOf("public boolean ready() {", i0)) > 0);
         i0 = i1 + 1;
-        assertTrue("missing ready condition", (i1 = program.indexOf("return tries == 10;", i0)) > 0);
+        assertTrue("missing ready condition", (i1 = program.indexOf("return equal(tries, 10);", i0)) > 0);
         i0 = i1 + 1;
         assertTrue("missing if", (i1 = program.indexOf("if (!(ready())) {", i0)) > 0);
         i0 = i1 + 1;

@@ -42,7 +42,7 @@ public class OpenClassTest {
         i0 = i1;
         assertTrue("missing if", (i1 = program.indexOf("if (")) > i0);
         i0 = i1;
-        assertTrue("missing first compare", (i1 = program.indexOf("value == null")) > i0);
+        assertTrue("missing first compare", (i1 = program.indexOf("equal(value, null)")) > i0);
         i0 = i1;
         assertTrue("missing second compare", (i1 = program.indexOf("value.isEmpty()")) > i0);
         i0 = i1;

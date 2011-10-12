@@ -80,6 +80,12 @@ public class Operator extends CorePlugin {
         return node;
     }
 
+    public Node transform_operator_add(Node node) {
+        String type = Expression.commonType(node.getFirst());
+        if (type != null) node.setTypeName(type);
+        return node;
+    }
+
     public Node transform_operator_as(Node node) {
         combineBrackets(node.getFirst(), node.getLast());
         String type = collectType(node);
@@ -115,7 +121,8 @@ public class Operator extends CorePlugin {
     }
 
     public Node transform_operator_compare(Node node) {
-        String type = node.getValue().toString().equals("<=>") ? "int" : "boolean";
+        final String operator = node.getValue().toString();
+        String type = operator.equals("<=>") ? "int" : (operator.equals("~=") ? "java.lang.Object" : "boolean");
         if (type != null) node.setTypeName(type);
         return node;
     }

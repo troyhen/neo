@@ -93,7 +93,7 @@ public class Expression extends CorePlugin {
         addKeyword("else");
         addKeyword("end");
 
-        addParser("expression_symbol", "symbol");
+        addParser("expression_symbol", "keyword_var- keyword_val- < symbol");
         addParser("expression", "reference > operator_assign- operator_eq-");
         addParser("expression_call", "call");
         addParser("array", "expression- reference- < !start_bracket (@expression !comma?)* @expression? !end_bracket");
@@ -122,7 +122,7 @@ public class Expression extends CorePlugin {
 
     public Node transform_call_this(Node start) {
         Node node = start.getFirst();
-        String symbol = node.getValue().toString();//methodSignature(node.getFirst());
+        String symbol = node.getValue().toString();
         node = node.getNext();
         List<String> argTypes = new ArrayList<String>();
         while (node != null) {
@@ -148,7 +148,7 @@ public class Expression extends CorePlugin {
         Node node = start.getFirst();
         ClassDef type = ClassDef.get(node.getTypeName());
         node = node.getNext();
-        String symbol = node.getValue().toString();//methodSignature(node.getFirst());
+        String symbol = node.getValue().toString();
         node = node.getNext();
         List<String> argTypes = new ArrayList<String>();
         while (node != null) {
@@ -176,11 +176,6 @@ public class Expression extends CorePlugin {
         return node;
     }
 
-//    public Node transform_reference(Node node) {
-//        node.setType("void");  // TODO look up actual type
-//        return node;
-//    }
-
     public Node transform_reference_dot(Node start) {
         ClassDef type;
         Node node = start.getFirst();
@@ -193,7 +188,7 @@ public class Expression extends CorePlugin {
         }
         type = ClassDef.get(typeName);
         node = node.getNext();
-        String symbol = node.getValue().toString();//methodSignature(node.getFirst());
+        String symbol = node.getValue().toString();
         MemberDef member = Compiler.compiler().memberFind(type, symbol);
         if (member == null) throw new SymbolException("cannot find symbol: member " + symbol, start);
         start.setValue(member);

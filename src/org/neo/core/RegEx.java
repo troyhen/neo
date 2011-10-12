@@ -23,6 +23,7 @@ public class RegEx extends CorePlugin {
         names.add(NAME);
         names.add(ABREV);
         add(new LexerPattern(this, NAME, "/((\\[(\\\\\\]|[^\\]])+|\\/|[^/])+)/[iop]?", 1));
+        addParser("expression", "regex");
     }
 
 }

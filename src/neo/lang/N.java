@@ -4,6 +4,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import neo.lang.Closure.Notice;
 
 /**
@@ -173,6 +175,12 @@ public class N {
         }
     }
 
+    public static boolean equal(Object obj1, Object obj2) {
+        if (obj1 == null && obj2 == null) return true;
+        if (obj1 == null || obj2 == null) return false;
+        return obj1.equals(obj2);
+    }
+
     public static String join(Object array) {
         return join(array, null);
     }
@@ -219,6 +227,28 @@ public class N {
             }
         }
         return buff.toString();
+    }
+
+    public static Object match(Object obj1, Class obj2) {
+        if (obj1 == null || obj2 == null) return false;
+        return obj2.isAssignableFrom(obj1.getClass());
+    }
+
+    public static Object match(String obj1, Pattern obj2) {
+        if (obj1 == null || obj2 == null) return false;
+        return obj2.matcher(obj1).matches();
+    }
+
+    public static Object match(Number obj1, Number obj2) {
+        if (obj1 == null || obj2 == null) return false;
+        return obj1.doubleValue() == obj2.doubleValue();
+    }
+
+    public static Object match(Object obj1, Object obj2) {
+        if (obj2 instanceof Class) return match(obj1, (Class) obj2);
+        if (obj1 instanceof Number && obj2 instanceof Number) return match((Number) obj1, (Number) obj2);
+        if (obj1 instanceof String && obj2 instanceof Pattern) return match((String) obj1, (Pattern) obj2);
+        return equal(obj1, obj2);
     }
 
     public static String plus(String left, Object right) {
@@ -278,6 +308,11 @@ public class N {
         if (val instanceof Number) return toboolean((Number) val);
         if (val instanceof String) return toboolean((String) val);
         return true;
+    }
+
+    public static boolean toboolean(Matcher val) {
+        if (val == null) return false;
+        return val.find();
     }
 
     public static boolean toboolean(Number val) {

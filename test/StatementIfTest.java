@@ -104,7 +104,7 @@ public class StatementIfTest {
         Log.info(lang.toTree());
         String program = lang.get("output");
         Log.info(program);
-        assertTrue("missing while", program.indexOf("while (!(1 == 2))") > 0);
+        assertTrue("missing while", program.indexOf("while (!(equal(1, 2)))") > 0);
         assertTrue("missing execute", program.indexOf("execute") > 0);
     }
 

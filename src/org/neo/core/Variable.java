@@ -21,14 +21,14 @@ public class Variable extends CorePlugin {
         addParser("cast", "^operator_as start_bracket class_path end_bracket");
         addParser("cast", "^operator_as class_path (start_bracket end_bracket)*");
         addParser("statement_varDeclare", "!keyword_var symbol @cast?");
-        addParser("statement_varAssign", "@statement_varDeclare !operator_eq expression");
+        addParser("statement_varAssign", "@statement_varDeclare !operator_eq expression > (comma | terminator)");
         addParser("statement_varDeclare",
                 "(statement_varDeclare | statement_varAssign) < !comma symbol @cast?");
-        addParser("statement_valAssign", "!keyword_val symbol @cast? !operator_eq expression");
+        addParser("statement_valAssign", "!keyword_val symbol @cast? !operator_eq expression > (comma | terminator)");
         addParser("statement_valAssign",
-                "statement_valAssign < !comma symbol @cast? !operator_eq expression");
+                "statement_valAssign < !comma symbol @cast? !operator_eq expression > (comma | terminator)");
         addInvalidParser("val statement requires an initial assignment",
-                "keyword_val symbol cast? terminator");
+                "keyword_val symbol cast? (comma | terminator)");
     }
 
     public Node transform_cast(Node node) {
