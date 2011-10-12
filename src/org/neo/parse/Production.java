@@ -52,6 +52,8 @@ public class Production extends RuleGroup {
         Node next = super.match(node, matched);
         if (next != null) {
             Node newNode = new Node(plugin, name);
+                // Move to the first node matched to support RuleBefore
+            if (matched.size() > 0) node = matched.get(0).node();
             node.insertBefore(newNode);
             StringBuilder buff = new StringBuilder();
             buff.append(name);

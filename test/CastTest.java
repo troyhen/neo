@@ -78,7 +78,9 @@ public class CastTest {
         assertTrue("Fifth level", node.isNamed("string_single"));
         assertTrue("Fifth level", node.getNext().isNamed("operator_as"));
         node = node.getNext().get(0);
-        assertTrue("Sixth level", node.isNamed("symbol_int"));
+        assertTrue("Sixth level", node.isNamed("class_path"));
+        node = node.get(0);
+        assertTrue("Seventh level", node.isNamed("symbol_int"));
     }
 
     @Test

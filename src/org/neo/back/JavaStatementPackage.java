@@ -6,22 +6,13 @@ import org.neo.Node;
  *
  * @author Troy Heninger
  */
-public class JavaStatementImport implements Backend {
+public class JavaStatementPackage implements Backend {
 
     @Override
     public void render(Node node) {
         CodeBuilder buff = JavaCompilation.output(JavaCompilation.OUTSIDE);
         String path = node.getValue().toString();
-        buff.append("import ");
-//        try {
-//            if (isStatic(path)) {
-//                buff.append("static ");
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            throw new NeoException(ex);
-//        }
-        buff.append(path).append(".*;").eol();
-        buff.append("import static ").append(path).append(".N.*;").eol();
+        buff.append("package ").append(path).append(';').eol();
     }
 
 //    private boolean isStatic(String path) throws ClassNotFoundException {

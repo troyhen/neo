@@ -15,30 +15,21 @@ public class Variable extends CorePlugin {
         addKeyword("var");
         addKeyword("val");
         
-        addParser("cast", "^operator_as start_bracket start_bracket start_bracket start_bracket symbol (operator_dot symbol)* end_bracket end_bracket end_bracket end_bracket");
-        addParser("cast", "^operator_as start_bracket start_bracket start_bracket symbol (operator_dot symbol)* end_bracket end_bracket end_bracket");
-        addParser("cast", "^operator_as start_bracket start_bracket symbol (operator_dot symbol)* end_bracket end_bracket");
-        addParser("cast", "^operator_as start_bracket symbol (operator_dot symbol)* end_bracket");
-        addParser("cast", "^operator_as symbol (operator_dot symbol)* (start_bracket end_bracket)*");
-        addParser("statement_varDeclare",
-                "!keyword_var symbol @cast?");// (start_bracket @expression end_bracket)?");
-        addParser("statement_varAssign",
-                "@statement_varDeclare !operator_eq expression");
+        addParser("cast", "^operator_as start_bracket start_bracket start_bracket start_bracket class_path end_bracket end_bracket end_bracket end_bracket");
+        addParser("cast", "^operator_as start_bracket start_bracket start_bracket class_path end_bracket end_bracket end_bracket");
+        addParser("cast", "^operator_as start_bracket start_bracket class_path end_bracket end_bracket");
+        addParser("cast", "^operator_as start_bracket class_path end_bracket");
+        addParser("cast", "^operator_as class_path (start_bracket end_bracket)*");
+        addParser("statement_varDeclare", "!keyword_var symbol @cast?");
+        addParser("statement_varAssign", "@statement_varDeclare !operator_eq expression");
         addParser("statement_varDeclare",
                 "(statement_varDeclare | statement_varAssign) < !comma symbol @cast?");
-        addParser("statement_valAssign",
-                "!keyword_val symbol @cast? !operator_eq expression");
+        addParser("statement_valAssign", "!keyword_val symbol @cast? !operator_eq expression");
         addParser("statement_valAssign",
                 "statement_valAssign < !comma symbol @cast? !operator_eq expression");
         addInvalidParser("val statement requires an initial assignment",
-                "keyword_val symbol cast? terminator");// (start_bracket @expression end_bracket)?");
+                "keyword_val symbol cast? terminator");
     }
-
-//    public void refine_statement(Node node) {
-//        String name = node.getFirst().getValue().toString();
-//        String type = node.getTypeName();
-//        Compiler.compiler().symbolAdd(name, ClassDef.get(type));
-//    }
 
     public Node transform_cast(Node node) {
             /*
@@ -46,8 +37,7 @@ public class Variable extends CorePlugin {
              * cast
              *     @expression
              *     operator.as
-             *         symbol
-             *         ...
+             *         class_path
              * into:
              * operator.as
              *     @expression
@@ -80,8 +70,7 @@ public class Variable extends CorePlugin {
 //             * cast
 //             *     @expression
 //             *     operator.as
-//             *         symbol
-//             *         ...
+//             *         class_path
 //             * into:
 //             * operator.as
 //             *     @expression

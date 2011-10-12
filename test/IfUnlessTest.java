@@ -185,18 +185,18 @@ public class IfUnlessTest {
         String program = lang.get("output");
         Log.info(program);
         int i0 = 0, i1;
-        assertTrue("missing if", (i1 = program.indexOf("if (!(ready())) {", i0)) > 0);
-        i0 = i1;
-        assertTrue("missing println 1", (i1 = program.indexOf("print(\"not ready\");", i0)) > 0);
-        i0 = i1;
-        assertTrue("missing tries increment", (i1 = program.indexOf("tries += 1;", i0)) > 0);
-        i0 = i1;
-        assertTrue("missing close brace", (i1 = program.indexOf("}", i0)) > 0);
-        i0 = i1;
         assertTrue("missing ready method", (i1 = program.indexOf("public boolean ready() {", i0)) > 0);
-        i0 = i1;
+        i0 = i1 + 1;
         assertTrue("missing ready condition", (i1 = program.indexOf("return tries == 10;", i0)) > 0);
-        i0 = i1;
+        i0 = i1 + 1;
+        assertTrue("missing if", (i1 = program.indexOf("if (!(ready())) {", i0)) > 0);
+        i0 = i1 + 1;
+        assertTrue("missing println 1", (i1 = program.indexOf("print(\"not ready\");", i0)) > 0);
+        i0 = i1 + 1;
+        assertTrue("missing tries increment", (i1 = program.indexOf("tries += 1;", i0)) > 0);
+        i0 = i1 + 1;
+        assertTrue("missing close brace", (i1 = program.indexOf("}", i0)) > 0);
+        i0 = i1 + 1;
     }
 
     @Test

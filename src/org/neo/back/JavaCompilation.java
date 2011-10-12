@@ -7,8 +7,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
 
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
@@ -24,48 +25,71 @@ import org.neo.Node;
  */
 public class JavaCompilation implements Backend {
 
-    private static final boolean PLATFORM_COMPILER = false;
-
-    public static ThreadLocal<List<CodeBuilder>> output = new ThreadLocal<List<CodeBuilder>>();
-
-//    private static int segments;
-    private static int segment;
+//    public static final String HEADER = "%header";
+    public static final String OUTSIDE = "%outside";
+    public static final String MAIN = "%main";
+    public static final String INSIDE = "%inside";
 //    public static enum Segment {outside, members, main, current;
 //        int index = segments++;
 //    };
 
+    private static final boolean PLATFORM_COMPILER = false;
+
+    public static ThreadLocal<Map<String, CodeBuilder>> output = new ThreadLocal<Map<String, CodeBuilder>>();
+
+    private static Stack<String> segments = new Stack<String>();
+
     public static CodeBuilder output() {
-        return output(segment);
+        if (segments.isEmpty()) {
+            openSegment(OUTSIDE);
+            openSegment(INSIDE);
+            openSegment(MAIN);
+        }
+        return output(segments.peek());
     }
     
-    public static CodeBuilder output(int segment) {//Segment segment) {
-        List<CodeBuilder> list = output.get();
-        if (list == null) {
-            output.set(list = new ArrayList<CodeBuilder>());
+    public static CodeBuilder output(String segment) {
+        Map<String, CodeBuilder> map = output.get();
+        if (map == null) {
+            output.set(map = new HashMap<String, CodeBuilder>());
         }
-        CodeBuilder buf;
-        while (segment/*.index*/ >= list.size()) {
-            buf = new CodeBuilder();
-            list.add(buf);
-            if (segment > 2) buf.tabMore();
+        CodeBuilder buff = map.get(segment);
+        if (buff == null) {
+            buff = new CodeBuilder();
+            map.put(segment, buff);
+            if (OUTSIDE.equals(segment)) renderHeader(buff);
+            else if (INSIDE.equals(segment)) renderClassOpen(buff);
+            else if (MAIN.equals(segment)) renderMainOpen(buff);
+            else {
+                CodeBuilder outside = output(OUTSIDE);
+                if (outside != null && outside.length() > 0) {
+                    buff.append(outside);
+                }
+            }
         }
-        buf = list.get(segment/*.index*/);
-        return buf;
+        return buff;
     }
 
     public static void closeSegment() {
-        segment--;
+        segments.pop();
     }
 
-    public static CodeBuilder openSegment() {
-        segment++;
-        return output();
+    public static CodeBuilder openSegment(String segment) {
+//        String tabs = null;
+//        if (segments.size() > 0 && segment.startsWith("%"))
+//            tabs = output().getTabs();
+        if (INSIDE.equals(segment) && segments.size() > 0 && !segments.peek().startsWith("%")) segment = segments.peek();
+        segments.push(segment);
+        CodeBuilder buff = output();
+//        if (tabs != null && tabs.length() > 0)
+//            buff.setTabs(tabs + buff.getTabs());
+        return buff;
     }
 
 //    private JavaExpression expression = new JavaExpression();
 //    private JavaStatementImport importStmt = new JavaStatementImport();
 
-    private String getClassName() {
+    private static String getClassName() {
         File file = Compiler.file();
         if (file == null) return "Main";
         String name = file.getName();
@@ -105,32 +129,41 @@ public class JavaCompilation implements Backend {
     @Override
     public void render(Node node) {
         output.set(null);
-        CodeBuilder outside  = output();//Segment.outside);
-        renderHeader(outside);
+//        CodeBuilder outside  = output();
 //        renderPackage(buff);
 //        renderImports(buff, node);
-        CodeBuilder inside  = openSegment();//output(Segment.main);
-        renderClassOpen(inside);
-        renderMainOpen(inside);
-        node.getFirst().render("java");//renderStatements(buff, node);
-        renderBlockClose(inside);
-        List<CodeBuilder> list = output.get();
-        CodeBuilder last = list.get(list.size() - 1);
-        renderBlockClose(last);
+        node.getFirst().render("java");
+//        Map<String, CodeBuilder> map = output.get();
+//        CodeBuilder main = map.get(MAIN);
+//        if (main != null && main.length() > 0) renderBlockClose(main);
+//        CodeBuilder inside = map.get(INSIDE);
+//        if (inside != null && inside.length() > 0) renderBlockClose(inside);
+//        CodeBuilder outside  = openSegment(OUTSIDE);
+//        renderBlockClose(inside);
+        if (!segments.isEmpty()) {
+            String innerSegment = segments.peek();
+            do {
+                String segment = segments.peek();
+                closeSegment();
+                if (MAIN.equals(segment) || INSIDE.equals(segment)) {
+                    renderBlockClose(output(innerSegment));
+                }
+            } while (!segments.isEmpty());
+        }
         String result = toString();
         Compiler.compiler().set("output", result);
         save(result);
     }
 
-    private void renderBlockClose(CodeBuilder buff) {
-        buff.tabLess().println("}").println("");
+    private static void renderBlockClose(CodeBuilder buff) {
+        buff.tabLess().println("}").eol();
     }
 
-    private void renderClassOpen(CodeBuilder buff) {
-        buff.eol().println("public class " + getClassName() + " {").tabMore();
+    private static void renderClassOpen(CodeBuilder buff) {
+        buff.eol().println("public class " + getClassName() + " {").eol().tabMore();
     }
 
-    private void renderHeader(CodeBuilder buff) {
+    private static void renderHeader(CodeBuilder buff) {
         buff.append("/* Do not edit. This file was generated automatically");
         if (Compiler.file() != null) {
             buff.append(" from ").append(Compiler.file());
@@ -150,8 +183,8 @@ public class JavaCompilation implements Backend {
 //        }
 //    }
     
-    private void renderMainOpen(CodeBuilder buff) {
-        buff.println("public static void main(String[] args) {").tabMore();
+    private static void renderMainOpen(CodeBuilder buff) {
+        buff.tabMore().println("public static void main(String[] args) {").tabMore();
     }
 
 //    private void renderStatement(CodeBuilder buff, Node node) {
@@ -217,8 +250,18 @@ public class JavaCompilation implements Backend {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        for (CodeBuilder codeSegment : output.get()) {
-            buf.append(codeSegment);
+        Map<String, CodeBuilder> map = output.get();
+        final CodeBuilder outside = map.get(OUTSIDE);
+        final CodeBuilder inside = map.get(INSIDE);
+        final CodeBuilder main = map.get(MAIN);
+        if (inside != null && inside.length() > 0) {
+            buf.append(outside);
+            buf.append(inside);
+        }
+        if (main != null && main.length() > 0) buf.append(main);
+        for (String name : map.keySet()) {
+            if (name.startsWith("%")) continue;
+            buf.append(map.get(name));
         }
         return buf.toString();
     }

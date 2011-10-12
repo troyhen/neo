@@ -10,9 +10,11 @@ import org.neo.Node;
 public class Import extends CorePlugin {
 
     public static final String NAME = "import";
+    public static final String PACKAGE = "package";
     public static final String STATEMENT = "statement_import";
+    public static final String PACKAGE_STATEMENT = "statement_package";
 
-    public static String getPath(Node node) {
+    private static String getPath(Node node) {
         StringBuilder buff = new StringBuilder();
         while (node != null) {
             buff.append(node.getValue());
@@ -26,7 +28,20 @@ public class Import extends CorePlugin {
         super.open();
         names.add(NAME);
         addKeyword(NAME);
-        addParser(STATEMENT, "!keyword_import (symbol operator_dot)* symbol");
+        addKeyword(PACKAGE);
+        addParser("class_path", "(operator_as start_bracket* | keyword_package | keyword_import | terminator? classTop comma?) < "
+                + "(symbol operator_dot)* symbol");
+        addParser(PACKAGE_STATEMENT, "!keyword_package class_path");
+        addParser(STATEMENT, "!keyword_import class_path");
+    }
+
+    public Node transform_class_path(Node node) {
+        String path = getPath(node.getFirst());
+        node.setTypeName(path);
+        while (node.getLast() != null) {
+            node.getLast().unlink();
+        }
+        return node;
     }
 
 //    public void transform_statement(Node node) {
@@ -59,7 +74,7 @@ public class Import extends CorePlugin {
 //    }
 
     public Node transform_statement_import(Node node) {
-        String value = getPath(node.getFirst());
+        String value = node.getFirst().getTypeName();
         node.setValue(value);
         Compiler.compiler().importPackage(value);
         return node;

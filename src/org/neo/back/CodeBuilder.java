@@ -36,6 +36,10 @@ public class CodeBuilder {
         buff.append(EOL);
         return this;
     }
+
+    public String getTabs() {
+        return tabs.toString();
+    }
     
     public void insert(int offset, CharSequence string) {
         buff.insert(offset, string);
@@ -64,6 +68,15 @@ public class CodeBuilder {
         return tab().append(obj).eol();
     }
 
+    public int length() {
+        return buff.length();
+    }
+
+    public void setTabs(String tabs) {
+        this.tabs.setLength(0);
+        this.tabs.append(tabs);
+    }
+    
     public CodeBuilder tab() {
         buff.append(tabs);
         return this;

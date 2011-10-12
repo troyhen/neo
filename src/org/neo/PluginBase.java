@@ -162,8 +162,10 @@ public class PluginBase implements Plugin {
     }
 
     @Override
-    public Node transform(Node node) {
-        return (Node) invoke("transform_", node);
+    public Node transform(Node start) {
+        Node node = (Node) invoke("transform_", start);
+        if (node == null) throw new NullPointerException("transform for " + start + " must return a node");
+        return node;
     }
 
 }

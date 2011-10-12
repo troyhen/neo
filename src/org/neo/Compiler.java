@@ -475,7 +475,8 @@ public class Compiler {
         return root;
     }
 
-    private void transform(Node node) throws NeoException {
+    private void transform(Node start) throws NeoException {
+        Node node = start;
         while (node != null) {
             node.prepare();
             if (node.getFirst() != null) {

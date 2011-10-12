@@ -1,6 +1,5 @@
 package org.neo.core;
 
-import org.neo.Compiler;
 import org.neo.Node;
 import org.neo.lex.LexerChar;
 import org.neo.lex.LexerPattern;
@@ -26,7 +25,8 @@ public class Operator extends CorePlugin {
         /*if (node.getFirst() != null)*/ node = node.getFirst();    // for cast
         //else node = node.getNext(); // for type casting
         while (node != null) {// && !node.isNamed("expression")) {
-            buff.append(node.getText());
+            if (node.isNamed("class_path")) buff.append(node.getTypeName());
+            else buff.append(node.getText());
             node = node.getNext();
         }
         return buff.toString();
@@ -84,13 +84,6 @@ public class Operator extends CorePlugin {
         combineBrackets(node.getFirst(), node.getLast());
         String type = collectType(node);
         if (type != null) node.setTypeName(type);
-//        Node parent = node.getParent();
-//        if (parent.isNamed("closureTop") || parent.isNamed("statement_def") || parent.isNamed("statement_var") || parent.isNamed("statement_val")) {
-//            Node prev = node.getPrev();
-//            if (prev.isNamed("symbol")) {
-//                Compiler.compiler().symbolAdd(prev.getValue().toString(), Compiler.compiler().symbolFind(type));
-//            }
-//        }
         return node;
     }
 
