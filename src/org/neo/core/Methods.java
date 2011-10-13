@@ -110,8 +110,14 @@ public class Methods extends CorePlugin {
         if (!type.equals("void") && !lastStmt.isNamed(STATEMENT_RETURN)) {
             Node returnStmt = new Node(this, STATEMENT_RETURN, null, null, lastStmt.getTypeName());
             lastStmt.append(returnStmt);
-            returnStmt.addAll(lastStmt.getFirst());
-            lastStmt.unlink();
+            Node lastContent = lastStmt.getFirst();
+            if (lastStmt.getName().startsWith("statement_va")) {
+                lastContent = new Node(lastContent);
+                returnStmt.addAll(lastContent);
+            } else {
+                returnStmt.addAll(lastContent);
+                lastStmt.unlink();
+            }
         }
         if (type != null) {
             node.setTypeName(type);

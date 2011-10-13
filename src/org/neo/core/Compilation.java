@@ -12,8 +12,7 @@ public class Compilation extends CorePlugin {
     public void open() {
         addParser("statement", "keyword_if- keyword_unless- keyword_while- keyword_until- < @expression > operator- closureTop- keyword_else-");
         addParser("statements", "(!terminator* statement)+ > terminator");
-//        addParser("statements", "@statements (@statements | statement)+");
-        addParser("statements", "@statements !terminator* @statements");
+        addParser("statements", "@statements !terminator* (@statements | statement)");
     }
 
     public void prepare_statements(Node node) {
@@ -32,18 +31,5 @@ public class Compilation extends CorePlugin {
         if (type != null) node.setTypeName(type);
         return node;
     }
-    
-//    @Override
-//    public Node transform(Node node) {
-//        String name = node.getName();
-//        String type = null;
-//        if (name.equals("statements")) {
-//            type = node.getLast().getType();
-//        } else if (name.equals("statement")) {
-//            type = node.getFirst().getType();
-//        }
-//        if (type != null) node.setType(type);
-//        return node;
-//    }
 
 }

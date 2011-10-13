@@ -25,6 +25,10 @@ public class Node {
     private Node prev;
     private byte flags;
 
+    public Node(Node copy) {
+        this(copy.plugin, copy.name, copy.text, copy.value, copy.typeName);
+    }
+
     public Node(Plugin plugin, String name) {
         this(plugin, name, null, null, null);
     }

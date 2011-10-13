@@ -164,4 +164,49 @@ public class ClassTest {
         i0 = i1 + 1;
     }
 
+    @Test
+    public void testClassFields() {
+        final String expr
+                = "var m1 = 0\n"
+                + "class Test\n"
+                + "    var f1 = 1\n"
+                + "    def method\n"
+                + "        var l1 = 2\n"
+                + "        val l2 = 2\n"
+                + "    val f2 = 1\n"
+                + "val m2 = 0\n";
+//Log.testStart();
+        lang.compile(expr);
+        Log.info(lang.toTree());
+        String program = lang.get("output");
+        Log.info(program);
+        int i0 = 0, i1;
+        assertTrue("missing main", (i1 = program.indexOf("public static void main(String[] args) {", i0)) > i0);
+        i0 = i1 + 1;
+        assertTrue("missing m1", (i1 = program.indexOf("int m1 = 0;", i0)) > i0);
+        i0 = i1 + 1;
+        assertTrue("missing m2", (i1 = program.indexOf("final int m2 = 0;", i0)) > i0);
+        i0 = i1 + 1;
+        assertTrue("missing main close", (i1 = program.indexOf("}", i0)) > i0);
+        i0 = i1 + 1;
+        assertTrue("missing Main class close", (i1 = program.indexOf("}", i0)) > i0);
+        i0 = i1 + 1;
+        assertTrue("missing Test class", (i1 = program.indexOf("public class Test {", i0)) > i0);
+        i0 = i1 + 1;
+        assertTrue("missing f1", (i1 = program.indexOf("int f1 = 1;", i0)) > i0);
+        i0 = i1 + 1;
+        assertTrue("missing method", (i1 = program.indexOf("public int method() {", i0)) > i0);
+        i0 = i1 + 1;
+        assertTrue("missing l1", (i1 = program.indexOf("int l1 = 2;", i0)) > i0);
+        i0 = i1 + 1;
+        assertTrue("missing l2", (i1 = program.indexOf("final int l2 = 2;", i0)) > i0);
+        i0 = i1 + 1;
+        assertTrue("missing method close", (i1 = program.indexOf("}", i0)) > i0);
+        i0 = i1 + 1;
+        assertTrue("missing f2", (i1 = program.indexOf("final int f2 = 1;", i0)) > i0);
+        i0 = i1 + 1;
+        assertTrue("missing Test class close", (i1 = program.indexOf("}", i0)) > i0);
+        i0 = i1 + 1;
+    }
+
 }
