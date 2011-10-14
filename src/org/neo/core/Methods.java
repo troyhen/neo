@@ -3,11 +3,11 @@ package org.neo.core;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
-import org.neo.ClassDef;
-import org.neo.Compiler;
-import org.neo.Log;
-import org.neo.MethodDef;
-import org.neo.Node;
+import org.neo.util.ClassDef;
+import org.neo.parse.Engine;
+import org.neo.util.Log;
+import org.neo.util.MethodDef;
+import org.neo.parse.Node;
 
 /**
  *
@@ -33,20 +33,20 @@ public class Methods extends CorePlugin {
             Node symbol = node;
             Node typeNode = symbol.getNext();
             ClassDef type = ClassDef.get(typeNode.getTypeName());
-            Compiler.compiler().symbolAdd(symbol.getValue().toString(), type);
+            Engine.engine().symbolAdd(symbol.getValue().toString(), type);
             args.add(type);
             node = typeNode.getNext();
         }
-        return new MethodDef(Compiler.currentClass(), name, ClassDef.get(returnType),
+        return new MethodDef(Engine.currentClass(), name, ClassDef.get(returnType),
                 Modifier.PUBLIC, args.toArray(new ClassDef[args.size()]));
     }
 
     public void descend_statement_def(Node node) {
         MethodDef def = buildMethod(node.getFirst());
         node.setValue(def);
-        Compiler.compiler().methodAdd(def.getName(), def);
+        Engine.engine().methodAdd(def.getName(), def);
         Log.info(def.toString());
-        Compiler.compiler().symbolsPush();
+        Engine.engine().symbolsPush();
     }
     
     @Override
@@ -91,7 +91,7 @@ public class Methods extends CorePlugin {
                 String name = node.getValue().toString();
                 node = node.getNext();
                 type = node.getTypeName();
-                Compiler.compiler().symbolAdd(name, ClassDef.get(type));
+                Engine.engine().symbolAdd(name, ClassDef.get(type));
             }
             node = node.getNext();
         }
@@ -99,7 +99,7 @@ public class Methods extends CorePlugin {
     }
 
     public Node transform_statement_def(Node node) {
-        Compiler.compiler().symbolsPop();
+        Engine.engine().symbolsPop();
         String type = null;
         if (node.get(1).isNamed("operator_as")) {
             type = node.get(1).getTypeName();

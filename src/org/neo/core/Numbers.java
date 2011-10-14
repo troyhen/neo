@@ -1,10 +1,10 @@
 package org.neo.core;
 
-import org.neo.Compiler;
-import org.neo.Node;
+import org.neo.parse.Node;
 import org.neo.lex.LexerPattern;
 import org.neo.lex.LexerString;
 import org.neo.lex.Token;
+import org.neo.parse.Engine;
 
 /**
  *
@@ -22,7 +22,7 @@ public class Numbers extends CorePlugin {
 
     @Override
     public Token consume(String name, int chars, Object value, String type) {
-        String text = Compiler.chars(chars).toString();
+        String text = Engine.chars(chars).toString();
         if (name.equals(TRUE) || name.equals(FALSE)) {
             value = text;
             type = "boolean";

@@ -1,11 +1,11 @@
 package org.neo.core;
 
 import org.neo.lex.LexerKeyword;
-import org.neo.ClassDef;
-import org.neo.Compiler;
-import org.neo.MethodDef;
-import org.neo.Node;
+import org.neo.util.ClassDef;
+import org.neo.util.MethodDef;
+import org.neo.parse.Node;
 import org.neo.lex.Token;
+import org.neo.parse.Engine;
 
 /**
  *
@@ -17,7 +17,7 @@ public class Symbol extends CorePlugin {
 
     @Override
     public Token consume(String name, int chars, Object value, String type) {
-        String text = Compiler.buffer().subSequence(0, chars).toString();
+        String text = Engine.buffer().subSequence(0, chars).toString();
         return super.consume(name + '_' + text, chars, text, type);
     }
     
@@ -37,7 +37,7 @@ public class Symbol extends CorePlugin {
                 && !parent.isNamed("statement_valAssign") && !parent.isNamed("statement_varAssign")
                 && ((!parent.isNamed("call_dot") && !parent.isNamed("reference_dot")) || node == parent.getFirst())) {
             final String name = node.getValue().toString();
-            MethodDef method = Compiler.compiler().methodFind(name);
+            MethodDef method = Engine.engine().methodFind(name);
             if (method != null) {
                 typeName = method.getReturnType().getName();
                 Node call = new Node(this, "call_this", null, method, typeName);
@@ -45,7 +45,7 @@ public class Symbol extends CorePlugin {
                 call.add(node);
                 node = call;
             } else {
-                ClassDef type = Compiler.compiler().symbolFind(name);
+                ClassDef type = Engine.engine().symbolFind(name);
                 if (type != null) typeName = type.getName();
             }
         }

@@ -4,7 +4,7 @@ import java.io.PrintStream;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.neo.Log;
+import org.neo.util.Log;
 import org.neo.NeoLang;
 
 import static org.junit.Assert.*;

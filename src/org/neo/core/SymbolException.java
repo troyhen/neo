@@ -1,7 +1,7 @@
 package org.neo.core;
 
 import org.neo.NeoException;
-import org.neo.Node;
+import org.neo.parse.Node;
 
 /**
  *

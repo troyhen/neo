@@ -1,7 +1,7 @@
 package org.neo.lex;
 
 import java.util.regex.Pattern;
-import org.neo.Node;
+import org.neo.parse.Node;
 import org.neo.Plugin;
 
 /**

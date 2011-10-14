@@ -1,7 +1,7 @@
 package org.neo.core;
 
-import org.neo.Compiler;
-import org.neo.Node;
+import org.neo.parse.Engine;
+import org.neo.parse.Node;
 
 /**
  *
@@ -76,7 +76,7 @@ public class Import extends CorePlugin {
     public Node transform_statement_import(Node node) {
         String value = node.getFirst().getTypeName();
         node.setValue(value);
-        Compiler.compiler().importPackage(value);
+        Engine.engine().importPackage(value);
         return node;
     }
 

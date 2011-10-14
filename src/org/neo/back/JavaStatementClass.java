@@ -1,7 +1,7 @@
 package org.neo.back;
 
 import org.neo.Compiler;
-import org.neo.Node;
+import org.neo.parse.Node;
 
 /**
  *

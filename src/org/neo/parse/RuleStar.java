@@ -1,7 +1,6 @@
 package org.neo.parse;
 
 import java.util.List;
-import org.neo.Node;
 
 class RuleStar implements Rule {
 

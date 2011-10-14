@@ -1,4 +1,4 @@
-package org.neo;
+package org.neo.util;
 
 import java.util.logging.Handler;
 import java.util.logging.Level;

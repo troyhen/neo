@@ -2,11 +2,11 @@ package org.neo.core;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.neo.ClassDef;
-import org.neo.Compiler;
-import org.neo.MethodDef;
-import org.neo.Node;
-import org.neo.MemberDef;
+import org.neo.util.ClassDef;
+import org.neo.parse.Engine;
+import org.neo.util.MethodDef;
+import org.neo.parse.Node;
+import org.neo.util.MemberDef;
 
 /**
  *
@@ -129,7 +129,7 @@ public class Expression extends CorePlugin {
             argTypes.add(node.getTypeName());
             node = node.getNext();
         }
-        MethodDef method = Compiler.compiler().methodFind(symbol, argTypes.toArray(new String[argTypes.size()]));
+        MethodDef method = Engine.engine().methodFind(symbol, argTypes.toArray(new String[argTypes.size()]));
         if (method == null) throw new SymbolException("cannot find symbol: method " + symbol, start);
         start.setValue(method);
         String type = method.getReturnType().getName();
@@ -155,7 +155,7 @@ public class Expression extends CorePlugin {
             argTypes.add(node.getTypeName());
             node = node.getNext();
         }
-        MethodDef method = Compiler.compiler().methodFind(type, symbol, argTypes.toArray(new String[argTypes.size()]));
+        MethodDef method = Engine.engine().methodFind(type, symbol, argTypes.toArray(new String[argTypes.size()]));
         if (method == null) throw new SymbolException("cannot find symbol: method " + symbol, start);
         start.setValue(method);
         String returnType = method.getReturnType().getName();
@@ -181,7 +181,7 @@ public class Expression extends CorePlugin {
         Node node = start.getFirst();
         String typeName = node.getTypeName();
         if (typeName == null && node.isNamed("symbol")) {
-            type = Compiler.compiler().symbolFind(node.getValue().toString());
+            type = Engine.engine().symbolFind(node.getValue().toString());
             if (type != null) typeName = type.getName();
             if (typeName != null) node.setTypeName(typeName);
             else throw new SymbolException("unknown symbol: " + node.getValue(), node);
@@ -189,7 +189,7 @@ public class Expression extends CorePlugin {
         type = ClassDef.get(typeName);
         node = node.getNext();
         String symbol = node.getValue().toString();
-        MemberDef member = Compiler.compiler().memberFind(type, symbol);
+        MemberDef member = Engine.engine().memberFind(type, symbol);
         if (member == null) throw new SymbolException("cannot find symbol: member " + symbol, start);
         start.setValue(member);
         String returnType = member.getReturnType().getName();

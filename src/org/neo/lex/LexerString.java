@@ -1,7 +1,7 @@
 package org.neo.lex;
 
-import org.neo.Compiler;
 import org.neo.Plugin;
+import org.neo.parse.Engine;
 
 /**
  *
@@ -23,7 +23,7 @@ public class LexerString extends LexerBase {
     @Override
     public Token nextToken() {
         final int len = string.length();
-        if (Compiler.chars(len).toString().equals(string)) {
+        if (Engine.chars(len).toString().equals(string)) {
             return consume(len);
         }
         return null;

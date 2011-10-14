@@ -1,5 +1,7 @@
 package org.neo;
 
+import org.neo.util.Log;
+import org.neo.parse.Node;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +10,7 @@ import java.util.Map;
 
 import org.neo.lex.Lexer;
 import org.neo.lex.Token;
+import org.neo.parse.Engine;
 import org.neo.parse.InvalidProduction;
 import org.neo.parse.Production;
 
@@ -24,11 +27,11 @@ public class PluginBase implements Plugin {
 
     public void add(Lexer lexer) {
         lexers.add(lexer);
-        Compiler.compiler().literals.add(lexer.getName());
+        Engine.engine().literals.add(lexer.getName());
     }
 
     protected void addKeyword(String word) {
-        Compiler.compiler().addKeyword(word);
+        Engine.engine().addKeyword(word);
     }
     
 //    protected void addParser(String name) {
@@ -58,7 +61,7 @@ public class PluginBase implements Plugin {
 
     @Override
     public Token consume(String name, int chars, Object value, String type) {
-        return Compiler.compiler().consume(this, name, chars, value, type);
+        return Engine.engine().consume(this, name, chars, value, type);
     }
 
     @Override

@@ -1,6 +1,7 @@
-package org.neo;
+package org.neo.parse;
 
 import java.util.List;
+import org.neo.Plugin;
 import org.neo.back.CodeBuilder;
 
 /**

@@ -1,11 +1,10 @@
-import org.neo.Log;
+import org.neo.parse.Engine;
+import org.neo.util.Log;
 import org.neo.lex.LexerEof;
-import org.neo.Node;
+import org.neo.parse.Node;
 import org.neo.NeoLang;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.neo.core.Whitespace.*;
@@ -34,7 +33,7 @@ public class CommentTest {
         final String single = "#This is a test";//"//This is a test";
         lang.load(single);
         Node tokens = lang.tokenize();
-        assertEquals(1, lang.getLine());
+        assertEquals(1, Engine.engine().getLine());
         assertEquals(LexerEof.EOF, tokens.get(0).getName());
     }
 
@@ -43,7 +42,7 @@ public class CommentTest {
         final String singlecrlf = "#This is a test\r\n";//"//This is a test\r\n";
         lang.load(singlecrlf);
         Node tokens = lang.tokenize();
-        assertEquals(2, lang.getLine());
+        assertEquals(2, Engine.engine().getLine());
         assertEquals(EOL, tokens.get(0).getName());
     }
 
@@ -60,7 +59,7 @@ public class CommentTest {
         final String multiline = "###This\r\nis\na\rtest###";//"/*This\r\nis\na\rtest*/";
         lang.load(multiline);
         Node tokens = lang.tokenize();
-        assertEquals(lang.getLine(), 4);
+        assertEquals(Engine.engine().getLine(), 4);
         assertEquals(LexerEof.EOF, tokens.get(0).getName());
     }
 

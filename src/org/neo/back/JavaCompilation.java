@@ -15,9 +15,9 @@ import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 
 import org.neo.Compiler;
-import org.neo.Log;
+import org.neo.util.Log;
 import org.neo.NeoException;
-import org.neo.Node;
+import org.neo.parse.Node;
 
 /**
  *

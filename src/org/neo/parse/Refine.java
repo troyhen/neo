@@ -1,4 +1,4 @@
-package org.neo;
+package org.neo.parse;
 
 /**
  *

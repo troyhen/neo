@@ -1,8 +1,7 @@
 package org.neo.parse;
 
 import java.util.List;
-import org.neo.Node;
-import org.neo.Node.Match;
+import org.neo.parse.Node.Match;
 import org.neo.Plugin;
 
 /**

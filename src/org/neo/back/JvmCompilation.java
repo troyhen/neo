@@ -2,7 +2,7 @@ package org.neo.back;
 
 import javassist.ClassPool;
 import javassist.CtClass;
-import org.neo.Node;
+import org.neo.parse.Node;
 
 /**
  *

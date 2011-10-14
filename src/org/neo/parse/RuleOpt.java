@@ -1,7 +1,6 @@
 package org.neo.parse;
 
 import java.util.List;
-import org.neo.Node;
 
 class RuleOpt implements Rule {
     private Rule child;

@@ -1,10 +1,11 @@
-package org.neo;
+package org.neo.util;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import org.neo.parse.Engine;
 
 /**
  *
@@ -41,13 +42,13 @@ public class ClassDef {
                 arrays++;
             }
             try {
-                type = get(Compiler.compiler().loadClass(name));
+                type = get(Engine.engine().loadClass(name));
             } catch (ClassNotFoundException ex) {
                 if (name.contains(".")) {
                     Log.info(ex.toString());
                     return null;
                 }
-                return Compiler.compiler().symbolFind(name);
+                return Engine.engine().symbolFind(name);
             }
             while (arrays-- > 0) {
                 type = get(Array.newInstance(type.type, 0).getClass());

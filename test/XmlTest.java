@@ -1,6 +1,6 @@
-import org.neo.Log;
+import org.neo.util.Log;
 import org.junit.After;
-import org.neo.Node;
+import org.neo.parse.Node;
 
 import org.neo.NeoLang;
 

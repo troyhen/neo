@@ -1,8 +1,8 @@
 package org.neo.core;
 
-import org.neo.ClassDef;
-import org.neo.Compiler;
-import org.neo.Node;
+import org.neo.util.ClassDef;
+import org.neo.parse.Engine;
+import org.neo.parse.Node;
 
 /**
  *
@@ -57,7 +57,7 @@ public class Variable extends CorePlugin {
         final String name = node.getFirst().getValue().toString();
         if (typeName != null) {
             node.setTypeName(typeName);
-            Compiler.compiler().symbolAdd(name, ClassDef.get(typeName));
+            Engine.engine().symbolAdd(name, ClassDef.get(typeName));
         }
         return node;
     }

@@ -1,7 +1,7 @@
 package org.neo.lex;
 
-import org.neo.Compiler;
 import org.neo.Plugin;
+import org.neo.parse.Engine;
 
 /**
  *
@@ -18,7 +18,7 @@ public class LexerChar extends LexerBase {
 
     @Override
     public Token nextToken() {
-        CharSequence buffer = Compiler.buffer();
+        CharSequence buffer = Engine.buffer();
         if (buffer.length() > 0 && buffer.charAt(0) == ch) {
             return consume(1);
         }

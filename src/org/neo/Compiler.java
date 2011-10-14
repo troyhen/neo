@@ -1,22 +1,17 @@
 package org.neo;
 
+import org.neo.util.Log;
+import org.neo.parse.Node;
 import java.io.IOException;
 import java.io.File;
-import java.io.FileReader;
-import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
-import java.util.Set;
-import neo.lang.N;
 
-import org.neo.lex.LexException;
 import org.neo.lex.LexerEof;
 import org.neo.lex.Token;
+import org.neo.parse.Engine;
 //import org.neo.tool.NeoClassLoader;
 
 /**
@@ -29,43 +24,16 @@ public class Compiler {
 
     enum State { closed, opened, loaded, tokenized, parsed, pruned, transformed, refined, rendered, error };
 
-    private static ThreadLocal<Compiler> compiler = new ThreadLocal<Compiler>();
-
     public final List<Plugin> plugins = new ArrayList<Plugin>();
-    public final Set<String> literals = new HashSet<String>();
 
-    private final LinkedList<Map<String, ClassDef>> symbols = new LinkedList<Map<String, ClassDef>>();
-    private final LinkedList<Map<String, List<MethodDef>>> methods = new LinkedList<Map<String, List<MethodDef>>>();
-
-//    private ClassLoader loader;
-    private List<String> imports = new ArrayList<String>();
-    private State state = State.closed;
     private Map<String, String> config = new HashMap<String, String>();
-    private int line, offset;
-    private CharBuffer buffer;
+    private Engine engine;
     private Node root;
-    public Token lastToken; // needed by LexerIndent
-    private Set<String> keywords = new HashSet<String>();
-    private ClassDef currentClass;
-
-    public void addKeyword(String word) {
-        keywords.add(word);
-    }
-    
-    public static CharSequence buffer() { return compiler().buffer; }
-    
-    public static Object chars(int chars) {
-        return compiler.get().getChars(chars);
-    }
-
-    public void close() {
-        close(null);
-    }
+    private State state = State.closed;
 
     public void close(Compiler previous) {
-        buffer = null;
         root = null;
-        compiler.set(previous);
+        engine.close(previous != null ? previous.engine : null);
         state = State.closed;
     }
 
@@ -94,17 +62,8 @@ public class Compiler {
         compile();
     }
 
-    public static Compiler compiler() { return (Compiler) compiler.get(); }
-
-    public Token consume(Plugin plugin, String name, int chars, Object value, String type) {
-        CharSequence text = getChars(chars);
-        Token token = new Token(plugin, name, text, line, value == null ? text : value, type);
-        buffer.position(buffer.position() + chars);
-        return token;
-    }
-
-    public static ClassDef currentClass() {
-        return compiler().getCurrentClass();
+    public static Compiler compiler() {
+        return Engine.compiler();
     }
 
     public static File file() {
@@ -121,67 +80,7 @@ public class Compiler {
         return defValue;
     }
 
-    public CharSequence getBuffer() { return buffer; }
-
-    public CharSequence getChars(int chars) {
-        chars = Math.min(chars, buffer.length());
-        return buffer.subSequence(0, chars);
-    }
-
-    public ClassDef getCurrentClass() {
-        return currentClass;
-    }
-
-    public void importPackage(String path) {
-        if (!imports.contains(path)) imports.add(path);
-//        ClassDef[] classes;
-//        try {
-//            classes = PackageTool.getClasses(path);
-//        } catch (NeoException ex) {
-//            throw ex;
-//        } catch (Exception ex) {
-//            Log.error(ex);
-//            throw new NeoException(ex);
-//        }
-//        for (Class type : classes) {
-//            symbolAdd(type.getSimpleName(), ClassDef.get(type));
-//        }
-//        for (ClassDef type : classes) {
-        ClassDef type = ClassDef.get(path + ".N");
-        if (type == null) return;
-            String name = type.getSimpleName();
-            symbolAdd(name, type);
-            if ("N".equals(name)) {
-                MethodDef[] meths = type.getMethods();
-                for (MethodDef method : meths) {
-                    if (method.isStatic() && method.isPublic()) {
-                        String mname = method.getName();
-                        methodAdd(mname, method);
-                    }
-                }
-            }
-//        }
-    }
-
-    public CharSequence limit(CharSequence text, int limit) {
-        limit = Math.min(text.length(), limit);
-        int index = 0;
-        for (; index < limit; index++) {
-            char ch = text.charAt(index);
-            if (ch == '\r' || ch == '\n') break;
-        }
-        return text.subSequence(0, index);
-    }
-
-    public int getLine() { return line; }
-
     public Node getRoot() { return root; }
-
-    public boolean isKeyword(String text) {
-        return keywords.contains(text);
-    }
-
-    public static int line() { return compiler().line; }
 
     public void load() throws NeoException {
         String text = get("text");
@@ -204,109 +103,25 @@ public class Compiler {
         switch (state) {
             case closed: open();
         }
-        buffer = CharBuffer.allocate((int) file.length());
-        FileReader inp = new FileReader(file);
-        try {
-            inp.read(buffer);
-            buffer.flip();
-        } finally {
-            inp.close();
-        }
-        set("file", file.getPath());
+        set("file", engine.load(file));
     }
 
     public void load(String text) {
         switch (state) {
             case closed: open();
         }
-        buffer = CharBuffer.wrap(text);
+        engine.load(text);
         set("text", text);
     }
-
-    public Class loadClass(String name) throws ClassNotFoundException {
-        /*if (name.startsWith("java."))*/ return Class.forName(name);
-//        return loader.loadClass(name);
-    }
-
-    public MemberDef memberFind(ClassDef type, String symbol, String assignmentType) {
-        MemberDef reference = null;
-        reference = methodFind(type, symbol, assignmentType);
-        if (reference == null) {
-            reference = methodFind(type, "set" + N.capitalize(symbol), assignmentType);
-        }
-        if (reference == null) {
-            reference = type.findField(symbol);
-        }
-        return reference;
-    }
-
-    public void methodAdd(String name, MethodDef type) {
-        Map<String, List<MethodDef>> map = methods.peek();
-        List<MethodDef> meths = map.get(name);
-        if (meths == null) {
-            meths = new ArrayList<MethodDef>();
-            map.put(name, meths);
-        }
-        meths.add(type);
-    }
-
-    public MethodDef methodFind(ClassDef type, String name, String...argTypes) {
-        String[] argTypes2 = new String[argTypes.length + 1];
-        argTypes2[0] = type.getName();
-        System.arraycopy(argTypes, 0, argTypes2, 1, argTypes.length);
-        MethodDef method = methodFind(name, argTypes2);
-        if (method == null) {
-            method = type.findMethod(name, argTypes);
-        }
-        return method;
-    }
-
-    public MethodDef methodFind(String name, String...argTypes) {
-        ListIterator<Map<String, List<MethodDef>>> it = methods.listIterator(methods.size());
-        while (it.hasPrevious()) {
-            Map<String, List<MethodDef>> map = it.previous();
-            List<MethodDef> meths = map.get(name);
-            if (meths != null) {
-                for (MethodDef method : meths) {
-                    if (method.isCallableWith(argTypes)) {
-                        return method;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    public Token nextToken() throws LexException {
-    loop:
-        for (;;) {
-            for (Plugin plugin : plugins) {
-                Token token = plugin.nextToken();
-                if (token != null) {
-                    lastToken = token;
-                    line += token.countLines();
-                    if (token.isIgnored()) continue loop;
-                    return token;
-                }
-            }
-            throw new LexException(String.format("Unrecognized input at line "
-                    + line + " (" + limit(buffer, 80) + ')'));
-        }
-    }
-
-    public static int offset() { return compiler().offset; }
-    public static void offset(int offset) { compiler().offset = offset; }
 
     public void open() {
 //        loader = NeoClassLoader.getInstance();
 //        Thread.currentThread().setContextClassLoader(loader);
-        compiler.set(this);
+        engine = new Engine(this);
+        engine.open();
         for (Plugin plugin : plugins) {
             plugin.open();
         }
-        line = 1;
-        offset = 0;
-        symbolsPush();
         state = State.opened;
     }
 
@@ -357,18 +172,6 @@ public class Compiler {
         return root.toTree();
     }
 
-    public MemberDef memberFind(ClassDef type, String symbol) {
-        MemberDef reference = null;
-        reference = methodFind(type, symbol);
-        if (reference == null) {
-            reference = methodFind(type, "get" + N.capitalize(symbol));
-        }
-        if (reference == null) {
-            reference = type.findField(symbol);
-        }
-        return reference;
-    }
-
     private void render() throws NeoException {
         switch (state) {
             case closed: open();
@@ -415,44 +218,13 @@ public class Compiler {
         return new Compiler();
     }
 
-    public void symbolAdd(String name, ClassDef type) {
-        Map<String, ClassDef> map = symbols.peek();
-        map.put(name, type);
-    }
-
-    public ClassDef symbolFind(String name) {
-        ListIterator<Map<String, ClassDef>> it = symbols.listIterator(symbols.size());
-        while (it.hasPrevious()) {
-            Map<String, ClassDef> map = it.previous();
-            ClassDef type = map.get(name);
-            if (type != null)
-                return type;
-        }
-        for (String importPath : imports) {
-            ClassDef type = ClassDef.get(importPath + '.' + name);
-            if (type != null)
-                return type;
-        }
-        return null;
-    }
-
-    public void symbolsPop() {
-        symbols.pop();
-        methods.pop();
-    }
-
-    public void symbolsPush() {
-        symbols.push(new HashMap<String, ClassDef>());
-        methods.push(new HashMap<String, List<MethodDef>>());
-    }
-
     public Node tokenize() throws NeoException {
         switch (state) {
             case closed: open();
             case opened: load();
         }
         for(;;) {
-            Token token = nextToken();
+            Token token = engine.nextToken();
             root.add(token);
             if (token.isNamed(LexerEof.EOF)) break;
         }
@@ -468,8 +240,8 @@ public class Compiler {
             case tokenized: parse();
             case parsed: prune();
         }
-        importPackage("java.lang");
-        importPackage("neo.lang");
+        engine.importPackage("java.lang");
+        engine.importPackage("neo.lang");
         transform(root);
         state = State.transformed;
         return root;

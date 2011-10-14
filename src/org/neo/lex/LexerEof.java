@@ -1,7 +1,7 @@
 package org.neo.lex;
 
-import org.neo.Compiler;
 import org.neo.Plugin;
+import org.neo.parse.Engine;
 
 /**
  *
@@ -16,7 +16,7 @@ public class LexerEof extends LexerBase {
     }
 
     public boolean atEof() {
-        return Compiler.buffer().length() == 0;
+        return Engine.buffer().length() == 0;
     }
 
     @Override

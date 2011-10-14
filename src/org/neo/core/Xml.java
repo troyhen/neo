@@ -2,8 +2,8 @@ package org.neo.core;
 
 import java.util.regex.Pattern;
 
-import org.neo.Compiler;
 import org.neo.lex.Token;
+import org.neo.parse.Engine;
 
 //import org.xml.sax.InputSource;
 
@@ -54,7 +54,7 @@ public class Xml extends CorePlugin {
 
     @Override
     public Token nextToken() {
-        CharSequence buffer = Compiler.buffer();
+        CharSequence buffer = Engine.buffer();
         java.util.regex.Matcher matcher = xmlStart.matcher(buffer);
         if (matcher.find()) {
             String found = matcher.group();

@@ -1,8 +1,8 @@
 import org.junit.After;
 import java.util.logging.Level;
-import org.neo.Log;
+import org.neo.util.Log;
 import org.neo.NeoLang;
-import org.neo.Node;
+import org.neo.parse.Node;
 import org.junit.Before;
 import org.junit.Test;
 

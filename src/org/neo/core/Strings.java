@@ -3,8 +3,8 @@ package org.neo.core;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.neo.Compiler;
-import org.neo.Log;
-import org.neo.Node;
+import org.neo.util.Log;
+import org.neo.parse.Node;
 import org.neo.lex.LexerPattern;
 import org.neo.lex.Token;
 

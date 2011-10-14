@@ -1,12 +1,12 @@
 package org.neo.core;
 
 import neo.lang.N;
-import org.neo.Compiler;
-import org.neo.Log;
+import org.neo.util.Log;
 import org.neo.NeoException;
-import org.neo.Node;
+import org.neo.parse.Node;
 import org.neo.PluginBase;
 import org.neo.back.Backend;
+import org.neo.parse.Engine;
 
 /**
  *
@@ -25,10 +25,10 @@ public class CorePlugin extends PluginBase {
         String className = "org.neo.back." + N.capitalize(backend) + N.capitalize(nodeName) + N.capitalize(nodeVar);
         Class<Backend> type;
         try {
-            type = (Class<Backend>) Compiler.compiler().loadClass(className);
+            type = (Class<Backend>) Engine.engine().loadClass(className);
         } catch (ClassNotFoundException ex) {
             className = "org.neo.back." + N.capitalize(backend) + N.capitalize(nodeName);
-            type = (Class<Backend>) Compiler.compiler().loadClass(className);
+            type = (Class<Backend>) Engine.engine().loadClass(className);
         }
         return type;
     }

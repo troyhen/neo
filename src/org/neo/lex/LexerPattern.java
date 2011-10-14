@@ -1,8 +1,8 @@
 package org.neo.lex;
 
 import java.util.regex.Pattern;
-import org.neo.Compiler;
 import org.neo.Plugin;
+import org.neo.parse.Engine;
 
 /**
  *
@@ -37,7 +37,7 @@ public class LexerPattern extends LexerBase {
 
     @Override
     public Token nextToken() {
-        CharSequence buffer = Compiler.buffer();
+        CharSequence buffer = Engine.buffer();
         java.util.regex.Matcher match = pattern.matcher(buffer);
         if (match.find()) {
             if (group <= 0) return consume(match.end());

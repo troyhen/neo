@@ -1,9 +1,8 @@
 package org.neo.core;
 
-import org.neo.ClassDef;
-import org.neo.Compiler;
-import org.neo.Log;
-import org.neo.Node;
+import org.neo.util.ClassDef;
+import org.neo.parse.Engine;
+import org.neo.parse.Node;
 
 /**
  *
@@ -75,7 +74,7 @@ public class Control extends CorePlugin {
             Node symbol3 = new Node(this, "symbol", varName, varName);
             Node ifStatement = new Node(this, "statement", null, null, typeName);
             Node eq1 = new Node(this, "operator_eq", "=", "=", typeName);
-            Compiler.compiler().symbolAdd(varName, ClassDef.get(typeName));
+            Engine.engine().symbolAdd(varName, ClassDef.get(typeName));
             statement.insertBefore(varStatement);
             varStatement.add(symbol1);
             statement.insertBefore(ifStatement);

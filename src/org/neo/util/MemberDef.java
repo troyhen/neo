@@ -1,5 +1,6 @@
-package org.neo;
+package org.neo.util;
 
+import org.neo.util.ClassDef;
 import java.lang.reflect.Modifier;
 
 /**

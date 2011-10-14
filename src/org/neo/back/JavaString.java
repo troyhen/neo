@@ -1,6 +1,6 @@
 package org.neo.back;
 
-import org.neo.Node;
+import org.neo.parse.Node;
 import org.neo.core.Strings;
 
 /**

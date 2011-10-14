@@ -1,5 +1,6 @@
 package org.neo;
 
+import org.neo.parse.Node;
 import org.neo.core.Classes;
 import org.neo.core.Delimiter;
 import org.neo.core.Compilation;

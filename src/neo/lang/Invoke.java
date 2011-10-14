@@ -1,9 +1,9 @@
 package neo.lang;
 
 import java.lang.reflect.Method;
-import org.neo.Compiler;
-import org.neo.Log;
+import org.neo.util.Log;
 import org.neo.NeoException;
+import org.neo.parse.Engine;
 
 /**
  *
@@ -39,7 +39,7 @@ public class Invoke {
         Package[] pkgs = Package.getPackages();
         for (Package pkg : pkgs) {
             try {
-                type = Compiler.compiler().loadClass(pkg.getName() + ".N");
+                type = Engine.engine().loadClass(pkg.getName() + ".N");
                 multiMethod = lookup2(type, name, args2);
                 if (multiMethod != null) return;
             } catch (ClassNotFoundException ex) {

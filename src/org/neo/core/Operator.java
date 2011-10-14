@@ -1,6 +1,6 @@
 package org.neo.core;
 
-import org.neo.Node;
+import org.neo.parse.Node;
 import org.neo.lex.LexerChar;
 import org.neo.lex.LexerPattern;
 

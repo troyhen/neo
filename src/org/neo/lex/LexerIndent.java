@@ -3,9 +3,9 @@ package org.neo.lex;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import org.neo.Compiler;
-import org.neo.Node;
+import org.neo.parse.Node;
 import org.neo.Plugin;
+import org.neo.parse.Engine;
 
 /**
  *
@@ -28,7 +28,7 @@ public class LexerIndent extends LexerEof {
     }
 
     public boolean atBol() {
-        Node last = Compiler.compiler().lastToken;
+        Node last = Engine.engine().lastToken;
         return last == null || last.isNamed(eol);
     }
 
@@ -69,7 +69,7 @@ public class LexerIndent extends LexerEof {
     }
 
     public CharSequence getIndent() {
-        CharSequence buf = Compiler.buffer();
+        CharSequence buf = Engine.buffer();
         StringBuilder indent = new StringBuilder();
         for (int ix = 0, iz = buf.length(); ix < iz; ix++) {
             char ch = buf.charAt(ix);
