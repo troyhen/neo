@@ -18,8 +18,8 @@ public class Range extends CorePlugin {
     public void open() {
         super.open();
         names.add(NAME);
-        add(new LexerString(this, RANGE_INCLUSIVE, "..."));
-        add(new LexerString(this, RANGE_EXCLUSIVE, ".."));
+        add(new LexerString(this, RANGE_EXCLUSIVE, "..."));
+        add(new LexerString(this, RANGE_INCLUSIVE, ".."));
         addParser("expression_range", "@expression ^range @expression");
     }
 
