@@ -1,14 +1,13 @@
-import org.neo.util.Log;
 import org.junit.After;
-import org.neo.parse.Node;
-
-import org.neo.NeoLang;
-
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.*;
+
+import org.neo.NeoLang;
+import org.neo.util.Log;
+import org.neo.parse.Node;
 
 import static org.neo.core.Xml.*;
-import static org.junit.Assert.*;
 
 /**
  *

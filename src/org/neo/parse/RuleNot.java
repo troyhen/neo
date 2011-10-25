@@ -2,12 +2,29 @@ package org.neo.parse;
 
 import java.util.List;
 
-class RuleNot implements Rule {
+/**
+ * A negative rule wrapper. Parse fails if enclosed rules are matched and succeeds otherwise.
+ * @author Troy Heninger
+ */
+class RuleNot implements OptimizedRule {
     
-    private Rule child;
+    private OptimizedRule child;
 
-    RuleNot(Rule child) {
+    RuleNot(OptimizedRule child) {
         this.child = child;
+    }
+
+    @Override
+    public Progress explore(Progress progress, boolean ignore) {
+        Progress after = child.explore(progress, !ignore);
+        after.getState().setDeadEnd(true);
+        return progress;
+    }
+
+    @Override
+    @Deprecated
+    public boolean findStarts(List<String> list) {
+        return true;
     }
 
     @Override

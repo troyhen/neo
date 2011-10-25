@@ -2,11 +2,29 @@ package org.neo.parse;
 
 import java.util.List;
 
-class RuleOpt implements Rule {
-    private Rule child;
+/**
+ * Rule wrapper for an optional element or group. Parse is successful whether or not the enclosed rules are matched.
+ * @author Troy Heninger
+ */
+class RuleOpt implements OptimizedRule {
+    private OptimizedRule child;
 
-    RuleOpt(Rule child) {
+    RuleOpt(OptimizedRule child) {
         this.child = child;
+    }
+
+    @Override
+    public Progress explore(Progress progress, boolean ignore) {
+        Progress after = child.explore(progress, ignore);
+        after.getState().setGoto(progress.getState());  // TODO this allows loops which is not correct
+        return after;
+    }
+
+    @Override
+    @Deprecated
+    public boolean findStarts(List<String> list) {
+        child.findStarts(list);
+        return true;
     }
 
     @Override

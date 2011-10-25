@@ -8,8 +8,24 @@ import java.util.List;
  */
 class RuleBefore extends RuleGroup {
 
-    public RuleBefore(List<Rule> rules) {
+    public RuleBefore(List<OptimizedRule> rules) {
         super(rules);
+    }
+
+    @Override
+    public Progress explore(Progress progress, boolean ignore) {
+        return progress;
+    }
+
+    @Override
+    @Deprecated
+    public boolean findStarts(List<String> list) {
+        boolean more = super.findStarts(list);
+        if (more) {
+            list.clear();
+            list.add("*");
+        }
+        return false;
     }
 
     @Override
@@ -19,7 +35,7 @@ class RuleBefore extends RuleGroup {
         if (found == null)
             return null;
         Node.revert(matched, 0);
-        if (found == start && found.getPrev() != null) {
+        if (found == start) {
             found = found.getNext(); // ensure next rule matches the following node
         }
         return found;

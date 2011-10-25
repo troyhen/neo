@@ -23,7 +23,7 @@ public class Percent extends CorePlugin {
         add(new LexerPattern(this, "percent_word", "%w`([^`]*)`", 1));
         add(new LexerPattern(this, "percent_word", "%w/([^/]*)/", 1));
         add(new LexerPattern(this, "percent_word", "%w\\|([^|]*)\\|", 1));
-        addParser("expression", "percent");
+        addParser("expression_percent", "percent");
     }
 
     public Node transform_percent_word(Node node) {

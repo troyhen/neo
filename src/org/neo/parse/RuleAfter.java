@@ -4,8 +4,19 @@ import java.util.List;
 
 class RuleAfter extends RuleGroup {
     
-    RuleAfter(List<Rule> rules) {
+    RuleAfter(List<OptimizedRule> rules) {
         super(rules);
+    }
+
+    @Override
+    public Progress explore(Progress progress, boolean ignore) {
+        return super.explore(progress, true);
+    }
+
+    @Override
+    @Deprecated
+    public boolean findStarts(List<String> list) {
+        return false;
     }
 
     @Override

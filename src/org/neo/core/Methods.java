@@ -55,21 +55,21 @@ public class Methods extends CorePlugin {
         addKeyword("return");
         
         addParser("closureTop",
-                "(expression | reference | call | symbol) < !keyword_def @cast? !start_paren (symbol @cast "
-                + "(!comma? !terminator* symbol @cast)*)? !end_paren");
+                "expression | reference | call | symbol < !keyword_def @cast? !start_paren (@expression_symbol @cast "
+                + "(!comma? !terminator* @expression_symbol @cast)*)? !end_paren");
         addParser("closureTop",
-                "(expression | reference | call | symbol) < !keyword_def @cast? (symbol @cast ((!comma !terminator+ | !comma?) symbol @cast)*)?");
+                "expression | reference | call | symbol < !keyword_def @cast? (@expression_symbol @cast ((!comma !terminator+ | !comma?) @expression_symbol @cast)*)? > terminator");
         addParser("expression_closure",
                 "^closureTop (statement | !terminator @block)");
 
-        addParser("defTop",
-                "expression- reference- call- symbol- < !keyword_def symbol @cast? !start_paren (symbol @cast "
-                + "(!comma? !terminator* symbol @cast)*)? !end_paren");
-        addParser("defTop",
-                "expression- reference- call- symbol- < !keyword_def symbol @cast? (symbol @cast ((!comma !terminator+ | !comma?) symbol @cast)*)?");
+        addParser("defTop_paren",
+                "terminator < !keyword_def @expression_symbol @cast? !start_paren (@expression_symbol @cast "
+                + "(!comma? !terminator* @expression_symbol @cast)*)? !end_paren");
+        addParser("defTop_noParen", "terminator < !keyword_def @expression_symbol @cast? (@expression_symbol @cast)? > start_paren- operator_as-");
+        addParser("defTop_noParen", "@defTop_noParen (!comma !terminator+ | !comma?) @expression_symbol @cast");
         addParser("statement_def",
                 "@defTop (statement | !terminator @block)");
-        addParser(STATEMENT_RETURN, "!keyword_return @expression? > (terminator | keyword_if | keyword_unless | keyword_while | keyword_until)");
+        addParser(STATEMENT_RETURN, "!keyword_return @expression? > terminator | keyword_if | keyword_unless | keyword_while | keyword_until");
     }
 
 //    public void prepare_statement_def(Node node) {

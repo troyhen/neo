@@ -2,8 +2,11 @@ package org.neo.parse;
 
 import java.util.List;
 
-class RuleIdent implements Rule {
-    
+/**
+ * Rule which matches a node by name.
+ */
+class RuleIdent implements OptimizedRule {
+
 //    private final String ident;
     private final String identBase;
     private final String identDot;
@@ -16,6 +19,35 @@ class RuleIdent implements Rule {
                 (ident.startsWith("@") ? Node.SUBSUME : 0));
         this.identBase = flags != 0 ? ident.substring(1) : ident;
         this.identDot = this.identBase + '_';
+    }
+
+    @Override
+    public Progress explore(Progress progress, boolean ignore) {
+//        State state = progress.getState();
+//        Progress after = progress.getNext();
+        List<Production> list = Engine.engine().findProductions(identBase);
+//        State nextState = after.getState();
+        Progress nextStep = Engine.engine().getProgress(progress.getProduction(), progress.getIndex() + 1);
+        boolean proceed = nextStep == null;
+        if (proceed) nextStep = new Progress(progress.getProduction(), );
+        Engine.engine().index(nextStep, true);
+        state.link(identBase, next);
+        if (proceed) {
+            for (Production prod : list) {
+                Progress progress1 = new Progress(prod, 0, state);
+                if (!progress1.isDup())
+                    progress1.explore();
+            }
+        }
+        return after;
+    }
+
+    @Override
+    @Deprecated
+    public boolean findStarts(List<String> list) {
+        list.add(identBase);
+        list.add(identDot);
+        return false;
     }
 
     @Override

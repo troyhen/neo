@@ -31,8 +31,8 @@ public class CastTest {
         String simple = "1+2.0~int-8d";
         lang.load(simple);
         Node tokens = lang.tokenize();
-        assertTrue("missing ~", tokens.get(3).isNamed(OPERATOR_AS));
-        assertEquals("missing ~", "~", tokens.get(3).getValue().toString());
+        assertTrue("missing ~", tokens.get(4).isNamed(OPERATOR_AS));
+        assertEquals("missing ~", "~", tokens.get(4).getValue().toString());
     }
 
 
@@ -42,18 +42,20 @@ public class CastTest {
 //Log.testStart();
         lang.load(expr);
         Node node = lang.parse();
+        Log.info(node.toTree());
         assertNotNull(node);
-        assertEquals("Wrong number of children: " + node.childNames(), 2, node.countChildren());
+        assertEquals("Wrong number of children: " + node.childNames(), 3, node.countChildren());
+        assertTrue("missing compilation", node.isNamed("compilation"));
+        node = node.get(1);
+        assertTrue("missing statements", node.isNamed("statements"));
         node = node.get(0);
-        assertTrue("Top of tree", node.isNamed("statements"));
+        assertTrue("missing statement", node.isNamed("statement"));
         node = node.get(0);
-        assertTrue("Second level", node.isNamed("statement"));
+        assertTrue("missing expression 1", node.isNamed("expression"));
         node = node.get(0);
-        assertTrue("Third level", node.isNamed("expression"));
-        node = node.get(0);
-        assertTrue("Forth level", node.isNamed("expression"));
+        assertTrue("missing expression 1", node.isNamed("expression"));
         node = node.getNext();
-        assertTrue("Forth level", node.isNamed("cast"));
+        assertTrue("missing cast", node.isNamed("cast"));
     }
 
     @Test
@@ -64,23 +66,24 @@ public class CastTest {
         Node node = lang.prune();
         Log.info(node.toTree());
         assertNotNull(node);
-        assertEquals("Wrong number of children: " + node.childNames(), 2, node.countChildren());
+        assertEquals("Wrong number of children: " + node.childNames(), 1, node.countChildren());
+        assertTrue("missing compilation", node.isNamed("compilation"));
         node = node.get(0);
-        assertTrue("Top of tree", node.isNamed("statements"));
+        assertTrue("missing statements", node.isNamed("statements"));
         node = node.get(0);
-        assertTrue("Second level", node.isNamed("statement"));
+        assertTrue("missing statement", node.isNamed("statement"));
         node = node.get(0);
-        assertTrue("Third level", node.isNamed("cast"));
+        assertTrue("missing cast 1", node.isNamed("cast"));
         node = node.get(0);
-        assertTrue("Forth level", node.isNamed("cast"));
-        assertTrue("Forth level", node.getNext().isNamed("operator_as"));
+        assertTrue("missing cast 2", node.isNamed("cast"));
+        assertTrue("missing operator_as 1", node.getNext().isNamed("operator_as"));
         node = node.get(0);
-        assertTrue("Fifth level", node.isNamed("string_single"));
-        assertTrue("Fifth level", node.getNext().isNamed("operator_as"));
+        assertTrue("missing string_single", node.isNamed("string_single"));
+        assertTrue("missing operator_as 2", node.getNext().isNamed("operator_as"));
         node = node.getNext().get(0);
-        assertTrue("Sixth level", node.isNamed("class_path"));
+        assertTrue("missing class_path", node.isNamed("class_path"));
         node = node.get(0);
-        assertTrue("Seventh level", node.isNamed("symbol_int"));
+        assertTrue("missing symbol_int", node.isNamed("symbol_int"));
     }
 
     @Test

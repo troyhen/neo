@@ -134,7 +134,7 @@ public class Compiler {
         }
         prune(root);
         state = State.pruned;
-        return root;
+        return root.getFirst();
     }
 
     private void prune(Node node) throws NeoException {
@@ -152,24 +152,29 @@ public class Compiler {
             case opened: load();
             case loaded: tokenize();
         }
-        List<Node.Match> matched = new ArrayList<Node.Match>();
-    loop:
-        for (;;) {
-            Node node = root.getFirst();
-            Log.info("current state: " + root.childNames());
-            for (Plugin plugin : plugins) {
-                Node next = plugin.match(node, matched);
-                if (next != null) continue loop;
-            }
-            break;
-        }
+        Log.info("start: " + root.childNames());
+//        engine.parseAll(root);
+//        engine.parseFirst(root);
+        engine.parseOld(root);
+//        List<Node.Match> matched = new ArrayList<Node.Match>();
+//    loop:
+//        for (;;) {
+//            Node node = root.getFirst();
+//            Log.info("current state: " + root.childNames());
+////            for (Plugin plugin : plugins) {
+////                Node next = plugin.match(node, matched);
+////                if (next != null) continue loop;
+////            }
+//            String name = node.getName();
+//            String name2 = "";
+//            int ix = name.lastIndexOf('_');
+//            if (ix > 0) name2 = name.substring(0, ix + 1);
+//
+//            break;
+//        }
         state = State.parsed;
-        Log.info("parse complete with " + root.childNames());
-        return root;
-    }
-
-    public String toTree() {
-        return root.toTree();
+        Log.info("end: " + root.childNames());
+        return root.getFirst();
     }
 
     private void render() throws NeoException {
@@ -183,7 +188,7 @@ public class Compiler {
             case transformed: refine();
         }
         String backend = get("backend", DEFAULT_BACKEND);
-        root.render(backend);
+        root.getFirst().render(backend);
         state = State.rendered;
     }
 
@@ -198,7 +203,7 @@ public class Compiler {
         }
         refine(root);
         state = State.refined;
-        return root;
+        return root.getFirst();
     }
 
     private void refine(Node node) throws NeoException {
@@ -212,7 +217,11 @@ public class Compiler {
     }
 
     public String set(String key, String value) { return config.put(key, value); }
-    public void setRoot(Node root) { this.root = root; }
+    protected void setRoot(Node root) { this.root = root; }
+
+    protected void setStart(String start) {
+        engine.setStart(start);
+    }
 
     public Compiler subcompile(String string) {
         return new Compiler();
@@ -232,6 +241,10 @@ public class Compiler {
         return root;
     }
 
+    public String toTree() {
+        return root.getFirst().toTree();
+    }
+
     public Node transform() throws NeoException {
         switch (state) {
             case closed: open();
@@ -244,7 +257,7 @@ public class Compiler {
         engine.importPackage("neo.lang");
         transform(root);
         state = State.transformed;
-        return root;
+        return root.getFirst();
     }
 
     private void transform(Node start) throws NeoException {

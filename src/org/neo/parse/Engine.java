@@ -36,11 +36,14 @@ public class Engine {
     private final Compiler compiler;
     private ClassDef currentClass;
     private List<String> imports = new ArrayList<String>();
-    public Token lastToken; // needed by LexerIndent
+    private Map<String, List<Production>> index = new HashMap<String, List<Production>>();
+    private Token lastToken, nextToken;
     private int line, offset;
     private Set<String> keywords = new HashSet<String>();
     private LinkedList<Map<String, ClassDef>> symbols = new LinkedList<Map<String, ClassDef>>();
     private LinkedList<Map<String, List<MethodDef>>> methods = new LinkedList<Map<String, List<MethodDef>>>();
+    private State initial;
+    private Map<Progress, Progress> steps = new HashMap<Progress, Progress>();
 
     public Engine(Compiler compiler) {
         this.compiler = compiler;
@@ -82,6 +85,14 @@ public class Engine {
 
     public static Engine engine() { return (Engine) engine.get(); }
 
+    public List<Production> findProductions(String name) {
+        List<Production> list = new ArrayList<Production>();
+        for (Plugin plugin : Engine.compiler().plugins) {
+            plugin.collect(name, list);
+        }
+        return list;
+    }
+
     public CharSequence getBuffer() { return buffer; }
 
     public CharSequence getChars(int chars) {
@@ -93,7 +104,28 @@ public class Engine {
         return currentClass;
     }
 
+    public Token getLastToken() {
+        return lastToken;
+    }
+
     public int getLine() { return line; }
+
+    public Progress getProgress(Production production, int index) {
+        Progress temp = new Progress(production, index);
+        Progress progress = steps.get(temp);
+        return progress;
+    }
+
+//    public State getState(Progress progress, boolean addIfMissing) {
+//        State state = progress.getState();
+//        if (state == null) {
+//            state = steps.get(progress);
+//            if (state == null && addIfMissing) {
+//                state = new State(progress);
+//            }
+//        }
+//        return state;
+//    }
 
     public void importPackage(String path) {
         if (!imports.contains(path)) imports.add(path);
@@ -126,18 +158,36 @@ public class Engine {
 //        }
     }
 
+    public void index(Production production) {
+        List<String> list = production.findStarts();
+        for (String name : list) {
+            List<Production> plist = index.get(name);
+            if (plist == null) {
+                plist = new ArrayList<Production>();
+                index.put(name, plist);
+            }
+            plist.add(production);
+        }
+    }
+
+    public void index(Progress progress) {
+        /*State state = progress.getState();
+        if (state == null) steps.remove(progress);
+        else*/ steps.put(progress, progress);
+    }
+
     public boolean isKeyword(String text) {
         return keywords.contains(text);
     }
 
     public CharSequence limit(CharSequence text, int limit) {
         limit = Math.min(text.length(), limit);
-        int index = 0;
-        for (; index < limit; index++) {
-            char ch = text.charAt(index);
+        int ix = 0;
+        for (; ix < limit; ix++) {
+            char ch = text.charAt(ix);
             if (ch == '\r' || ch == '\n') break;
         }
-        return text.subSequence(0, index);
+        return text.subSequence(0, ix);
     }
 
     public static int line() { return engine().line; }
@@ -161,6 +211,21 @@ public class Engine {
     public Class loadClass(String name) throws ClassNotFoundException {
         /*if (name.startsWith("java."))*/ return Class.forName(name);
 //        return loader.loadClass(name);
+    }
+
+    private Match matchProductions(String name, Node node, List<Node.Match> matched, Match bestMatch) {
+        List<Production> list = index.get(name);
+        if (list == null) return bestMatch;
+        for (Production production : list) {
+            Node next = production.match(node, matched);
+            if (next == null) {
+                continue;
+            }
+            if (bestMatch == null || bestMatch.isWorse(matched)) {
+                bestMatch = new Match(production, node, matched);
+            }
+        }
+        return bestMatch;
     }
 
     public MemberDef memberFind(ClassDef type, String symbol, String assignmentType) {
@@ -225,6 +290,11 @@ public class Engine {
     }
 
     public Token nextToken() throws LexException {
+        if (nextToken != null) {
+            Token temp = nextToken;
+            nextToken = null;
+            return temp;
+        }
     loop:
         for (;;) {
             for (Plugin plugin : compiler.plugins) {
@@ -241,6 +311,32 @@ public class Engine {
         }
     }
 
+    private static class Match {
+        Production production;
+        Node node;
+        List<Node.Match> matched = new ArrayList<Node.Match>();
+
+        Match(Production production, Node node, List<Node.Match> matched) {
+            this.production = production;
+            this.node = node;
+            this.matched.addAll(matched);
+        }
+
+        boolean isWorse(List<Node.Match> matched) {
+            return this.matched.size() < matched.size();
+        }
+
+        void reduce() {
+            production.reduce(node, matched);
+        }
+
+        @Override
+        public String toString() {
+            return "matched " + production.getName();
+        }
+
+    }
+
     public static int offset() { return engine().offset; }
     public static void offset(int offset) { engine().offset = offset; }
 
@@ -249,6 +345,91 @@ public class Engine {
         line = 1;
         offset = 0;
         symbolsPush();
+    }
+
+    public void parseAll(Node root) {
+        List<Node.Match> matched = new ArrayList<Node.Match>();
+        Node node = root.getFirst();
+        for (;;) {
+            Match bestMatch = null;
+            while (node != null) {
+                bestMatch = matchProductions("*", node, matched, bestMatch);
+                String name = node.getName();
+                bestMatch = matchProductions(name, node, matched, bestMatch);
+                int ix = name.lastIndexOf('_');
+                if (ix > 0) {
+                    name = name.substring(0, ix + 1);
+                    bestMatch = matchProductions(name, node, matched, bestMatch);
+                }
+                node = node.getNext();
+            }
+            if (bestMatch == null) break;
+            bestMatch.reduce();
+//            Log.info("current state: " + root.childNames(10));
+            node = root.getFirst();
+        }
+    }
+
+    public void parseFirst(Node root) {
+        List<Node.Match> matched = new ArrayList<Node.Match>();
+        Node node = root.getFirst();
+        while (node != null) {
+            Match bestMatch = null;
+            bestMatch = matchProductions("*", node, matched, bestMatch);
+            String name = node.getName();
+            bestMatch = matchProductions(name, node, matched, bestMatch);
+            int ix = name.lastIndexOf('_');
+            if (ix > 0) {
+                name = name.substring(0, ix + 1);
+                bestMatch = matchProductions(name, node, matched, bestMatch);
+            }
+            if (bestMatch == null) {
+                node = node.getNext();
+                continue;
+            }
+            bestMatch.reduce();
+            node = root.getFirst();
+        }
+    }
+
+    public void parseOld(Node root) {
+        List<Node.Match> matched = new ArrayList<Node.Match>();
+        Node node = root.getFirst();
+        for (;;) {
+            Match bestMatch = null;
+            while (node != null) {
+                String name = node.getName();
+                bestMatch = matchProductions(name, node, matched, bestMatch);
+                if (bestMatch != null) break;
+                int ix = name.lastIndexOf('_');
+                if (ix > 0) {
+                    name = name.substring(0, ix + 1);
+                    bestMatch = matchProductions(name, node, matched, bestMatch);
+                    if (bestMatch != null) break;
+                }
+                bestMatch = matchProductions("*", node, matched, bestMatch);
+                if (bestMatch != null) break;
+                node = node.getNext();
+            }
+            if (bestMatch == null) break;
+            bestMatch.reduce();
+//            Log.info("current state: " + root.childNames(10));
+            node = root.getFirst();
+        }
+    }
+
+    public void setNextToken(Token nextToken) {
+        this.nextToken = nextToken;
+    }
+
+    public void setStart(String start) {
+        engine.set(this);
+        List<Production> list = findProductions(start);
+        for (Production production : list) {
+            if (initial == null) initial = new State(production);
+            Progress progress = new Progress(production, 0, initial);
+            progress.explore();
+        }
     }
 
     public void symbolAdd(String name, ClassDef type) {

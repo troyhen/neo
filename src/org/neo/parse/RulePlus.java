@@ -2,10 +2,25 @@ package org.neo.parse;
 
 import java.util.List;
 
+/**
+ * Wrapper for rules which must match one or more times.
+ */
 class RulePlus extends RuleStar {
 
-    RulePlus(Rule child) {
+    RulePlus(OptimizedRule child) {
         super(child);
+    }
+
+    @Override
+    public Progress explore(Progress production, boolean ignore) {
+        Progress after = child.explore(production, ignore);
+        return super.explore(after, ignore);
+    }
+
+    @Override
+    @Deprecated
+    public boolean findStarts(List<String> list) {
+        return child.findStarts(list);
     }
 
     @Override

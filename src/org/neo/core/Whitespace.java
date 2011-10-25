@@ -24,8 +24,9 @@ public class Whitespace extends CorePlugin {
         add(new LexerPattern(this, "!space", "[ \\t]+"));   // must come after indent lexer
         addParser("terminator", "semi");
         addParser("terminator", "eol");
-        addParser("terminator", "eof");
-        addParser("block", "!start_block statements !terminator* !end_block");
+        addParser("terminator_eof", "eof");
+        addParser("terminator_bof", "bof");
+        addParser("block", "!start_block statements !terminator* !end_block > terminator");
     }
 
 }
