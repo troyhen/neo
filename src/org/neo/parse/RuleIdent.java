@@ -52,11 +52,9 @@ class RuleIdent implements OptimizedRule {
 
     @Override
     public Node match(Node node, List<Node.Match> matched) {
-        //final String name = node.getName();
-        if (node.isNamed(identBase)) {//name.equals(identBase) || name.startsWith(identDot)) {
+        if (node.isNamed(identBase)) {
             Node next = node.getNext();
             matched.add(node.newMatch(flags));
-//            node.setFlags((byte) flags);    //TODO problem because a higher rule may cancel this match
             if (next == null) return node.getParent();
             return next;
         }
