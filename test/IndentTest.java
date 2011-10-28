@@ -35,6 +35,8 @@ public class IndentTest {
         lang.load(simple);
         Node tokens = lang.tokenize();
         Node node = tokens.getFirst();
+        assertEquals("bof", node.getName());
+        node = node.getNext();
         assertEquals("number_integer", node.getName());
         node = node.getNext();
         assertEquals("eol", node.getName());
@@ -52,6 +54,8 @@ public class IndentTest {
         assertEquals("eol", node.getName());
         node = node.getNext();
         assertEquals("end_block", node.getName());
+        node = node.getNext();
+        assertEquals("eol", node.getName());
         node = node.getNext();
         assertEquals("number_integer", node.getName());
         node = node.getNext();
@@ -74,6 +78,8 @@ public class IndentTest {
         lang.load(simple);
         Node tokens = lang.tokenize();
         Node node = tokens.getFirst();
+        assertEquals("bof", node.getName());
+        node = node.getNext();
         assertEquals("number_integer", node.getName());
         node = node.getNext();
         assertEquals("eol", node.getName());
@@ -97,6 +103,8 @@ public class IndentTest {
         assertEquals("eol", node.getName());
         node = node.getNext();
         assertEquals("end_block", node.getName());
+        node = node.getNext();
+        assertEquals("eol", node.getName());
         node = node.getNext();
         assertEquals("number_integer", node.getName());
         node = node.getNext();

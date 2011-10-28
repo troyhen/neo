@@ -155,7 +155,7 @@ public class Strings extends CorePlugin {
         add(new LexerPattern(this, STRING_MULTILINE, "\"\"\"((\"\"[^\"]|\"[^\"]|[^\"])*)\"\"\"", 1));
         add(new LexerPattern(this, STRING_DOUBLE, "\"((\\\\\"|[^\"\\r\\n])*)\"", 1));
 //        add(new LexerPattern(this, STRING_DOUBLE_BAD, "\"((\\\"|[^\"\\r\\n])*)[\\r\\n]", 1));
-        addParser("expression", "string");
+        addParser("expression_string", "string");
     }
 
     @Override

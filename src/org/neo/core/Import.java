@@ -29,8 +29,8 @@ public class Import extends CorePlugin {
         names.add(NAME);
         addKeyword(NAME);
         addKeyword(PACKAGE);
-        addParser("class_path", "(operator_as start_bracket* | keyword_package | keyword_import | terminator? classTop comma?) < "
-                + "(symbol operator_dot)* symbol");
+        addParser("class_path", "operator_as start_bracket* | keyword_package | keyword_import | terminator? classTop comma? < "
+                + "symbol (operator_dot symbol)*");
         addParser(PACKAGE_STATEMENT, "!keyword_package class_path");
         addParser(STATEMENT, "!keyword_import class_path");
     }

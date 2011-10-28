@@ -39,7 +39,7 @@ public class HelloWorldTest {
     @Test
     public void compileHelloWorld() {
 //Log.testStart();
-        lang.set("file", "examples/helloWorld.neo");
+        lang.set("file", "examples/HelloWorld.neo");
         lang.compile();
         Log.info(lang.toTree());
         String result = lang.get("output");

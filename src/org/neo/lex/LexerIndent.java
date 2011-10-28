@@ -28,8 +28,8 @@ public class LexerIndent extends LexerEof {
     }
 
     public boolean atBol() {
-        Node last = Engine.engine().lastToken;
-        return last == null || last.isNamed(eol);
+        Node last = Engine.engine().getLastToken();
+        return last == null || (last.isNamed(eol) && !"post-block".equals(last.getValue()));
     }
 
     private boolean checkMatch(CharSequence indent, CharSequence lastIndent) {
@@ -44,7 +44,7 @@ public class LexerIndent extends LexerEof {
         if (atEof()) {
             if (indents.isEmpty()) return super.nextToken();
             if (!atBol()) {
-                return getPlugin().consume(eol, 0, null, null);
+                return getPlugin().consume(eol, 0, "at-eof", null);
             }
             indents.pop();
             return getPlugin().consume(endBlock, 0, null, null);
@@ -65,6 +65,7 @@ public class LexerIndent extends LexerEof {
             return getPlugin().consume(startBlock, indent.length(), null, null);
         }
         indents.pop();
+        Engine.engine().setNextToken(getPlugin().consume(eol, 0, "post-block", null));
         return getPlugin().consume(endBlock, indent.length(), null, null);
     }
 

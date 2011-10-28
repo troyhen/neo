@@ -9,7 +9,7 @@ import org.neo.parse.Node.Match;
  */
 class RuleEnforce extends RuleGroup {
 
-    public RuleEnforce(List<Rule> parseRules) {
+    public RuleEnforce(List<OptimizedRule> parseRules) {
         super(parseRules);
     }
 

@@ -9,10 +9,12 @@ import org.neo.parse.Engine;
  */
 public class LexerEof extends LexerBase {
 
+    public static final String BOF = "bof";
     public static final String EOF = "eof";
-
+    
     public LexerEof(Plugin plugin) {
         super(plugin, EOF);
+        Engine.engine().setNextToken(new Token(plugin, BOF, "", 1));
     }
 
     public boolean atEof() {

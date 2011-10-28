@@ -3,6 +3,7 @@ package org.neo.parse;
 import java.util.List;
 import org.neo.Plugin;
 import org.neo.back.CodeBuilder;
+import org.neo.core.Strings;
 
 /**
  *
@@ -103,12 +104,18 @@ public class Node {
     }
 
     public String childNames() {
+        return childNames(Integer.MAX_VALUE);
+    }
+    
+    public String childNames(int max) {
         if (first == null) return "(none)";
         StringBuilder buff = new StringBuilder();
         Node node = first;
         String comma = "";
-        while (node != null) {
+        while (node != null && max-- > 0) {
             buff.append(comma);
+            buff.append(node.getLine());
+            buff.append(':');
             buff.append(node);
             comma = " ";
             node = node.next;
@@ -238,9 +245,17 @@ public class Node {
         plugin.render(this, backend);
     }
 
+    public void replaceWithChildren() {
+        while (first != null) {
+            insertBefore(first);
+        }
+        unlink();
+    }
+
     public static void revert(List<Match> matched, int size) {
         while (matched.size() > size) {
-            matched.remove(matched.size() - 1);
+            Match match = matched.remove(matched.size() - 1);
+            match.node().replaceWithChildren();
         }
     }
 
@@ -281,11 +296,11 @@ public class Node {
         CodeBuilder buff = new CodeBuilder(getName());
         if (value != null) {
             buff.append('(');
-            buff.append(value);
+            buff.append(Strings.encode(String.valueOf(value)));
             buff.append(')');
         } else if (text != null) {
             buff.append('[');
-            buff.append(text);
+            buff.append(Strings.encode(text));
             buff.append(']');
         }
         if (typeName != null) {

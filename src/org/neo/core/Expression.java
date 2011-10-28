@@ -44,6 +44,12 @@ public class Expression extends CorePlugin {
         "double", "java.lang.Double", "double",
     };
 
+    private final boolean isMain;
+
+    public Expression(boolean isMain) {
+        this.isMain = isMain;
+    }
+
     public static String commonType(Node node) {
         String common = node.getTypeName();
         while (node != null) {
@@ -69,21 +75,21 @@ public class Expression extends CorePlugin {
         return common;
     }
 
-    private String methodSignature(Node node) {
-        StringBuilder buff = new StringBuilder();
-        buff.append(node.getValue().toString());
-        node = node.getNext();
-        buff.append('(');
-        String comma = "";
-        while (node != null) {
-            buff.append(comma);
-            comma = ",";
-            buff.append(node.getTypeName());
-            node = node.getNext();
-        }
-        buff.append(')');
-        return buff.toString();
-    }
+//    private String methodSignature(Node node) {
+//        StringBuilder buff = new StringBuilder();
+//        buff.append(node.getValue().toString());
+//        node = node.getNext();
+//        buff.append('(');
+//        String comma = "";
+//        while (node != null) {
+//            buff.append(comma);
+//            comma = ",";
+//            buff.append(node.getTypeName());
+//            node = node.getNext();
+//        }
+//        buff.append(')');
+//        return buff.toString();
+//    }
     
     @Override
     public void open() {
@@ -93,31 +99,33 @@ public class Expression extends CorePlugin {
         addKeyword("else");
         addKeyword("end");
 
-        addParser("expression_symbol", "keyword_var- keyword_val- < symbol");
-        addParser("expression", "reference > operator_assign- operator_eq-");
+//        addParser("expression_symbol", "keyword_var- keyword_val- keyword_def- | statement_valAssign comma < symbol");
+        addParser("expression_symbol", "symbol");
+        addParser("expression_reference", "reference > operator_assign- operator_eq-");
         addParser("expression_call", "call");
         addParser("array", "expression- reference- < !start_bracket (@expression !comma?)* @expression? !end_bracket");
-        addParser("expression", "array");
+        addParser("expression_array", "array");
 
-        addParser("expression", "expression_symbol- < !start_paren @expression !end_paren");
-        addParser("expression", "@expression ^cast"); // must precede reference
+        addParser("expression_group", "symbol- expression_symbol- < !start_paren @expression !end_paren");
+        addParser("expression_cast", "keyword_def- keyword_class- < @expression ^cast"); // must precede reference
 
-        addParser("reference_dot", "@expression !operator_dot @expression_symbol > keyword_def- closureTop- start_paren- expression-");
+        addParser("reference_dot", "@expression !operator_dot @expression_symbol > operator | terminator");
         addParser("reference_array", "@expression !start_bracket @expression (!comma? @expression)* !end_bracket");
         addParser("call_dot", "@expression !operator_dot @expression_symbol !start_paren (@expression (!comma? @expression)*)? !end_paren");
-        addParser("call_dot", " start_bracket- < @expression !operator_dot @expression_symbol @expression (!comma? @expression)*");
+        addParser("call_dot", "start_bracket- < @expression !operator_dot @expression_symbol @expression (!comma? @expression)*");
 
-        addParser("expression", "@expression (^operator_pow @expression)+");
-        addParser("expression", "@expression (^operator_mul @expression)+");
-        addParser("expression", "@expression (^operator_add @expression)+");
-        addParser("expression", "@expression ^operator_compare @expression");
-        addParser("expression", "@expression ^operator_other @expression");
+        addParser("expression_pow", "@expression (^operator_pow @expression)+ > cast- operator_as- operator_dot-");
+        addParser("expression_mul", "@expression (^operator_mul @expression)+ > operator_pow- cast- operator_as- operator_dot-");
+        addParser("expression_add", "@expression (^operator_add @expression)+ > operator_mul- operator_pow- cast- operator_as- operator_dot-");
+        addParser("expression_compare", "@expression ^operator_compare @expression > operator_add- operator_mul- operator_pow- cast- operator_as- operator_dot-");
+        addParser("expression_operator", "@expression ^operator_other @expression > operator_compare- operator_add- operator_mul- operator_pow- cast- operator_as- operator_dot-");
         addParser("expression_assign", "(reference | @expression_symbol | @expression_assign) "
-                + "(^operator_assign | ^operator_eq) @expression"); // must precede expression: reference
+                + "(^operator_assign | ^operator_eq) @expression > operator_other- operator_compare- operator_add- operator_mul- operator_pow- cast- operator_as- operator_dot-"); // must precede expression: reference
 
-        addParser("call_this", "keyword_def- operator_dot- < @expression_symbol !start_paren (@expression (!comma? @expression)*)? !end_paren");
-        addParser("call_this", "keyword_def- start_bracket- operator_dot- < @expression_symbol @expression (!comma? @expression)*");
-        addParser("call_this", "@expression_symbol > keyword.def");
+        addParser("call_this", "keyword_def- operator_dot- < @expression_symbol !start_paren (@expression (!comma? !terminator* @expression)*)? !end_paren");
+        addParser("call_this", "keyword_def- start_bracket- operator_dot- < @expression_symbol @expression ((!comma !terminator* | comma?) @expression)* > terminator | keyword_else | keyword_end");
+
+        if (isMain) addParser("compilation", "!terminator_bof !terminator* expression (terminator_eof- !terminator)* !terminator_eof");
     }
 
     public Node transform_call_this(Node start) {

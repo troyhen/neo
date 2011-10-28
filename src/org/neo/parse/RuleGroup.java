@@ -2,12 +2,37 @@ package org.neo.parse;
 
 import java.util.List;
 
-class RuleGroup implements Rule {
+class RuleGroup implements OptimizedRule {
     
-    protected List<Rule> rules;
+    protected List<OptimizedRule> rules;
 
-    public RuleGroup(List<Rule> rules) {
+    public RuleGroup(List<OptimizedRule> rules) {
         this.rules = rules;
+    }
+
+//    @Override
+//    public Progress explore(Progress progress, boolean ignore) {
+////        Ignore next = null;
+////        State state = progress.getState();
+//        for (OptimizedRule rule : rules) {
+//            progress = rule.explore(progress, ignore);
+////            if (next != null) {
+////                next = new Ignore();
+////                previous.add(null, next);
+////            }
+////            previous = rule.explore(production, index, previous, ignore);
+//        }
+//        return progress;
+//    }
+
+    @Override
+    public boolean findStarts(List<String> list) {
+        boolean more = false;
+        for (OptimizedRule rule : rules) {
+            more = rule.findStarts(list);
+            if (!more) break;
+        }
+        return more;
     }
 
     @Override
@@ -17,6 +42,18 @@ class RuleGroup implements Rule {
             node = rule.match(node, matched);
             if (node == null) {
                 Node.revert(matched, size);
+                break;
+            }
+        }
+        return node;
+    }
+
+    @Override
+    public Node parse(Node from, List<Node.Match> matched) {
+        Node node = from;
+        for (OptimizedRule rule : rules) {
+            node = rule.parse(node, matched);
+            if (node == null) {
                 break;
             }
         }

@@ -1,6 +1,5 @@
 package org.neo;
 
-import org.neo.parse.Node;
 import org.neo.core.Classes;
 import org.neo.core.Delimiter;
 import org.neo.core.Compilation;
@@ -20,6 +19,7 @@ import org.neo.core.Symbol;
 import org.neo.core.Variable;
 import org.neo.core.Whitespace;
 import org.neo.core.Xml;
+import org.neo.parse.Node;
 
 /**
  *
@@ -51,14 +51,15 @@ public class NeoLang extends Compiler {
         plugins.add(new Symbol());
         plugins.add(new Control());
         plugins.add(new Classes());
-        plugins.add(main = new Expression());
+        plugins.add(main = new Expression(!full));
         if (full) plugins.add(main = new Compilation()); // must be last
     }
 
     @Override
     public void open() {
         super.open();
-        setRoot(new Node(main, "compilation"));
+        setStart("compilation");
+        setRoot(new Node(main, "root"));
     }
 
     @Override

@@ -34,7 +34,8 @@ public class CommentTest {
         lang.load(single);
         Node tokens = lang.tokenize();
         assertEquals(1, Engine.engine().getLine());
-        assertEquals(LexerEof.EOF, tokens.get(0).getName());
+        assertEquals(LexerEof.BOF, tokens.get(0).getName());
+        assertEquals(LexerEof.EOF, tokens.get(1).getName());
     }
 
     @Test
@@ -43,7 +44,7 @@ public class CommentTest {
         lang.load(singlecrlf);
         Node tokens = lang.tokenize();
         assertEquals(2, Engine.engine().getLine());
-        assertEquals(EOL, tokens.get(0).getName());
+        assertEquals(EOL, tokens.get(1).getName());
     }
 
     @Test
@@ -51,7 +52,7 @@ public class CommentTest {
         final String slashstar = "###This is a comment###";//"/*This is a comment*/";
         lang.load(slashstar);
         Node tokens = lang.tokenize();
-        assertEquals(LexerEof.EOF, tokens.get(0).getName());
+        assertEquals(LexerEof.EOF, tokens.get(1).getName());
     }
 
     @Test
@@ -60,7 +61,7 @@ public class CommentTest {
         lang.load(multiline);
         Node tokens = lang.tokenize();
         assertEquals(Engine.engine().getLine(), 4);
-        assertEquals(LexerEof.EOF, tokens.get(0).getName());
+        assertEquals(LexerEof.EOF, tokens.get(1).getName());
     }
 
     @Test
@@ -68,10 +69,11 @@ public class CommentTest {
         final String combined = "\r\n#Comment 1\r\n#########\r\nComment\r\n#########\r\n";//"\r\n//Comment 1\r\n/*\r\nComment\r\n*/\r\n";
         lang.load(combined);
         Node tokens = lang.tokenize();
-        assertEquals(EOL, tokens.get(0).getName());
+        assertEquals(LexerEof.BOF, tokens.get(0).getName());
         assertEquals(EOL, tokens.get(1).getName());
         assertEquals(EOL, tokens.get(2).getName());
-        assertEquals(LexerEof.EOF, tokens.get(3).getName());
+        assertEquals(EOL, tokens.get(3).getName());
+        assertEquals(LexerEof.EOF, tokens.get(4).getName());
     }
 
 }

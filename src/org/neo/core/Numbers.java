@@ -58,7 +58,7 @@ public class Numbers extends CorePlugin {
         add(new LexerPattern(this, REAL, "[0-9_]+[fF]"));
         add(new LexerPattern(this, LONG, "[0-9_]+[lL]"));
         add(new LexerPattern(this, INTEGER, "[0-9_]+"));
-        addParser("expression", "number");
+        addParser("expression_number", "number");
     }
 
     public Node transform_expression(Node node) {

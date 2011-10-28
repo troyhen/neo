@@ -3,13 +3,20 @@ package org.neo.parse;
 import java.util.List;
 
 /**
- *
+ * Production element which descends one level down the AST (of the previous rule) and matches the enclosed rules at
+ * that level.
  * @author Troy Heninger
  */
 class RuleInside extends RuleGroup {
 
-    public RuleInside(List<Rule> parseRules) {
+    public RuleInside(List<OptimizedRule> parseRules) {
         super(parseRules);
+    }
+
+    @Override
+    @Deprecated
+    public boolean findStarts(List<String> list) {
+        return false;
     }
 
     @Override

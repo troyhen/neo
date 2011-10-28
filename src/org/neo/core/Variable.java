@@ -15,20 +15,17 @@ public class Variable extends CorePlugin {
         addKeyword("var");
         addKeyword("val");
         
-        addParser("cast", "^operator_as start_bracket start_bracket start_bracket start_bracket class_path end_bracket end_bracket end_bracket end_bracket");
-        addParser("cast", "^operator_as start_bracket start_bracket start_bracket class_path end_bracket end_bracket end_bracket");
-        addParser("cast", "^operator_as start_bracket start_bracket class_path end_bracket end_bracket");
-        addParser("cast", "^operator_as start_bracket class_path end_bracket");
-        addParser("cast", "^operator_as class_path (start_bracket end_bracket)*");
-        addParser("statement_varDeclare", "!keyword_var symbol @cast?");
-        addParser("statement_varAssign", "@statement_varDeclare !operator_eq expression > (comma | terminator)");
-        addParser("statement_varDeclare",
-                "(statement_varDeclare | statement_varAssign) < !comma symbol @cast?");
-        addParser("statement_valAssign", "!keyword_val symbol @cast? !operator_eq expression > (comma | terminator)");
-        addParser("statement_valAssign",
-                "statement_valAssign < !comma symbol @cast? !operator_eq expression > (comma | terminator)");
+        addParser("cast", "^operator_as (class_path | @enclosed_path) (start_bracket end_bracket)*");
+        addParser("enclosed_path", "start_bracket (class_path | @enclosed_path) end_bracket");
+        addParser("var_symbol", "!keyword_var symbol");
+        addParser("var_symbol", "statement_varDeclare | statement_varAssign < !comma symbol");
+        addParser("val_symbol", "!keyword_val symbol");
+        addParser("val_symbol", "statement_valAssign < !comma symbol");
+        addParser("statement_varDeclare", "@var_symbol @cast? > operator_as-");
+        addParser("statement_varAssign", "@statement_varDeclare !operator_eq expression > comma | terminator");
+        addParser("statement_valAssign", "@val_symbol @cast? !operator_eq expression > comma | terminator");
         addInvalidParser("val statement requires an initial assignment",
-                "keyword_val symbol cast? (comma | terminator)");
+                "@val_symbol cast? (comma | terminator)");
     }
 
     public Node transform_cast(Node node) {

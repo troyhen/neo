@@ -21,7 +21,7 @@ import org.neo.parse.Production;
 public class PluginBase implements Plugin {
 
     private List<Lexer> lexers = new ArrayList<Lexer>();
-    private List<Production> grammar = new ArrayList<Production>();
+    private List<Production> productions = new ArrayList<Production>();
     protected List<String> names = new ArrayList<String>();
     private Map<String, Method> cache = new HashMap<String, Method>();
 
@@ -39,11 +39,13 @@ public class PluginBase implements Plugin {
 //    }
 
     protected void addParser(String name, String structure) {
-        grammar.add(new Production(this, name, structure));
+        final Production production = new Production(this, name, structure);
+        productions.add(production);
+        Engine.engine().index(production);
     }
 
     protected void addInvalidParser(String message, String structure) {
-        grammar.add(new InvalidProduction(this, message, structure));
+        productions.add(new InvalidProduction(this, message, structure));
     }
 
     public void close() {
@@ -62,6 +64,13 @@ public class PluginBase implements Plugin {
     @Override
     public Token consume(String name, int chars, Object value, String type) {
         return Engine.engine().consume(this, name, chars, value, type);
+    }
+
+    @Override
+    public void collect(String name, List<Production> list) {
+        for (Production production : productions) {
+            if (production.isNamed(name)) list.add(production);
+        }
     }
 
     @Override
@@ -118,7 +127,7 @@ public class PluginBase implements Plugin {
     @Override
     public Node match(Node node, List<Node.Match> matched) {
         Node start = node;
-        for (Production production : grammar) {
+        for (Production production : productions) {
             while (node != null) {
                 Node nextNode = production.match(node, matched);
                 if (nextNode != null) {
