@@ -11,7 +11,7 @@ public interface OptimizedRule extends Rule {
      * Used during grammar analysis to verify the grammar and prepare parse tables/structures.
      * @param progress current point within a production
      * @param ignore false if node should be reduced, true if not
-     * @return following point in in the production
+     * @return following point in the production
      */
     Progress explore(Progress progress, boolean ignore);
 

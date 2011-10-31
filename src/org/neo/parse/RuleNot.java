@@ -18,6 +18,7 @@ class RuleNot implements OptimizedRule {
     public Progress explore(Progress progress, boolean ignore) {
         Progress after = child.explore(progress, !ignore);
         after.getState().setDeadEnd(true);
+        progress.getState().link("*", after.getState());    // if nothing matches move on (and don't reduce)
         return progress;
     }
 

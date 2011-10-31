@@ -23,23 +23,19 @@ class RuleIdent implements OptimizedRule {
 
     @Override
     public Progress explore(Progress progress, boolean ignore) {
-//        State state = progress.getState();
-//        Progress after = progress.getNext();
+        Progress nextStep = progress.getNext();
+        if (nextStep.hasState())
+            return nextStep;    // skip if already explored
+        State state = progress.getState();
+        state.link(identBase, nextStep.getState());
         List<Production> list = Engine.engine().findProductions(identBase);
-//        State nextState = after.getState();
-        Progress nextStep = Engine.engine().getProgress(progress.getProduction(), progress.getIndex() + 1);
-        boolean proceed = nextStep == null;
-        if (proceed) nextStep = new Progress(progress.getProduction(), );
-        Engine.engine().index(nextStep, true);
-        state.link(identBase, next);
-        if (proceed) {
-            for (Production prod : list) {
-                Progress progress1 = new Progress(prod, 0, state);
-                if (!progress1.isDup())
-                    progress1.explore();
-            }
+        for (Production prod : list) {
+            if (Engine.engine().hasProgress(prod, 0))
+                continue;    // skip if already explored
+            Progress progress1 = Engine.engine().getProgress(prod, 0, state);
+            progress1.explore();
         }
-        return after;
+        return nextStep;
     }
 
     @Override

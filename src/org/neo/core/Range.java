@@ -20,7 +20,7 @@ public class Range extends CorePlugin {
         names.add(NAME);
         add(new LexerString(this, RANGE_EXCLUSIVE, "..."));
         add(new LexerString(this, RANGE_INCLUSIVE, ".."));
-        addParser("expression_range", "@expression ^range @expression");
+        addParser("expression_range", "@expression_root ^range @expression_root");
     }
 
     public Node transform_range(Node node) {

@@ -44,9 +44,15 @@ public class Engine {
     private LinkedList<Map<String, List<MethodDef>>> methods = new LinkedList<Map<String, List<MethodDef>>>();
     private State initial;
     private Map<Progress, Progress> steps = new HashMap<Progress, Progress>();
+    private List<State> states = new ArrayList<State>();
 
     public Engine(Compiler compiler) {
         this.compiler = compiler;
+    }
+
+    public int add(State state) {
+        states.add(state);
+        return states.size();
     }
 
     public void addKeyword(String word) {
@@ -111,8 +117,16 @@ public class Engine {
     public int getLine() { return line; }
 
     public Progress getProgress(Production production, int index) {
-        Progress temp = new Progress(production, index);
+        return getProgress(production, index, null);
+    }
+
+    public Progress getProgress(Production production, int index, State state) {
+        Progress temp = new Progress(production, index, null);
         Progress progress = steps.get(temp);
+        if (progress == null) {
+            steps.put(progress = temp, temp);
+            progress.setState(state);
+        }
         return progress;
     }
 
@@ -126,6 +140,12 @@ public class Engine {
 //        }
 //        return state;
 //    }
+
+    public boolean hasProgress(Production production, int index) {
+        Progress temp = new Progress(production, index, null);
+        Progress progress = steps.get(temp);
+        return progress != null;
+    }
 
     public void importPackage(String path) {
         if (!imports.contains(path)) imports.add(path);
@@ -238,6 +258,17 @@ public class Engine {
             reference = type.findField(symbol);
         }
         return reference;
+    }
+
+    public void merge(State state, State other) {
+        if (state == other) return;
+        for (Progress progress : steps.keySet()) {
+            progress.replace(other, state);
+        }
+        for (State state1 : states) {
+            state1.replace(other, state);
+        }
+        states.remove(other);
     }
 
     public void methodAdd(String name, MethodDef type) {
@@ -426,8 +457,9 @@ public class Engine {
         engine.set(this);
         List<Production> list = findProductions(start);
         for (Production production : list) {
-            if (initial == null) initial = new State(production);
-            Progress progress = new Progress(production, 0, initial);
+//            if (initial == null) initial = new State(production);
+            Progress progress = new Progress(production, 0, null);
+            if (initial == null) initial = progress.getState();
             progress.explore();
         }
     }

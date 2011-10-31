@@ -12,14 +12,14 @@ class Progress {
     private final Production production;
     private final int index;
 
-    Progress(Production production, int index) {
-        this(production, index, null);
-    }
+//    Progress(Production production, int index) {
+//        this(production, index, null);
+//    }
 
     Progress(Production production, int index, State state) {
         this.production = production;
         this.index = index;
-        this.state = state;
+        setState(state);
     }
 
 //    static Progress create(Production production, int index) {
@@ -48,6 +48,8 @@ class Progress {
     }
 
     State getState() {
+        if (state == null)
+            new State(this);
         return state;
     }
 
@@ -55,10 +57,9 @@ class Progress {
         return index;
     }
 
-//    Progress getNext() {
-//        Progress progress = new Progress(production, index + 1);
-//        return progress;
-//    }
+    Progress getNext() {
+        return Engine.engine().getProgress(production, index + 1);
+    }
 
     Production getProduction() {
         return production;
@@ -69,17 +70,26 @@ class Progress {
         return production.hashCode() + index;
     }
 
+    public boolean hasState() {
+        return state != null;
+    }
+
 //    public boolean isDup() {
 //        return dup;
 //    }
 
+    public void replace(State other, State state) {
+        if (this.state == other) this.state = state;
+    }
+
     void setState(State state) {
         this.state = state;
-        Engine.engine().index(this);
+        if (state != null) Engine.engine().index(this);
     }
 
     @Override
     public String toString() {
-        return production.toString() + ":: step " + index + " from " + state;
+        return production.toString() + ":: step " + index + (state != null ? " from State " + state.getId() : "");
     }
+
 }

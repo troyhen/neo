@@ -21,11 +21,11 @@ public class Variable extends CorePlugin {
         addParser("var_symbol", "statement_varDeclare | statement_varAssign < !comma symbol");
         addParser("val_symbol", "!keyword_val symbol");
         addParser("val_symbol", "statement_valAssign < !comma symbol");
-        addParser("statement_varDeclare", "@var_symbol @cast? > operator_as-");
-        addParser("statement_varAssign", "@statement_varDeclare !operator_eq expression > comma | terminator");
-        addParser("statement_valAssign", "@val_symbol @cast? !operator_eq expression > comma | terminator");
-        addInvalidParser("val statement requires an initial assignment",
-                "@val_symbol cast? (comma | terminator)");
+        addParser("statement_varDeclare", "@var_symbol @cast?");
+        addParser("statement_varAssign", "@statement_varDeclare !operator_eq expression_operator");
+        addParser("statement_valAssign", "@val_symbol @cast? !operator_eq expression_operator");
+//        addInvalidParser("val statement requires an initial assignment",
+//                "@val_symbol cast? (comma | terminator)");
     }
 
     public Node transform_cast(Node node) {

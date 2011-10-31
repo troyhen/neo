@@ -16,7 +16,7 @@ class RuleOpt implements OptimizedRule {
     @Override
     public Progress explore(Progress progress, boolean ignore) {
         Progress after = child.explore(progress, ignore);
-        after.getState().setGoto(progress.getState());  // TODO this allows loops which is not correct
+        progress.getState().link("*", after.getState());    // if nothing matches move on (and don't reduce)
         return after;
     }
 

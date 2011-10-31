@@ -54,13 +54,12 @@ public class Methods extends CorePlugin {
         addKeyword("def");
         addKeyword("return");
         
-        addParser("closureTop",
-                "expression | reference | call | symbol < !keyword_def @cast? !start_paren (@expression_symbol @cast "
-                + "(!comma? !terminator* @expression_symbol @cast)*)? !end_paren");
-        addParser("closureTop",
-                "expression | reference | call | symbol < !keyword_def @cast? (@expression_symbol @cast ((!comma !terminator+ | !comma?) @expression_symbol @cast)*)? > terminator");
-        addParser("expression_closure",
-                "^closureTop (statement | !terminator @block)");
+        addParser("closureArgs", "!start_paren (@expression_symbol @cast " +
+                "(!comma? !terminator* @expression_symbol @cast)*)? !end_paren");
+        addParser("closureArgs", "(@expression_symbol @cast " +
+                "((!comma !terminator* | ) @expression_symbol @cast)*)?");
+        addParser("closureTop", "!keyword_def @cast? @closureArgs");
+        addParser("expression_closure", "^closureTop (statement | !terminator @block)");
 
         addParser("defTop_paren",
                 "terminator < !keyword_def @expression_symbol @cast? !start_paren (@expression_symbol @cast "

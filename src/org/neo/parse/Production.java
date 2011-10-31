@@ -27,6 +27,10 @@ public class Production extends RuleGroup {
         super(null);
         this.plugin = plugin;
         this.name = name;
+        int ix = definition.indexOf('<');
+        if (ix > 0) definition = definition.substring(ix + 1);
+        ix = definition.indexOf('>');
+        if (ix > 0) definition = definition.substring(0, ix);
         this.definition = definition;
         rules = parseRules();
     }

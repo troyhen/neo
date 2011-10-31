@@ -1,5 +1,7 @@
 package org.neo.parse;
 
+import org.neo.util.Log;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,22 +13,23 @@ import java.util.Map;
  */
 class State {
 
-    private static int nextId = 1;
-
-    private Production production;
+//    private Production production;
+    private Progress progress;
     private Map<String, State> links = new HashMap<String, State>();
     private boolean deadEnd;
     private byte flags;
     private int id;
-    private State nextState;
+//    private State nextState;
 
-    State(Production production) {
-        this.production = production;
-        this.id = nextId++;
-    }
+//    State(Production production) {
+//        this.production = production;
+//        this.id = Engine.engine().add(this);
+//    }
 
     State(Progress progress) {
-        this(progress.getProduction());
+//        this(progress.getProduction());
+        this.id = Engine.engine().add(this);
+        this.progress = progress;
         progress.setState(this);
     }
 
@@ -35,12 +38,20 @@ class State {
 ////        progress.explore();
 //    }
 
-    Production getProduction() {
-        return production;
-    }
+//    Production getProduction() {
+//        return progress.getProduction();
+//    }
 
     byte getFlags() {
         return flags;
+    }
+
+    int getId() {
+        return id;
+    }
+
+    Progress getProgress() {
+        return progress;
     }
 
     boolean isDeadEnd() {
@@ -48,15 +59,23 @@ class State {
     }
 
     void link(String name, State state) {
-        if (links.get(name) != null) throw new GrammarException(this.getProduction().getName() + " (" + this.getProduction().plugin.getClass() + ") has more than one " + name + " transition (shift-shift conflict)");
+        final State state1 = links.get(name);
+        if (state1 != null) {
+            if (name.equals("*")) Log.warning(this.getProgress() + " (" + this.getProgress().getProduction().plugin.getClass() + ") has more than one " + name + " transition (shift-shift conflict)");
+            else throw new GrammarException(this.getProgress() + " (" + this.getProgress().getProduction().plugin.getClass() + ") has more than one " + name + " transition (shift-shift conflict)");
+        }
         if (state != null) links.put(name, state);
         else links.remove(name);
+    }
+
+    void merge(State other) {
+        Engine.engine().merge(this, other);
     }
 
     State parse(Node node, List<Node.Match> matched) {
         if (links.isEmpty()) {
 //            set.iterator().next().getProduction().reduce(node, matched);
-            getProduction().reduce(node, matched);
+            getProgress().getProduction().reduce(node, matched);
             return Start.over;
         }
         String name = node.getName();
@@ -74,6 +93,13 @@ class State {
         return state;
     }
 
+    public void replace(State other, State state) {
+        for (Map.Entry<String, State> entry : links.entrySet()) {
+            if (entry.getValue() == other)
+                entry.setValue(state);
+        }
+    }
+
     void setDeadEnd(boolean deadEnd) {
         this.deadEnd = deadEnd;
     }
@@ -82,12 +108,12 @@ class State {
         this.flags = flags;
     }
 
-    void setGoto(State nextState) {
-        this.nextState = nextState;
-    }
+//    void setGoto(State nextState) {
+//        this.nextState = nextState;
+//    }
 
     @Override
     public String toString() {
-        return "State " + id;
+        return "Step " + progress.getIndex() + " of " + progress.getProduction() + " (State " + id + ')';
     }
 }

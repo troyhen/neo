@@ -57,7 +57,7 @@ class RuleBefore extends RuleGroup {
 
     @Override
     public String toString() {
-        return super.toString() + " < ";
+        return "";//super.toString() + " < ";
     }
 
 }

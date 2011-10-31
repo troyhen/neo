@@ -10,7 +10,8 @@ class RuleAfter extends RuleGroup {
 
     @Override
     public Progress explore(Progress progress, boolean ignore) {
-        return super.explore(progress, true);
+//        return super.explore(progress, true);
+        return progress;
     }
 
     @Override
@@ -30,7 +31,7 @@ class RuleAfter extends RuleGroup {
 
     @Override
     public String toString() {
-        return " > " + super.toString();
+        return "";//" > " + super.toString();
     }
 
 }

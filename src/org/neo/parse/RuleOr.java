@@ -16,11 +16,21 @@ class RuleOr implements OptimizedRule {
 
     @Override
     public Progress explore(Progress progress, boolean ignore) {
+        State startState = progress.getState();
+        State endState = null;
+        Progress before = progress;
+        Progress after = null;
         for (OptimizedRule rule : rules) {
-            rule.explore(progress, ignore);
+            if (after != null) {
+                before = after.getNext();
+                before.setState(startState);
+            }
+            after = rule.explore(before, ignore);
+            if (endState == null)
+                endState = after.getState();
+            else
+                endState.merge(after.getState());
         }
-        Progress after = progress.getNext();
-        after.setState(Engine.engine().getState(after, true));
         return after;
     }
 

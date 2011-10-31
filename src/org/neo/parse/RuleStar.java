@@ -16,8 +16,10 @@ class RuleStar implements OptimizedRule {
     @Override
     public Progress explore(Progress progress, boolean ignore) {
         Progress after = child.explore(progress, ignore);
-        after.getState().setGoto(progress.getState());
-        return after;
+        Progress done = after.getNext();
+        progress.getState().merge(after.getState());
+        progress.getState().link("*", done.getState());    // if nothing matches move on (and don't reduce)
+        return done;
     }
 
     @Override
