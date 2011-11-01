@@ -1,7 +1,8 @@
 package org.neo;
 
+import org.neo.parse.*;
 import org.neo.util.Log;
-import org.neo.parse.Node;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,9 +11,6 @@ import java.util.Map;
 
 import org.neo.lex.Lexer;
 import org.neo.lex.Token;
-import org.neo.parse.Engine;
-import org.neo.parse.InvalidProduction;
-import org.neo.parse.Production;
 
 /**
  *

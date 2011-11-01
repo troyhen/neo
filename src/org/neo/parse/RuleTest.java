@@ -3,14 +3,15 @@ package org.neo.parse;
 import java.util.List;
 
 /**
- * A negative rule wrapper. Parse fails if enclosed rules are matched and succeeds otherwise.
+ * A test rule wrapper. Parse succeeds if enclosed rules are matched and fails otherwise.
+ * In either case no nodes are consumed/reduced.
  * @author Troy Heninger
  */
-class RuleNot implements OptimizedRule {
-    
+class RuleTest implements OptimizedRule {
+
     private OptimizedRule child;
 
-    RuleNot(OptimizedRule child) {
+    RuleTest(OptimizedRule child) {
         this.child = child;
     }
 
@@ -31,17 +32,16 @@ class RuleNot implements OptimizedRule {
         int size = matched.size();
         Node result = child.match(node, matched);
         Node.revert(matched, size);
-        if (result != null) return null;
+        if (result == null) return null;
         return node;
     }
 
     @Override
     public Node parse(Node from, List<Node.Match> matched) {
-        if (from.getParent() == null) return from;
         int size = matched.size();
         Node result = child.parse(from, matched);
         Node.revert(matched, size);
-        if (result != null) return null;
+        if (result == null) return null;
         return from;
     }
 

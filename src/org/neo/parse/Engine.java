@@ -4,14 +4,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.CharBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+
 import neo.lang.N;
 
 import org.neo.Compiler;
@@ -19,6 +13,7 @@ import org.neo.Plugin;
 import org.neo.lex.LexException;
 import org.neo.lex.Token;
 import org.neo.util.ClassDef;
+import org.neo.util.Log;
 import org.neo.util.MemberDef;
 import org.neo.util.MethodDef;
 
@@ -45,6 +40,8 @@ public class Engine {
     private State initial;
     private Map<Progress, Progress> steps = new HashMap<Progress, Progress>();
     private String start;
+//    private Deque<List<Production>> productionStack;
+    private Deque<Position> productionStack;
 
     public Engine(Compiler compiler) {
         this.compiler = compiler;
@@ -327,8 +324,10 @@ public class Engine {
             return this.matched.size() < matched.size();
         }
 
-        void reduce() {
-            production.reduce(node, matched);
+        Node reduce() {
+            final Node parent = node.getParent();
+            if (parent.isNamed(production.getName())) return parent;
+            return production.reduce(node, matched);
         }
 
         @Override
@@ -419,25 +418,77 @@ public class Engine {
 //        }
 //    }
 
+    /**
+     * Setup
+     * Create a production stack. Each level of the stack holds multiple production possibilities.
+     *
+     * Algorithm
+     * When a production name in encountered, find all possible productions not already on the stack and push
+     * them as a group to the next level of the stack. Try to match productions from the top group of the stack
+     * to the current node. Compare the matches and select the longest match. Reduce the match and pop the top
+     * production group. If no matches were found, report an error and stop.
+     *
+     * @param root starting node
+     */
     public void parseLL(Node root) {
+        productionStack = new ArrayDeque<Position>();
         Node found = parse(root.getFirst(), start);
+Log.info(root.getFirst().toListTree());
         if (found == null) throw new ParseException("Invalid program");
     }
 
     public Node parse(Node from, String name) {
+        Node next = null;
+        for (;;) {
+            Match bestMatch = parseProductions(name, from);
+            if (bestMatch == null) return next;
+            from = bestMatch.reduce();
+            next = from.getNext();
+            if (next == null)
+                next = from.getParent();
+        }
+    }
+
+    public Match parseProductions(String name, Node node) {
+        final Position position = new Position(name, node);
+        if (productionStack.contains(position)) {
+            return null;
+        }
         List<Production> list = findProductions(name);
-        Node found = null;
+        if (list.isEmpty()) {
+            return null;
+        }
+        productionStack.push(position);
+        Node root = node.getParent();
+        Match bestMatch = null;
         List<Node.Match> matched = new ArrayList<Node.Match>();
         for (Production production : list) {
-            matched.clear();
-            found = production.parse(from, matched);
-            if (found != null) {
-                found = production.reduce(from, matched);
-                break;
+            Node next = production.parse(node, matched);
+            while (node.getParent() != null && node.getParent() != root) {
+                node = node.getParent();
+            }
+            if (next == null) continue;
+            if (bestMatch == null || bestMatch.isWorse(matched)) {
+                bestMatch = new Match(production, node, matched);
             }
         }
-        return found;
+        productionStack.pop();
+        return bestMatch;
     }
+
+//    private List<Production> pushProductions(List<Production> list) {
+//        for (List<Production> level : productionStack) {
+//            Iterator<Production> it = list.iterator();
+//            while (it.hasNext()) {
+//                Production production = it.next();
+//                if (level.contains(production)) {
+//                    it.remove();
+//                }
+//            }
+//        }
+//        productionStack.push(list);
+//        return list;
+//    }
 
     public void setNextToken(Token nextToken) {
         this.nextToken = nextToken;
@@ -479,4 +530,25 @@ public class Engine {
         methods.push(new HashMap<String, List<MethodDef>>());
     }
 
+    private class Position {
+        String name;
+        Node node;
+
+        private Position(String name, Node node) {
+            this.name = name;
+            this.node = node;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null || !(obj instanceof Position)) return false;
+            final Position obj1 = (Position) obj;
+            return this.name.equals(obj1.name) && this.node.equals(obj1.node);
+        }
+
+        @Override
+        public int hashCode() {
+            return name.hashCode() + node.hashCode();
+        }
+    }
 }

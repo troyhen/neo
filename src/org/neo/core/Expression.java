@@ -103,16 +103,16 @@ public class Expression extends CorePlugin {
         addParser("expression_symbol", "symbol");
         addParser("expression_reference", "reference > operator_assign- operator_eq-");
         addParser("expression_call", "call");
-        addParser("array", "expression- reference- < !start_bracket (@expression !comma?)* @expression? !end_bracket");
+        addParser("array", "!start_bracket (@expression !comma?)* @expression? !end_bracket");
         addParser("expression_array", "array");
 
-        addParser("expression_group", "symbol- expression_symbol- < !start_paren @expression !end_paren");
-        addParser("expression_cast", "keyword_def- keyword_class- < @expression ^cast"); // must precede reference
+        addParser("expression_group", "!start_paren @expression !end_paren");
+        addParser("expression_cast", "@expression ^cast"); // must precede reference
 
         addParser("reference_dot", "@expression !operator_dot @expression_symbol > operator | terminator");
         addParser("reference_array", "@expression !start_bracket @expression (!comma? @expression)* !end_bracket");
         addParser("call_dot", "@expression !operator_dot @expression_symbol !start_paren (@expression (!comma? @expression)*)? !end_paren");
-        addParser("call_dot", "start_bracket- < @expression !operator_dot @expression_symbol @expression (!comma? @expression)*");
+        addParser("call_dot", "@expression !operator_dot @expression_symbol @expression (!comma? @expression)*");
 
         addParser("expression_pow", "@expression (^operator_pow @expression)+ > cast- operator_as- operator_dot-");
         addParser("expression_mul", "@expression (^operator_mul @expression)+ > operator_pow- cast- operator_as- operator_dot-");
@@ -122,8 +122,8 @@ public class Expression extends CorePlugin {
         addParser("expression_assign", "(reference | @expression_symbol | @expression_assign) "
                 + "(^operator_assign | ^operator_eq) @expression > operator_other- operator_compare- operator_add- operator_mul- operator_pow- cast- operator_as- operator_dot-"); // must precede expression: reference
 
-        addParser("call_this", "keyword_def- operator_dot- < @expression_symbol !start_paren (@expression (!comma? !terminator* @expression)*)? !end_paren");
-        addParser("call_this", "keyword_def- start_bracket- operator_dot- < @expression_symbol @expression ((!comma !terminator* | comma?) @expression)* > terminator | keyword_else | keyword_end");
+        addParser("call_this", "@expression_symbol !start_paren (@expression (!comma? !terminator* @expression)*)? !end_paren");
+        addParser("call_this", "@expression_symbol @expression ((!comma !terminator* | comma?) @expression)* > terminator | keyword_else | keyword_end");
 
         if (isMain) addParser("compilation", "!terminator_bof !terminator* expression (terminator_eof- !terminator)* !terminator_eof");
     }

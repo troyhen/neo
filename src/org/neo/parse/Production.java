@@ -67,6 +67,12 @@ public class Production extends RuleGroup {
         return super.match(node, matched);
     }
 
+    @Override
+    public Node parse(Node from, List<Match> matched) {
+        matched.clear();
+        return super.parse(from, matched);
+    }
+
     private List<OptimizedRule> parseRules() {
         Stack<OptimizedRule> local = new Stack<OptimizedRule>();
         List<List<OptimizedRule>> alternatives = null;
@@ -90,7 +96,12 @@ public class Production extends RuleGroup {
                     addIdent(ident, local);
                     local.add(new RuleNot(local.pop()));
                     break;
+                case '&':
+                    addIdent(ident, local);
+                    local.add(new RuleTest(local.pop()));
+                    break;
                 case '|':
+                case '/':
                     addIdent(ident, local);
                     if (alternatives == null) alternatives = new ArrayList<List<OptimizedRule>>();
                     alternatives.add(local);
@@ -131,10 +142,10 @@ public class Production extends RuleGroup {
                         local.add(new RuleAfter(after));
                     }
                     break;
-                case '/':
-                    addIdent(ident, local);
-                    local.add(new RuleEnforce(parseRules()));
-                    break;
+//                case '/':
+//                    addIdent(ident, local);
+//                    local.add(new RuleEnforce(parseRules()));
+//                    break;
                 case ' ':
                     addIdent(ident, local);
                     break;
@@ -158,10 +169,10 @@ public class Production extends RuleGroup {
         buff.append(name);
         buff.append(" matched ");
         if (newNode.getPrev() != null) {
-            if (newNode.getPrev().getPrev() != null) {
-                buff.append(newNode.getPrev().getPrev());
-                buff.append(" ");
-            }
+//            if (newNode.getPrev().getPrev() != null) {
+//                buff.append(newNode.getPrev().getPrev());
+//                buff.append(" ");
+//            }
             buff.append(newNode.getPrev());
             buff.append(" ");
         }
@@ -176,10 +187,10 @@ public class Production extends RuleGroup {
         buff.append("] ");
         if (newNode.getNext() != null) {
             buff.append(newNode.getNext());
-            if (newNode.getNext().getNext() != null) {
-                buff.append(" ");
-                buff.append(newNode.getNext().getNext());
-            }
+//            if (newNode.getNext().getNext() != null) {
+//                buff.append(" ");
+//                buff.append(newNode.getNext().getNext());
+//            }
         }
         Log.info(buff.toString());
 //        matched.clear();

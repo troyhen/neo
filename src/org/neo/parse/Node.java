@@ -156,7 +156,12 @@ public class Node {
     public Node getNext() { return next; }
     public Node getParent() { return parent; }
     public Plugin getPlugin() { return plugin; }
-    public Node getPrev() { return prev; }
+
+    public Node getPrev() {
+        if (prev == null && parent == null)
+            return last;
+        return prev == null && parent == null ? last : prev;
+    }
 
     public String getShortName() {
         int ix = name.indexOf('_');
@@ -255,7 +260,7 @@ public class Node {
     public static void revert(List<Match> matched, int size) {
         while (matched.size() > size) {
             Match match = matched.remove(matched.size() - 1);
-            match.node().replaceWithChildren();
+//            match.node().replaceWithChildren();
         }
     }
 

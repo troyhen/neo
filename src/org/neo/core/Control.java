@@ -28,27 +28,27 @@ public class Control extends CorePlugin {
         addParser("elseClause", "!terminator* !keyword_else statement");
         addParser("elseClause", "!terminator* !keyword_else !terminator+ @block");
 
-        addParser("control_if",     "expression- < !keyword_if     @expression !keyword_then  "
-                + "statement          elseClause? (!terminator? !keyword_end !keyword_if?)?     > (terminator* keyword_else)-");
-        addParser("control_if",     "expression- < !keyword_if     @expression !keyword_then? "
-                + "!terminator @block elseClause? (!terminator? !keyword_end !keyword_if?)?     > (terminator* keyword_else)-");
-        addParser("control_unless", "expression- < !keyword_unless @expression !keyword_then  "
-                + "statement          elseClause? (!terminator? !keyword_end !keyword_unless?)? > (terminator* keyword_else)-");
-        addParser("control_unless", "expression- < !keyword_unless @expression !keyword_then? "
-                + "!terminator @block elseClause? (!terminator? !keyword_end !keyword_unless?)? > (terminator* keyword_else)-");
-        addParser("control_while",  "expression- < !keyword_while  @expression !keyword_do    "
-                + "statement          elseClause? (!terminator? !keyword_end !keyword_while?)?  > (terminator* keyword_else)-");
-        addParser("control_while",  "expression- < !keyword_while  @expression !keyword_do?   "
-                + "!terminator @block elseClause? (!terminator? !keyword_end !keyword_while?)?  > (terminator* keyword_else)-");
-        addParser("control_until",  "expression- < !keyword_until  @expression !keyword_do    "
-                + "statement          elseClause? (!terminator? !keyword_end !keyword_until?)?  > (terminator* keyword_else)-");
-        addParser("control_until",  "expression- < !keyword_until  @expression !keyword_do?   "
-                + "!terminator @block elseClause? (!terminator? !keyword_end !keyword_until?)?  > (terminator* keyword_else)-");
+        addParser("control_if",     "expression- !keyword_if     @expression !keyword_then  "
+                + "statement          elseClause? (!terminator? !keyword_end !keyword_if?)?     (terminator* keyword_else)-");
+        addParser("control_if",     "expression- !keyword_if     @expression !keyword_then? "
+                + "!terminator @block elseClause? (!terminator? !keyword_end !keyword_if?)?     (terminator* keyword_else)-");
+        addParser("control_unless", "expression- !keyword_unless @expression !keyword_then  "
+                + "statement          elseClause? (!terminator? !keyword_end !keyword_unless?)? (terminator* keyword_else)-");
+        addParser("control_unless", "expression- !keyword_unless @expression !keyword_then? "
+                + "!terminator @block elseClause? (!terminator? !keyword_end !keyword_unless?)? (terminator* keyword_else)-");
+        addParser("control_while",  "expression- !keyword_while  @expression !keyword_do    "
+                + "statement          elseClause? (!terminator? !keyword_end !keyword_while?)?  (terminator* keyword_else)-");
+        addParser("control_while",  "expression- !keyword_while  @expression !keyword_do?   "
+                + "!terminator @block elseClause? (!terminator? !keyword_end !keyword_while?)?  (terminator* keyword_else)-");
+        addParser("control_until",  "expression- !keyword_until  @expression !keyword_do    "
+                + "statement          elseClause? (!terminator? !keyword_end !keyword_until?)?  (terminator* keyword_else)-");
+        addParser("control_until",  "expression- !keyword_until  @expression !keyword_do?   "
+                + "!terminator @block elseClause? (!terminator? !keyword_end !keyword_until?)?  (terminator* keyword_else)-");
 
-        addParser("statement_if",     "statement_def- statement !keyword_if     @expression > terminator");
-        addParser("statement_unless", "statement_def- statement !keyword_unless @expression > terminator");
-        addParser("statement_while",  "statement_def- statement !keyword_while  @expression > terminator");
-        addParser("statement_until",  "statement_def- statement !keyword_until  @expression > terminator");
+        addParser("statement_if",     "(expression | statement_return) !keyword_if     @expression > terminator");
+        addParser("statement_unless", "(expression | statement_return) !keyword_unless @expression > terminator");
+        addParser("statement_while",  "(expression | statement_return) !keyword_while  @expression > terminator");
+        addParser("statement_until",  "(expression | statement_return) !keyword_until  @expression > terminator");
     }
 
     public Node transform_control(Node node) {

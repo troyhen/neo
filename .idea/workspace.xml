@@ -2,19 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c4716776-ec39-4274-9241-a27464ba6979" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/.name" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/neo/parse/GrammarException.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/neo/parse/OptimizedRule.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/neo/parse/Progress.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/neo/parse/Start.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/neo/parse/State.java" />
-      <change type="MOVED" beforePath="C:\Users\theninger.CONTROL4\Documents\NetBeansProjects\neo\src\org\neo\tool\NeoClassLoader.java" afterPath="$PROJECT_DIR$/src/org/neo/util/NeoClassLoader.java" />
-      <change type="MOVED" beforePath="C:\Users\theninger.CONTROL4\Documents\NetBeansProjects\neo\src\org\neo\tool\PackageTool.java" afterPath="$PROJECT_DIR$/src/org/neo/util/PackageTool.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/neo/parse/RuleTest.java" />
+      <change type="DELETED" beforePath="C:\Users\theninger.CONTROL4\Documents\NetBeansProjects\neo\.idea\workspace.xml" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nbproject/genfiles.properties" afterPath="$PROJECT_DIR$/nbproject/genfiles.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/Compiler.java" afterPath="$PROJECT_DIR$/src/org/neo/Compiler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/NeoLang.java" afterPath="$PROJECT_DIR$/src/org/neo/NeoLang.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/Plugin.java" afterPath="$PROJECT_DIR$/src/org/neo/Plugin.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/PluginBase.java" afterPath="$PROJECT_DIR$/src/org/neo/PluginBase.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/core/Classes.java" afterPath="$PROJECT_DIR$/src/org/neo/core/Classes.java" />
@@ -23,36 +14,18 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/core/Expression.java" afterPath="$PROJECT_DIR$/src/org/neo/core/Expression.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/core/Import.java" afterPath="$PROJECT_DIR$/src/org/neo/core/Import.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/core/Methods.java" afterPath="$PROJECT_DIR$/src/org/neo/core/Methods.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/core/Numbers.java" afterPath="$PROJECT_DIR$/src/org/neo/core/Numbers.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/core/Percent.java" afterPath="$PROJECT_DIR$/src/org/neo/core/Percent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/core/RegEx.java" afterPath="$PROJECT_DIR$/src/org/neo/core/RegEx.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/core/Strings.java" afterPath="$PROJECT_DIR$/src/org/neo/core/Strings.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/core/Variable.java" afterPath="$PROJECT_DIR$/src/org/neo/core/Variable.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/core/Whitespace.java" afterPath="$PROJECT_DIR$/src/org/neo/core/Whitespace.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/lex/LexerEof.java" afterPath="$PROJECT_DIR$/src/org/neo/lex/LexerEof.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/lex/LexerIndent.java" afterPath="$PROJECT_DIR$/src/org/neo/lex/LexerIndent.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/parse/Engine.java" afterPath="$PROJECT_DIR$/src/org/neo/parse/Engine.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/parse/Node.java" afterPath="$PROJECT_DIR$/src/org/neo/parse/Node.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/parse/Production.java" afterPath="$PROJECT_DIR$/src/org/neo/parse/Production.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/parse/Rule.java" afterPath="$PROJECT_DIR$/src/org/neo/parse/Rule.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/parse/RuleAfter.java" afterPath="$PROJECT_DIR$/src/org/neo/parse/RuleAfter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/parse/RuleBefore.java" afterPath="$PROJECT_DIR$/src/org/neo/parse/RuleBefore.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/parse/RuleEnforce.java" afterPath="$PROJECT_DIR$/src/org/neo/parse/RuleEnforce.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/parse/RuleGroup.java" afterPath="$PROJECT_DIR$/src/org/neo/parse/RuleGroup.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/parse/RuleIdent.java" afterPath="$PROJECT_DIR$/src/org/neo/parse/RuleIdent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/parse/RuleInside.java" afterPath="$PROJECT_DIR$/src/org/neo/parse/RuleInside.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/parse/RuleNot.java" afterPath="$PROJECT_DIR$/src/org/neo/parse/RuleNot.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/parse/RuleOpt.java" afterPath="$PROJECT_DIR$/src/org/neo/parse/RuleOpt.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/parse/RuleOr.java" afterPath="$PROJECT_DIR$/src/org/neo/parse/RuleOr.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/parse/RulePlus.java" afterPath="$PROJECT_DIR$/src/org/neo/parse/RulePlus.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/neo/parse/RuleStar.java" afterPath="$PROJECT_DIR$/src/org/neo/parse/RuleStar.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/CastTest.java" afterPath="$PROJECT_DIR$/test/CastTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/CommentTest.java" afterPath="$PROJECT_DIR$/test/CommentTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/ExpressionTest.java" afterPath="$PROJECT_DIR$/test/ExpressionTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/HelloWorldTest.java" afterPath="$PROJECT_DIR$/test/HelloWorldTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/IndentTest.java" afterPath="$PROJECT_DIR$/test/IndentTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/MethodTest.java" afterPath="$PROJECT_DIR$/test/MethodTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/XmlTest.java" afterPath="$PROJECT_DIR$/test/XmlTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/ArrayTest.java" afterPath="$PROJECT_DIR$/test/ArrayTest.java" />
     </list>
     <ignored path="neo.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -85,7 +58,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/org/neo/parse/Node.java" line="248" class="org.neo.parse.Node" package="org.neo.parse">
+      <breakpoint url="file://$PROJECT_DIR$/src/org/neo/parse/RulePlus.java" line="35" class="org.neo.parse.RulePlus" package="org.neo.parse">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -98,7 +71,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/org/neo/parse/Engine.java" line="432" class="org.neo.parse.Engine" package="org.neo.parse">
+      <breakpoint url="file://$PROJECT_DIR$/src/org/neo/parse/Node.java" line="161" class="org.neo.parse.Node" package="org.neo.parse">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -111,33 +84,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/org/neo/parse/RuleGroup.java" line="54" class="org.neo.parse.RuleGroup" package="org.neo.parse">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/org/neo/parse/RuleIdent.java" line="71" class="org.neo.parse.RuleIdent" package="org.neo.parse">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/org/neo/parse/RuleIdent.java" line="68" class="org.neo.parse.RuleIdent" package="org.neo.parse">
+      <breakpoint url="file://$PROJECT_DIR$/src/org/neo/parse/RuleGroup.java" line="57" class="org.neo.parse.RuleGroup" package="org.neo.parse">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -184,26 +131,43 @@
       </breakpoint>
     </breakpoint_any>
     <breakpoint_rules />
-    <ui_properties />
+    <ui_properties>
+      <property name="line_breakpoints_groupByMethods" value="false" />
+      <property name="line_breakpoints_viewId" value="TABLE" />
+      <property name="exception_breakpoints_flattenPackages" value="true" />
+      <property name="method_breakpoints_flattenPackages" value="true" />
+      <property name="field_breakpoints_flattenPackages" value="true" />
+      <property name="exception_breakpoints_groupByMethods" value="false" />
+      <property name="line_breakpoints_groupByClasses" value="true" />
+      <property name="method_breakpoints_viewId" value="TABLE" />
+      <property name="field_breakpoints_groupByMethods" value="false" />
+      <property name="line_breakpoints_flattenPackages" value="true" />
+      <property name="field_breakpoints_groupByClasses" value="true" />
+      <property name="method_breakpoints_groupByClasses" value="true" />
+      <property name="exception_breakpoints_viewId" value="TABLE" />
+      <property name="exception_breakpoints_groupByClasses" value="true" />
+      <property name="field_breakpoints_viewId" value="TABLE" />
+      <property name="method_breakpoints_groupByMethods" value="false" />
+    </ui_properties>
   </component>
   <component name="FavoritesManager">
     <favorites_list name="neo" />
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Node.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/neo/parse/Node.java">
+      <file leaf-file-name="Engine.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/neo/parse/Engine.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="248" column="0" selection-start="6886" selection-end="6886" vertical-scroll-proportion="0.0">
+            <state line="437" column="0" selection-start="14630" selection-end="14630" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RuleStar.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RuleStar.java">
+      <file leaf-file-name="Compiler.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/org/neo/Compiler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="41" column="0" selection-start="973" selection-end="973" vertical-scroll-proportion="0.0">
+            <state line="166" column="0" selection-start="4374" selection-end="4374" vertical-scroll-proportion="0.15018316">
               <folding />
             </state>
           </provider>
@@ -212,52 +176,16 @@
       <file leaf-file-name="RulePlus.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RulePlus.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="26" selection-start="917" selection-end="917" vertical-scroll-proportion="0.0">
+            <state line="35" column="0" selection-start="891" selection-end="891" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Engine.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/org/neo/parse/Engine.java">
+      <file leaf-file-name="Node.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/neo/parse/Node.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="443" column="5" selection-start="14453" selection-end="14453" vertical-scroll-proportion="0.16484717">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ArrayTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/ArrayTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="33" column="0" selection-start="597" selection-end="597" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CorePlugin.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/neo/core/CorePlugin.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RuleGroup.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RuleGroup.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="54" column="0" selection-start="1487" selection-end="1487" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Production.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/neo/parse/Production.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="0" selection-start="391" selection-end="391" vertical-scroll-proportion="0.0">
+            <state line="161" column="0" selection-start="4387" selection-end="4387" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -266,16 +194,52 @@
       <file leaf-file-name="RuleIdent.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RuleIdent.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="71" column="0" selection-start="2356" selection-end="2356" vertical-scroll-proportion="0.0">
+            <state line="78" column="0" selection-start="2564" selection-end="2564" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RuleNot.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RuleNot.java">
+      <file leaf-file-name="RuleOr.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RuleOr.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="41" column="14" selection-start="1082" selection-end="1082" vertical-scroll-proportion="0.0">
+            <state line="59" column="0" selection-start="1626" selection-end="1626" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RuleGroup.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RuleGroup.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="68" column="0" selection-start="1942" selection-end="1942" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RuleStar.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RuleStar.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="46" column="0" selection-start="1146" selection-end="1146" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Production.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/neo/parse/Production.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="72" column="0" selection-start="1986" selection-end="1986" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RuleAfter.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RuleAfter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="35" column="0" selection-start="889" selection-end="889" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -295,22 +259,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/org/neo/parse/RuleAfter.java" />
-        <option value="$PROJECT_DIR$/src/org/neo/parse/Progress.java" />
-        <option value="$PROJECT_DIR$/src/org/neo/Compiler.java" />
+        <option value="$PROJECT_DIR$/src/org/neo/core/Control.java" />
+        <option value="$PROJECT_DIR$/src/org/neo/core/Expression.java" />
+        <option value="$PROJECT_DIR$/src/org/neo/core/Import.java" />
+        <option value="$PROJECT_DIR$/src/org/neo/core/Methods.java" />
+        <option value="$PROJECT_DIR$/test/ArrayTest.java" />
         <option value="$PROJECT_DIR$/src/org/neo/parse/Production.java" />
-        <option value="$PROJECT_DIR$/src/org/neo/parse/Rule.java" />
-        <option value="$PROJECT_DIR$/src/org/neo/parse/OptimizedRule.java" />
-        <option value="$PROJECT_DIR$/src/org/neo/parse/RuleGroup.java" />
-        <option value="$PROJECT_DIR$/src/org/neo/parse/RuleBefore.java" />
-        <option value="$PROJECT_DIR$/src/org/neo/parse/RuleOr.java" />
-        <option value="$PROJECT_DIR$/src/org/neo/parse/RuleOpt.java" />
-        <option value="$PROJECT_DIR$/src/org/neo/parse/RuleNot.java" />
-        <option value="$PROJECT_DIR$/src/org/neo/parse/Node.java" />
-        <option value="$PROJECT_DIR$/src/org/neo/parse/RuleStar.java" />
+        <option value="$PROJECT_DIR$/src/org/neo/core/Compilation.java" />
+        <option value="$PROJECT_DIR$/src/org/neo/parse/RuleAfter.java" />
         <option value="$PROJECT_DIR$/src/org/neo/parse/RulePlus.java" />
+        <option value="$PROJECT_DIR$/src/org/neo/parse/RuleStar.java" />
+        <option value="$PROJECT_DIR$/src/org/neo/parse/Node.java" />
+        <option value="$PROJECT_DIR$/src/org/neo/parse/RuleNot.java" />
         <option value="$PROJECT_DIR$/src/org/neo/parse/RuleIdent.java" />
+        <option value="$PROJECT_DIR$/src/org/neo/parse/RuleOpt.java" />
         <option value="$PROJECT_DIR$/src/org/neo/parse/Engine.java" />
+        <option value="$PROJECT_DIR$/src/org/neo/parse/RuleGroup.java" />
       </list>
     </option>
   </component>
@@ -347,6 +311,58 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="neo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="neo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="neo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="neo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="neo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="neo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="neo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="neo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="PackagesPane">
         <subPane>
           <PATH>
@@ -355,7 +371,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Neo" />
+              <option name="myItemId" value="neo" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -365,7 +381,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Neo" />
+              <option name="myItemId" value="neo" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -379,12 +395,22 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Neo" />
+              <option name="myItemId" value="neo" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="org.neo" />
+              <option name="myItemId" value="org.neo.core" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Favorites">
+        <subPane subId="neo">
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" />
+              <option name="myItemType" value="com.intellij.ide.favoritesTreeView.FavoritesTreeNodeDescriptor" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -477,72 +503,10 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="neo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="neo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="neo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="neo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="neo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="neo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="neo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="neo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Favorites">
-        <subPane subId="neo">
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" />
-              <option name="myItemType" value="com.intellij.ide.favoritesTreeView.FavoritesTreeNodeDescriptor" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="275" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="293" />
     <property name="OverrideImplement.combined" value="true" />
@@ -578,6 +542,11 @@
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="options.searchVisible" value="true" />
     <property name="dynamic.classpath" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.neo.parse" />
+    </key>
   </component>
   <component name="RunManager" selected="JUnit.Test All">
     <configuration default="true" type="Remote" factoryName="Remote">
@@ -671,7 +640,7 @@
     </configuration>
     <configuration default="false" name="Test All" type="JUnit" factoryName="JUnit">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="Neo" />
+      <module name="neo" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" value="" />
       <option name="PACKAGE_NAME" />
@@ -735,26 +704,26 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1928" y="-320" width="1936" height="1096" extended-state="6" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32979852" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Phing Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3993232" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.37512952" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.50423014" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20678686" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4506893" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.13988253" sideWeight="0.6564157" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.17134193" sideWeight="0.24365482" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.13988253" sideWeight="0.33510074" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17134193" sideWeight="0.4957699" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3282572" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40084836" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4506893" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -808,116 +777,194 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/org/neo/parse/OptimizedRule.java">
+    <entry file="file://$PROJECT_DIR$/src/org/neo/core/Import.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="0" selection-start="990" selection-end="990" vertical-scroll-proportion="1.0733198">
+        <state line="40" column="17" selection-start="1179" selection-end="1179" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/neo/parse/Rule.java">
+    <entry file="file://$PROJECT_DIR$/src/org/neo/core/Methods.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="0" selection-start="434" selection-end="434" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RuleBefore.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="0" selection-start="1579" selection-end="1579" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RuleOr.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="53" column="0" selection-start="1559" selection-end="1559" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RuleOpt.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="31" selection-start="1092" selection-end="1092" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.6.0_26/src.zip!/java/util/List.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="463" column="6" selection-start="21455" selection-end="21455" vertical-scroll-proportion="0.33197555" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/neo/parse/Node.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="248" column="0" selection-start="6886" selection-end="6886" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RuleStar.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="0" selection-start="973" selection-end="973" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RulePlus.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="26" selection-start="917" selection-end="917" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/ArrayTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="0" selection-start="597" selection-end="597" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/neo/core/CorePlugin.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RuleGroup.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="0" selection-start="1487" selection-end="1487" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/neo/parse/Production.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="0" selection-start="391" selection-end="391" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RuleIdent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="71" column="0" selection-start="2356" selection-end="2356" vertical-scroll-proportion="0.0">
+        <state line="98" column="39" selection-start="3632" selection-end="3632" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RuleNot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="14" selection-start="1082" selection-end="1082" vertical-scroll-proportion="0.0">
+        <state line="39" column="50" selection-start="1033" selection-end="1033" vertical-scroll-proportion="0.34586465">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RuleOpt.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="38" column="0" selection-start="1064" selection-end="1064" vertical-scroll-proportion="0.30827066">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RuleTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="6" selection-start="226" selection-end="226" vertical-scroll-proportion="0.33082706">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/neo/core/Operator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="114" column="31" selection-start="3672" selection-end="3672" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RuleOr.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="59" column="0" selection-start="1626" selection-end="1626" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RuleAfter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="35" column="0" selection-start="889" selection-end="889" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/neo/parse/Node.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="161" column="0" selection-start="4387" selection-end="4387" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RulePlus.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="35" column="0" selection-start="891" selection-end="891" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RuleStar.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="46" column="0" selection-start="1146" selection-end="1146" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RuleIdent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="78" column="0" selection-start="2564" selection-end="2564" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/neo/parse/RuleGroup.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="68" column="0" selection-start="1942" selection-end="1942" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/neo/parse/Production.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="72" column="0" selection-start="1986" selection-end="1986" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/neo/parse/Engine.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="443" column="5" selection-start="14453" selection-end="14453" vertical-scroll-proportion="0.16484717">
+        <state line="437" column="0" selection-start="14630" selection-end="14630" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/neo/Compiler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="166" column="0" selection-start="4374" selection-end="4374" vertical-scroll-proportion="0.15018316">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>Android</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>Netty 3.2.4</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.6</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>neo</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>javac</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>
 

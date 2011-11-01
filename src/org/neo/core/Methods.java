@@ -15,8 +15,6 @@ import org.neo.parse.Node;
  */
 public class Methods extends CorePlugin {
 
-    public static final String STATEMENT_RETURN = "statement_return";
-
     private MethodDef buildMethod(Node node) {
         String name = null;
         if (node.getParent().isNamed("statement") && node.isNamed("symbol")) {
@@ -53,23 +51,15 @@ public class Methods extends CorePlugin {
     public void open() {
         addKeyword("def");
         addKeyword("return");
-        
-        addParser("closureTop",
-                "expression | reference | call | symbol < !keyword_def @cast? !start_paren (@expression_symbol @cast "
-                + "(!comma? !terminator* @expression_symbol @cast)*)? !end_paren");
-        addParser("closureTop",
-                "expression | reference | call | symbol < !keyword_def @cast? (@expression_symbol @cast ((!comma !terminator+ | !comma?) @expression_symbol @cast)*)? > terminator");
-        addParser("expression_closure",
-                "^closureTop (statement | !terminator @block)");
 
-        addParser("defTop_paren",
-                "terminator < !keyword_def @expression_symbol @cast? !start_paren (@expression_symbol @cast "
-                + "(!comma? !terminator* @expression_symbol @cast)*)? !end_paren");
-        addParser("defTop_noParen", "terminator < !keyword_def @expression_symbol @cast? (@expression_symbol @cast)? > start_paren- operator_as-");
-        addParser("defTop_noParen", "@defTop_noParen (!comma !terminator+ | !comma?) @expression_symbol @cast");
-        addParser("statement_def",
-                "@defTop (statement | !terminator @block)");
-        addParser(STATEMENT_RETURN, "!keyword_return @expression? > terminator | keyword_if | keyword_unless | keyword_while | keyword_until");
+        addParser("arguments_paren", "!start_paren (@expression_symbol @cast (!comma? !terminator* @expression_symbol @cast)*)? !end_paren");
+        addParser("arguments_noParen", "(@expression_symbol @cast ((!comma !terminator+ | !comma?) @expression_symbol @cast)*)? > terminator");
+        addParser("closureTop", "!keyword_def @cast? @arguments");
+        addParser("expression_closure", "^closureTop (statement | !terminator @block)");
+
+        addParser("defTop", "!keyword_def @expression_symbol @cast? @arguments");
+        addParser("statement_def", "@defTop (statement | !terminator @block)");
+        addParser("statement_return", "!keyword_return @expression? > terminator | keyword_if | keyword_unless | keyword_while | keyword_until");
     }
 
 //    public void prepare_statement_def(Node node) {
@@ -107,8 +97,8 @@ public class Methods extends CorePlugin {
             type = node.getLast().getTypeName();
         }
         Node lastStmt = node.getLast().getLast();
-        if (!type.equals("void") && !lastStmt.isNamed(STATEMENT_RETURN)) {
-            Node returnStmt = new Node(this, STATEMENT_RETURN, null, null, lastStmt.getTypeName());
+        if (!type.equals("void") && !lastStmt.isNamed("statement_return")) {
+            Node returnStmt = new Node(this, "statement_return", null, null, lastStmt.getTypeName());
             lastStmt.append(returnStmt);
             Node lastContent = lastStmt.getFirst();
             if (lastStmt.getName().startsWith("statement_va")) {

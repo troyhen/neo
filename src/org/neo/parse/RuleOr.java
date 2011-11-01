@@ -3,15 +3,22 @@ package org.neo.parse;
 import java.util.ArrayList;
 import java.util.List;
 
-class RuleOr implements OptimizedRule {
+public class RuleOr implements OptimizedRule {
     
     private List<OptimizedRule> rules = new ArrayList<OptimizedRule>();
+
+    public RuleOr() {
+    }
 
     public RuleOr(List<List<OptimizedRule>> lists) {
         for (List<OptimizedRule> list : lists) {
             if (list.size() == 1) rules.add(list.get(0));
             else rules.add(new RuleGroup(list));
         }
+    }
+
+    public void add(OptimizedRule rule) {
+        rules.add(rule);
     }
 
 //    @Override
@@ -68,5 +75,4 @@ class RuleOr implements OptimizedRule {
         buff.append(")");
         return buff.toString();
     }
-
 }

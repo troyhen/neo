@@ -33,6 +33,7 @@ class RulePlus extends RuleStar {
     public Node parse(Node from, List<Node.Match> matched) {
         from = child.parse(from, matched);
         if (from == null) return null;
+        if (from.getParent() == null) return from;
         return super.parse(from, matched);
     }
 

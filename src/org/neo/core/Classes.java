@@ -11,9 +11,7 @@ public class Classes extends CorePlugin {
         addKeyword("class");
         addKeyword("implements");
         
-        addParser("classTop", "!keyword_class @expression_symbol @cast? > operator_as-");
-        addParser("classTop", "@classTop !comma !terminator+ class_path");
-        addParser("classTop", "@classTop !comma? class_path");
+        addParser("classTop", "!keyword_class @expression_symbol @cast? (!comma !terminator+ class_path | !comma? class_path)*");
         addParser("statement_class", "@classTop !terminator+ @block");
     }
 

@@ -28,6 +28,15 @@ class RuleAfter extends RuleGroup {
     }
 
     @Override
+    public Node parse(Node from, List<Node.Match> matched) {
+        int size = matched.size();
+        Node next = super.parse(from, matched);
+        Node.revert(matched, size);
+        if (next == null) return null;
+        return from;
+    }
+
+    @Override
     public String toString() {
         return " > " + super.toString();
     }

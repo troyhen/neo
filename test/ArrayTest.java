@@ -1,13 +1,12 @@
 import org.junit.After;
-import java.util.logging.Level;
-import org.neo.util.Log;
-import org.neo.NeoLang;
-import org.neo.parse.Node;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.*;
+
+import org.neo.util.Log;
+import org.neo.NeoLang;
 
 import static org.neo.core.Operator.*;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -30,7 +29,7 @@ public class ArrayTest {
     @Test
     public void intArray() {
         final String expr = "var a = [1 2 3 4]";
-//Log.testStart();
+Log.testStart();
         lang.compile(expr);
         Log.info(lang.toTree());
         String program = lang.get("output");
