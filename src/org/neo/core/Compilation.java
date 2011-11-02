@@ -13,7 +13,7 @@ public class Compilation extends CorePlugin {
 //        addParser("statement", "keyword_if- keyword_unless- keyword_while- keyword_until- < @expression > operator- closureTop- keyword_else-");
         addParser("statement_expression", "@expression > terminator");
 //        addParser("statements", "(!terminator* statement)+ > terminator");
-        addParser("statements", "statement (!terminator+ statement)* > terminator");
+        addParser("statements", "statement (terminator_eof- !terminator+ statement)* > terminator");
 //        addParser("statements_block", "start_block < !terminator* statement !terminator* > end_block");
 //        addParser("statements_compilation", "terminator_bof < !terminator* statement (terminator_eof- !terminator)* > terminator_eof");
         addParser("compilation", "!terminator_bof !terminator* statements (terminator_eof- !terminator)* !terminator_eof");

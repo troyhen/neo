@@ -154,13 +154,23 @@ public class Node {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public Node getNext() { return next; }
+
+    public Node getNextWrapped() {
+        if (next == null) {
+            return parent.first;
+        }
+        return next;
+    }
+
     public Node getParent() { return parent; }
     public Plugin getPlugin() { return plugin; }
+    public Node getPrev() { return prev; }
 
-    public Node getPrev() {
-        if (prev == null && parent == null)
-            return last;
-        return prev == null && parent == null ? last : prev;
+    public Node getPrevWrapped() {
+        if (prev == null) {
+            return parent.last;
+        }
+        return prev;
     }
 
     public String getShortName() {

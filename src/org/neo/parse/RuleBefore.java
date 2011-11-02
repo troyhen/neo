@@ -35,7 +35,7 @@ class RuleBefore extends RuleGroup {
             return null;
         Node.revert(matched, 0);
         if (found == start) {
-            found = found.getNext(); // ensure next rule matches the following node
+            found = found.getNextWrapped(); // ensure next rule matches the following node
         }
         return found;
 //        for (int ix = rules.size() - 1; ix >= 0; ix--) {
@@ -56,7 +56,14 @@ class RuleBefore extends RuleGroup {
 
     @Override
     public Node parse(Node from, List<Node.Match> matched) {
-        return from;
+        Node node = from.getPrevWrapped();
+        Node found = super.parse(node, matched);
+        if (found == null) return null;
+        Node.revert(matched, 0);
+        if (found == node) {
+            found = found.getNextWrapped(); // ensure next rule matches the following node
+        }
+        return found;
     }
 
     @Override

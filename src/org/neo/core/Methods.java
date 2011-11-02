@@ -52,12 +52,12 @@ public class Methods extends CorePlugin {
         addKeyword("def");
         addKeyword("return");
 
-        addParser("arguments_paren", "!start_paren (@expression_symbol @cast (!comma? !terminator* @expression_symbol @cast)*)? !end_paren");
-        addParser("arguments_noParen", "(@expression_symbol @cast ((!comma !terminator+ | !comma?) @expression_symbol @cast)*)? > terminator");
+        addParser("arguments_paren", "!start_paren (symbol @cast (!comma? !terminator* symbol @cast)*)? !end_paren");
+        addParser("arguments_noParen", "(symbol @cast ((!comma !terminator+ | !comma?) symbol @cast)*)? > terminator");
         addParser("closureTop", "!keyword_def @cast? @arguments");
         addParser("expression_closure", "^closureTop (statement | !terminator @block)");
 
-        addParser("defTop", "!keyword_def @expression_symbol @cast? @arguments");
+        addParser("defTop", "!keyword_def symbol @cast? @arguments");
         addParser("statement_def", "@defTop (statement | !terminator @block)");
         addParser("statement_return", "!keyword_return @expression? > terminator | keyword_if | keyword_unless | keyword_while | keyword_until");
     }

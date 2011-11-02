@@ -39,7 +39,7 @@ class RuleStar implements OptimizedRule {
     @Override
     public Node parse(Node from, List<Node.Match> matched) {
         for (;;) {
-            if (from.getParent() == null) break;
+//            if (from.getParent() == null) break;
             Node next = child.parse(from, matched);
             if (next == null) break;
             from = next;

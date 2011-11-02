@@ -443,9 +443,7 @@ Log.info(root.getFirst().toListTree());
             Match bestMatch = parseProductions(name, from);
             if (bestMatch == null) return next;
             from = bestMatch.reduce();
-            next = from.getNext();
-            if (next == null)
-                next = from.getParent();
+            next = from.getNextWrapped();
         }
     }
 
@@ -464,7 +462,7 @@ Log.info(root.getFirst().toListTree());
         List<Node.Match> matched = new ArrayList<Node.Match>();
         for (Production production : list) {
             Node next = production.parse(node, matched);
-            while (node.getParent() != null && node.getParent() != root) {
+            while (/*node.getParent() != null &&*/ node.getParent() != root) {
                 node = node.getParent();
             }
             if (next == null) continue;

@@ -52,10 +52,8 @@ class RuleIdent implements OptimizedRule {
     @Override
     public Node match(Node node, List<Node.Match> matched) {
         if (node.isNamed(identBase)) {
-            Node next = node.getNext();
             matched.add(node.newMatch(flags));
-            if (next == null)
-                return node.getParent();
+            Node next = node.getNextWrapped();
             return next;
         }
         return null;
@@ -64,16 +62,14 @@ class RuleIdent implements OptimizedRule {
     @Override
     public Node parse(Node from, List<Node.Match> matched) {
         if (from.isNamed(identBase)) {
-            Node next = from.getNext();
             matched.add(from.newMatch(flags));
-            if (next == null)
-                return from.getParent();
+            Node next = from.getNextWrapped();
             return next;
         }
-        if (from.getParent() == null) return null;
+//        if (from.getParent() == null) return null;
         Node next = Engine.engine().parse(from, identBase);
         if (next != null) {
-            Node node = next.getPrev();
+            Node node = next.getPrevWrapped();
             matched.add(node.newMatch(flags));
         }
         return next;

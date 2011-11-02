@@ -37,7 +37,7 @@ class RuleNot implements OptimizedRule {
 
     @Override
     public Node parse(Node from, List<Node.Match> matched) {
-        if (from.getParent() == null) return from;
+//        if (from.getParent() == null) return from;
         int size = matched.size();
         Node result = child.parse(from, matched);
         Node.revert(matched, size);

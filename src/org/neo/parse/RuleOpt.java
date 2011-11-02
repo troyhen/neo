@@ -35,7 +35,7 @@ class RuleOpt implements OptimizedRule {
 
     @Override
     public Node parse(Node from, List<Node.Match> matched) {
-        if (from.getParent() == null) return from;
+//        if (from.getParent() == null) return from;
         Node next = child.parse(from, matched);
         return next != null ? next : from;
     }

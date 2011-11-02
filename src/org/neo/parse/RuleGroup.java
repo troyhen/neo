@@ -53,11 +53,11 @@ class RuleGroup implements OptimizedRule {
         int size = matched.size();
         Node node = from;
         for (OptimizedRule rule : rules) {
-            if (node.getParent() == null) {
-                Node.revert(matched, size);
-                node = null;
-                break;
-            }
+//            if (node.getParent() == null) {
+//                Node.revert(matched, size);
+//                node = null;
+//                break;
+//            }
             node = rule.parse(node, matched);
             if (node == null) {
                 Node.revert(matched, size);
