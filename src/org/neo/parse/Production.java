@@ -67,11 +67,16 @@ public class Production extends RuleGroup {
         return super.match(node, matched);
     }
 
-    @Override
-    public Node parse(Node from, List<Match> matched) {
-        matched.clear();
-        return super.parse(from, matched);
-    }
+//    @Override
+//    public Node parse(Node from, List<Match> matched) {
+//        matched.clear();
+////        if (from.isNamed(this.getName())) {
+//////            return null;
+////            matched.add(from.newMatch(from.getFlags()));
+////            return from.getNext();
+////        }
+//        return super.parse(from, matched);
+//    }
 
     private List<OptimizedRule> parseRules() {
         Stack<OptimizedRule> local = new Stack<OptimizedRule>();
@@ -158,7 +163,7 @@ public class Production extends RuleGroup {
     }
 
     public Node reduce(Node node, List<Node.Match> matched) {
-        Node newNode = new Node(plugin, name);
+        Node newNode = new Node(plugin, name, node.getIndex());
             // Move to the first node matched to support RuleBefore
         if (matched.size() > 0) node = matched.get(0).node();
         node.insertBefore(newNode);

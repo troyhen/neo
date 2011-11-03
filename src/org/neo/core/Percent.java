@@ -23,7 +23,7 @@ public class Percent extends CorePlugin {
         add(new LexerPattern(this, "percent_word", "%w`([^`]*)`", 1));
         add(new LexerPattern(this, "percent_word", "%w/([^/]*)/", 1));
         add(new LexerPattern(this, "percent_word", "%w\\|([^|]*)\\|", 1));
-        addParser("expression_percent", "percent");
+        addParser("expression0", "percent");
     }
 
     public Node transform_percent_word(Node node) {
@@ -32,7 +32,7 @@ public class Percent extends CorePlugin {
         String text = (String) node.getValue();
         for (String part : text.split("\\s")) {
             if (part.length() > 0) {
-                Node n = new Node(this, "string_single", part, part, "java.lang.String");
+                Node n = new Node(this, "string_single", node.getIndex(), part, part, "java.lang.String");
                 node.add(n);
             }
         }

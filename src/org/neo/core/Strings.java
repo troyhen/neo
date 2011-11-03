@@ -155,7 +155,7 @@ public class Strings extends CorePlugin {
         add(new LexerPattern(this, STRING_MULTILINE, "\"\"\"((\"\"[^\"]|\"[^\"]|[^\"])*)\"\"\"", 1));
         add(new LexerPattern(this, STRING_DOUBLE, "\"((\\\\\"|[^\"\\r\\n])*)\"", 1));
 //        add(new LexerPattern(this, STRING_DOUBLE_BAD, "\"((\\\"|[^\"\\r\\n])*)[\\r\\n]", 1));
-        addParser("expression_string", "string");
+        addParser("expression0", "string");
     }
 
     @Override
@@ -175,7 +175,7 @@ public class Strings extends CorePlugin {
                 if (content.length() == 0) continue;
                 if (match.start() > index || index == 0) {  // We need the first string even if empty so the Java expression will do String conversion and concatenation
                     CharSequence between = text.subSequence(index, match.start());
-                    Node string = new Node(this, STRING_SINGLE, between, between, CLASS);
+                    Node string = new Node(this, STRING_SINGLE, node.getIndex(), between, between, CLASS);
                     node.add(string);
                 }
                 Compiler current = Compiler.compiler();
@@ -193,7 +193,7 @@ public class Strings extends CorePlugin {
             int end = text.length();
             if (index > 0 && index < end) {
                 CharSequence between = text.subSequence(index, end);
-                Node string = new Node(this, STRING_SINGLE, between, between, CLASS);
+                Node string = new Node(this, STRING_SINGLE, node.getIndex(), between, between, CLASS);
                 node.add(string);
             }
         }

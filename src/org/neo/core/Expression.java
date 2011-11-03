@@ -99,31 +99,30 @@ public class Expression extends CorePlugin {
         addKeyword("else");
         addKeyword("end");
 
-//        addParser("expression_symbol", "keyword_var- keyword_val- keyword_def- | statement_valAssign comma < symbol");
-        addParser("expression_symbol", "symbol");
-        addParser("expression_reference", "reference > operator_assign- operator_eq-");
-        addParser("expression_call", "call");
         addParser("array", "expression- symbol- < !start_bracket (@expression !comma?)* @expression? !end_bracket");
-        addParser("expression_array", "array");
 
-        addParser("expression_group", "!start_paren @expression !end_paren");
-        addParser("expression_cast", "@expression ^cast"); // must precede reference
+        addParser("reference_dot", "@expression1 !operator_dot symbol");
+        addParser("reference_array", "@expression1 !start_bracket @expression (!comma? @expression)* !end_bracket");
 
-        addParser("reference_dot", "@expression !operator_dot symbol > operator | terminator");
-        addParser("reference_array", "@expression !start_bracket @expression (!comma? @expression)* !end_bracket");
-        addParser("call_dot", "@expression !operator_dot symbol !start_paren (@expression (!comma? @expression)*)? !end_paren");
-        addParser("call_dot", "@expression !operator_dot symbol @expression (!comma? @expression)*");
-
-        addParser("expression_pow", "@expression (^operator_pow @expression)+ > cast- operator_as- operator_dot-");
-        addParser("expression_mul", "@expression (^operator_mul @expression)+ > operator_pow- cast- operator_as- operator_dot-");
-        addParser("expression_add", "@expression (^operator_add @expression)+ > operator_mul- operator_pow- cast- operator_as- operator_dot-");
-        addParser("expression_compare", "@expression ^operator_compare @expression > operator_add- operator_mul- operator_pow- cast- operator_as- operator_dot-");
-        addParser("expression_operator", "@expression ^operator_other @expression > operator_compare- operator_add- operator_mul- operator_pow- cast- operator_as- operator_dot-");
-        addParser("expression_assign", "(reference | symbol | @expression_assign) "
-                + "(^operator_assign | ^operator_eq) @expression > operator_other- operator_compare- operator_add- operator_mul- operator_pow- cast- operator_as- operator_dot-"); // must precede expression: reference
+        addParser("call_dot", "@expression0 !operator_dot symbol !start_paren (@expression (!comma? @expression)*)? !end_paren");
+        addParser("call_dot", "@expression0 !operator_dot symbol @expression (!comma? @expression)*");
 
         addParser("call_this", "symbol !start_paren (@expression (!comma? !terminator* @expression)*)? !end_paren");
         addParser("call_this", "symbol @expression ((!comma !terminator* | comma?) @expression)* > terminator | keyword_else | keyword_end");
+
+//        addParser("expression_symbol", "keyword_var- keyword_val- keyword_def- | statement_valAssign comma < symbol");
+        addParser("expression0", "array");
+        addParser("expression0", "symbol");
+        addParser("expression0", "!start_paren @expression !end_paren");
+        addParser("expression1", "reference > operator_assign- operator_eq-");
+        addParser("expression1", "call");
+        addParser("expression1", "@expression0 ^cast*"); // must precede reference
+        addParser("expression2", "@expression1 (^operator_pow @expression1)*");
+        addParser("expression3", "@expression2 (^operator_mul @expression2)*");
+        addParser("expression4", "@expression3 (^operator_add @expression3)*");
+        addParser("expression5", "@expression4 (^operator_compare @expression4)?");
+        addParser("expression6", "@expression5 (^operator_other @expression5)?");
+        addParser("expression", "(reference | symbol) ((^operator_assign | ^operator_eq) @expression)+ | @expression6");
 
         if (isMain) addParser("compilation", "!terminator_bof !terminator* expression (terminator_eof- !terminator)* !terminator_eof");
     }

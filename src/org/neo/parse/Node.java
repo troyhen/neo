@@ -1,6 +1,9 @@
 package org.neo.parse;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.neo.Plugin;
 import org.neo.back.CodeBuilder;
 import org.neo.core.Strings;
@@ -26,30 +29,32 @@ public class Node {
     private Node next;
     private Node prev;
     private byte flags;
+    private int index;
 
     public Node(Node copy) {
-        this(copy.plugin, copy.name, copy.text, copy.value, copy.typeName);
+        this(copy.plugin, copy.name, copy.index, copy.text, copy.value, copy.typeName);
     }
 
-    public Node(Plugin plugin, String name) {
-        this(plugin, name, null, null, null);
+    public Node(Plugin plugin, String name, int index) {
+        this(plugin, name, index, null, null, null);
     }
     
-    public Node(Plugin plugin, String name, CharSequence text) {
-        this(plugin, name, text, null, null);
+    public Node(Plugin plugin, String name, int index, CharSequence text) {
+        this(plugin, name, index, text, null, null);
     }
     
-    public Node(Plugin plugin, String name, CharSequence text, Object value) {
-        this(plugin, name, text, value, null);
+    public Node(Plugin plugin, String name, int index, CharSequence text, Object value) {
+        this(plugin, name, index, text, value, null);
     }
 
-    public Node(Plugin plugin, String name, CharSequence text, Object value, String typeName) {
+    public Node(Plugin plugin, String name, int index, CharSequence text, Object value, String typeName) {
         this.plugin = plugin;
         this.name = name;
         flags |= name.startsWith("!") ? IGNORE : 0; // lexers use this for ignored tokens
         this.value = value;
         this.text = text;
         this.typeName = typeName;
+        this.index = index;
     }
 
     public void add(Node child) {
@@ -133,6 +138,10 @@ public class Node {
         return count;
     }
 
+//    public void dropMemo() {
+//        memo = null;
+//    }
+    
     public Node get(int index) {
         Node node = getFirst();
         while (index-- > 0 && node != null) {
@@ -144,6 +153,7 @@ public class Node {
     public Node getFirst() { return first; }
     public byte getFlags() { return flags; }
     public void setFlags(byte flags) { this.flags = flags; }
+    public int getIndex() { return index; }
     public Node getLast() { return last; }
 
     public int getLine() {
@@ -185,6 +195,13 @@ public class Node {
     public String getTypeName() { return typeName; }
     public void setTypeName(String typeName) { this.typeName = typeName; }
     public Object getValue() { return value; }
+
+    public boolean hasMemo(String name) {
+//        if (memo == null) return false;
+//        return memo.containsKey(name);
+        return Engine.engine().memoExists(index, name);
+    }
+    
     public boolean isIgnored() { return (flags & IGNORE) != 0; }
 
     public boolean isNamed(String name) {
@@ -219,6 +236,18 @@ public class Node {
             parent.first = node;
         }
     }
+
+//    public Node memo(String name) {
+////        if (memo == null) return null;
+////        return memo.get(name);
+//        return Engine.engine().memo(index, name);
+//    }
+//
+//    public void memo(String name, Node node) {
+////        if (memo == null) memo = new HashMap<String, Node>();
+////        memo.put(name, node);
+//        Engine.engine().memo(index, name, node);
+//    }
 
     public Match newMatch(byte flags) {
         return new Match(flags);

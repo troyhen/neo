@@ -14,7 +14,7 @@ public class LexerEof extends LexerBase {
     
     public LexerEof(Plugin plugin) {
         super(plugin, EOF);
-        Engine.engine().setNextToken(new Token(plugin, BOF, "", 1));
+        Engine.engine().setNextToken(new Token(plugin, BOF, Engine.engine().nextTokenIndex(), "", 1));
     }
 
     public boolean atEof() {

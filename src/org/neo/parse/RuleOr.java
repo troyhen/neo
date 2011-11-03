@@ -3,12 +3,12 @@ package org.neo.parse;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RuleOr implements OptimizedRule {
+/*public*/ class RuleOr implements OptimizedRule {
     
     private List<OptimizedRule> rules = new ArrayList<OptimizedRule>();
 
-    public RuleOr() {
-    }
+//    public RuleOr() {
+//    }
 
     public RuleOr(List<List<OptimizedRule>> lists) {
         for (List<OptimizedRule> list : lists) {
@@ -17,9 +17,9 @@ public class RuleOr implements OptimizedRule {
         }
     }
 
-    public void add(OptimizedRule rule) {
-        rules.add(rule);
-    }
+//    public void add(OptimizedRule rule) {
+//        rules.add(rule);
+//    }
 
 //    @Override
 //    public Progress explore(Progress progress, boolean ignore) {
@@ -54,11 +54,15 @@ public class RuleOr implements OptimizedRule {
 
     @Override
     public Node parse(Node from, List<Node.Match> matched) {
+        Node root = from.getParent();
         for (OptimizedRule rule : rules) {
             int size = matched.size();
             Node node = rule.parse(from, matched);
             if (node != null) return node;
             Node.revert(matched, size);
+            while (from.getParent() != root) {
+                from = from.getParent();
+            }
         }
         return null;
     }

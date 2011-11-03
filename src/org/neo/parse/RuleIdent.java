@@ -59,6 +59,15 @@ class RuleIdent implements OptimizedRule {
         return null;
     }
 
+    /**
+     * Match the identifier and return the following node or null if cannot be matched. First a check is made that
+     * the current node is already what the identifier specified. If not it check the previous memoised results for
+     * the node's position. If not yet memoised it parses the rules specified by the identifier. The result, found or
+     * not, is memoised.
+     * @param from the node to start on
+     * @param matched list of matched nodes (used for reduction)
+     * @return the following node if a matched or null if not matched
+     */
     @Override
     public Node parse(Node from, List<Node.Match> matched) {
         if (from.isNamed(identBase)) {
@@ -66,11 +75,21 @@ class RuleIdent implements OptimizedRule {
             Node next = from.getNextWrapped();
             return next;
         }
+//        if (from.hasMemo(identBase)) {
+//            Node node = from.memo(identBase);
+//            if (node == null) return null;
+//            matched.add(node.newMatch(flags));
+//            Node next = node.getNextWrapped();
+//            return next;
+//        }
 //        if (from.getParent() == null) return null;
         Node next = Engine.engine().parse(from, identBase);
         if (next != null) {
             Node node = next.getPrevWrapped();
+//            from.memo(identBase, node);
             matched.add(node.newMatch(flags));
+        } else {
+//            from.memo(identBase, null);
         }
         return next;
     }

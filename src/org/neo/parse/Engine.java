@@ -42,6 +42,8 @@ public class Engine {
     private String start;
 //    private Deque<List<Production>> productionStack;
     private Deque<Position> productionStack;
+    private List<Map<String, Boolean>> memo = new ArrayList<Map<String, Boolean>>();
+    private int tokenIndex = 0;
 
     public Engine(Compiler compiler) {
         this.compiler = compiler;
@@ -72,7 +74,7 @@ public class Engine {
 
     public Token consume(Plugin plugin, String name, int chars, Object value, String type) {
         CharSequence text = getChars(chars);
-        Token token = new Token(plugin, name, text, line, value == null ? text : value, type);
+        Token token = new Token(plugin, name, tokenIndex++, text, line, value == null ? text : value, type);
         buffer.position(buffer.position() + chars);
         return token;
     }
@@ -238,6 +240,34 @@ public class Engine {
         return reference;
     }
 
+    public boolean memoExists(int index, String name) {
+        if (memo.size() <= index) return false;
+        return memo.get(index).containsKey(name);
+    }
+
+    public boolean memo(int index, String name) {
+        if (memo.size() <= index) return false;
+        return memo.get(index).get(name);
+    }
+
+    public void memo(int index, String name, boolean recursive) {
+        while (memo.size() <= index) {
+            memo.add(new HashMap<String, Boolean>());
+        }
+        Map<String, Boolean> at = memo.get(index);
+//        if (node != null) {
+//            Iterator<Map.Entry<String, Node>> it = at.entrySet().iterator();
+//            while (it.hasNext()) {
+//                Map.Entry<String, Node> entry = it.next();
+//                if (entry.getValue() != null) {
+//                    entry.setValue(null);
+//                    break;
+//                }
+//            }
+//        }
+        at.put(name, recursive);
+    }
+
     public void methodAdd(String name, MethodDef type) {
         Map<String, List<MethodDef>> map = methods.peek();
         List<MethodDef> meths = map.get(name);
@@ -309,6 +339,10 @@ public class Engine {
         }
     }
 
+    public int nextTokenIndex() {
+        return tokenIndex++;
+    }
+
     private static class Match {
         Production production;
         Node node;
@@ -326,7 +360,8 @@ public class Engine {
 
         Node reduce() {
             final Node parent = node.getParent();
-            if (parent.isNamed(production.getName())) return parent;
+            if (parent.isNamed(production.getName()))
+                return parent;
             return production.reduce(node, matched);
         }
 
@@ -335,6 +370,9 @@ public class Engine {
             return "matched " + production.getName();
         }
 
+        public boolean isReduced() {
+            return node.isNamed(production.getName()) && matched.size() == 1;
+        }
     }
 
     public static int offset() { return engine().offset; }
@@ -342,6 +380,7 @@ public class Engine {
 
     public void open() {
         engine.set(this);
+        tokenIndex = 0;
         line = 1;
         offset = 0;
         symbolsPush();
@@ -432,46 +471,53 @@ public class Engine {
      */
     public void parseLL(Node root) {
         productionStack = new ArrayDeque<Position>();
-        Node found = parse(root.getFirst(), start);
+        Node top = parse(root.getFirst(), start);
 Log.info(root.getFirst().toListTree());
-        if (found == null) throw new ParseException("Invalid program");
+        if (top == null) throw new ParseException("Invalid program");
     }
 
     public Node parse(Node from, String name) {
-        Node next = null;
-        for (;;) {
-            Match bestMatch = parseProductions(name, from);
-            if (bestMatch == null) return next;
-            from = bestMatch.reduce();
-            next = from.getNextWrapped();
-        }
-    }
-
-    public Match parseProductions(String name, Node node) {
-        final Position position = new Position(name, node);
+        final Position position = new Position(name, from.getIndex());
         if (productionStack.contains(position)) {
+            memo(from.getIndex(), name, true);
+            return null;
+        }
+        if (memoExists(from.getIndex(), name) && !memo(from.getIndex(), name)) {
             return null;
         }
         List<Production> list = findProductions(name);
         if (list.isEmpty()) {
+            memo(from.getIndex(), name, false);
             return null;
         }
         productionStack.push(position);
-        Node root = node.getParent();
-        Match bestMatch = null;
-        List<Node.Match> matched = new ArrayList<Node.Match>();
-        for (Production production : list) {
-            Node next = production.parse(node, matched);
-            while (/*node.getParent() != null &&*/ node.getParent() != root) {
-                node = node.getParent();
+        Node next = null;
+        Node root = from.getParent();
+        for (;;) {
+            Match bestMatch = null;
+            List<Node.Match> matched = new ArrayList<Node.Match>();
+            for (Production production : list) {
+                matched.clear();
+                Node node = production.parse(from, matched);
+                while (/*node.getParent() != null &&*/ from.getParent() != root) {
+                    from = from.getParent();
+                }
+                if (node == null) continue;
+                if (bestMatch == null || bestMatch.isWorse(matched)) {
+                    bestMatch = new Match(production, from, matched);
+                }
             }
-            if (next == null) continue;
-            if (bestMatch == null || bestMatch.isWorse(matched)) {
-                bestMatch = new Match(production, node, matched);
+            if (bestMatch == null) {
+                memo(from.getIndex(), name, false);
+                break;
             }
+            if (next != null && bestMatch.isReduced())
+                break;
+            from = bestMatch.reduce();
+            next = from.getNextWrapped();
         }
         productionStack.pop();
-        return bestMatch;
+        return next;
     }
 
 //    private List<Production> pushProductions(List<Production> list) {
@@ -530,23 +576,28 @@ Log.info(root.getFirst().toListTree());
 
     private class Position {
         String name;
-        Node node;
+        int index;
 
-        private Position(String name, Node node) {
+        private Position(String name, int index) {
             this.name = name;
-            this.node = node;
+            this.index = index;
         }
 
         @Override
         public boolean equals(Object obj) {
             if (obj == null || !(obj instanceof Position)) return false;
             final Position obj1 = (Position) obj;
-            return this.name.equals(obj1.name) && this.node.equals(obj1.node);
+            return this.name.equals(obj1.name) && this.index == obj1.index;
         }
 
         @Override
         public int hashCode() {
-            return name.hashCode() + node.hashCode();
+            return name.hashCode() + index;
+        }
+
+        @Override
+        public String toString() {
+            return name + '@' + index;
         }
     }
 }

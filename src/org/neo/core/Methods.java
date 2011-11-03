@@ -55,7 +55,7 @@ public class Methods extends CorePlugin {
         addParser("arguments_paren", "!start_paren (symbol @cast (!comma? !terminator* symbol @cast)*)? !end_paren");
         addParser("arguments_noParen", "(symbol @cast ((!comma !terminator+ | !comma?) symbol @cast)*)? > terminator");
         addParser("closureTop", "!keyword_def @cast? @arguments");
-        addParser("expression_closure", "^closureTop (statement | !terminator @block)");
+        addParser("expression0", "^closureTop (statement | !terminator @block)");
 
         addParser("defTop", "!keyword_def symbol @cast? @arguments");
         addParser("statement_def", "@defTop (statement | !terminator @block)");
@@ -98,7 +98,7 @@ public class Methods extends CorePlugin {
         }
         Node lastStmt = node.getLast().getLast();
         if (!type.equals("void") && !lastStmt.isNamed("statement_return")) {
-            Node returnStmt = new Node(this, "statement_return", null, null, lastStmt.getTypeName());
+            Node returnStmt = new Node(this, "statement_return", node.getIndex(), null, null, lastStmt.getTypeName());
             lastStmt.append(returnStmt);
             Node lastContent = lastStmt.getFirst();
             if (lastStmt.getName().startsWith("statement_va")) {
