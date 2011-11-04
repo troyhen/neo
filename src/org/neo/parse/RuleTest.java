@@ -39,9 +39,11 @@ class RuleTest implements OptimizedRule {
     @Override
     public Node parse(Node from, List<Node.Match> matched) {
         int size = matched.size();
-        Node result = child.parse(from, matched);
-        Node.revert(matched, size);
-        if (result == null) return null;
+        try {
+            child.parse(from, matched);
+        } finally {
+            Node.revert(matched, size);
+        }
         return from;
     }
 

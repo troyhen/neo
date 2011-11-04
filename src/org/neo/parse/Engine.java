@@ -479,44 +479,53 @@ Log.info(root.getFirst().toListTree());
     public Node parse(Node from, String name) {
         final Position position = new Position(name, from.getIndex());
         if (productionStack.contains(position)) {
-            memo(from.getIndex(), name, true);
-            return null;
+//            memo(from.getIndex(), name, true);
+            throw new Mismatch(from, name);
         }
         if (memoExists(from.getIndex(), name) && !memo(from.getIndex(), name)) {
-            return null;
+            throw new Mismatch(from, name);
         }
         List<Production> list = findProductions(name);
         if (list.isEmpty()) {
             memo(from.getIndex(), name, false);
-            return null;
+            throw new Mismatch(from, name);
         }
-        productionStack.push(position);
         Node next = null;
-        Node root = from.getParent();
-        for (;;) {
-            Match bestMatch = null;
+        productionStack.push(position);
+        try {
+            Node root = from.getParent();
+            Mismatch lastError = null;
             List<Node.Match> matched = new ArrayList<Node.Match>();
-            for (Production production : list) {
-                matched.clear();
-                Node node = production.parse(from, matched);
-                while (/*node.getParent() != null &&*/ from.getParent() != root) {
-                    from = from.getParent();
+            for (;;) {
+                Match bestMatch = null;
+                for (Production production : list) {
+                    matched.clear();
+                    try {
+                        production.parse(from, matched);
+                    } catch (Mismatch e) {
+                        lastError = e;
+                        continue;
+                    } finally {
+                        while (/*node.getParent() != null &&*/ from.getParent() != root) {
+                            from = from.getParent();
+                        }
+                    }
+                    if (bestMatch == null || bestMatch.isWorse(matched)) {
+                        bestMatch = new Match(production, from, matched);
+                    }
                 }
-                if (node == null) continue;
-                if (bestMatch == null || bestMatch.isWorse(matched)) {
-                    bestMatch = new Match(production, from, matched);
+                if (bestMatch == null && next == null) {
+                    memo(from.getIndex(), name, false);
+                    throw lastError;
                 }
+                if (next != null && (bestMatch == null || bestMatch.isReduced()))
+                    break;
+                from = bestMatch.reduce();
+                next = from.getNextOrLast();
             }
-            if (bestMatch == null) {
-                memo(from.getIndex(), name, false);
-                break;
-            }
-            if (next != null && bestMatch.isReduced())
-                break;
-            from = bestMatch.reduce();
-            next = from.getNextWrapped();
+        } finally {
+            productionStack.pop();
         }
-        productionStack.pop();
         return next;
     }
 
@@ -577,6 +586,7 @@ Log.info(root.getFirst().toListTree());
     private class Position {
         String name;
         int index;
+        boolean recursive;
 
         private Position(String name, int index) {
             this.name = name;

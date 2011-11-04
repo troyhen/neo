@@ -55,16 +55,19 @@ import java.util.List;
     @Override
     public Node parse(Node from, List<Node.Match> matched) {
         Node root = from.getParent();
+        int size = matched.size();
         for (OptimizedRule rule : rules) {
-            int size = matched.size();
-            Node node = rule.parse(from, matched);
-            if (node != null) return node;
-            Node.revert(matched, size);
-            while (from.getParent() != root) {
-                from = from.getParent();
+            try {
+                Node node = rule.parse(from, matched);
+                return node;
+            } catch (Mismatch e) {
+                Node.revert(matched, size);
+                while (from.getParent() != root) {
+                    from = from.getParent();
+                }
             }
         }
-        return null;
+        throw new Mismatch(from, toString());
     }
 
     @Override

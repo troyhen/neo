@@ -52,19 +52,13 @@ class RuleGroup implements OptimizedRule {
     public Node parse(Node from, List<Node.Match> matched) {
         int size = matched.size();
         Node node = from;
-        for (OptimizedRule rule : rules) {
-//            if (node.getParent() == null) {
-//                Node.revert(matched, size);
-//                node = null;
-//                break;
-//            }
-            node = rule.parse(node, matched);
-            if (node == null) {
-                Node.revert(matched, size);
-                break;
+        try {
+            for (OptimizedRule rule : rules) {
+                node = rule.parse(node, matched);
             }
-//            if (from.getParent() != node.getParent())
-//                from = node.getPrev();
+        } catch (Mismatch e) {
+            Node.revert(matched, size);
+            throw e;
         }
         return node;
     }

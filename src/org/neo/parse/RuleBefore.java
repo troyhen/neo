@@ -8,8 +8,11 @@ import java.util.List;
  */
 class RuleBefore extends RuleGroup {
 
+    public static ThreadLocal<Boolean> simpleCheck = new ThreadLocal<Boolean>();
+
     public RuleBefore(List<OptimizedRule> rules) {
         super(rules);
+        simpleCheck.set(false);
     }
 
 //    @Override
@@ -35,7 +38,7 @@ class RuleBefore extends RuleGroup {
             return null;
         Node.revert(matched, 0);
         if (found == start) {
-            found = found.getNextWrapped(); // ensure next rule matches the following node
+            found = found.getNextOrLast(); // ensure next rule matches the following node
         }
         return found;
 //        for (int ix = rules.size() - 1; ix >= 0; ix--) {
@@ -56,14 +59,19 @@ class RuleBefore extends RuleGroup {
 
     @Override
     public Node parse(Node from, List<Node.Match> matched) {
-        Node node = from.getPrevWrapped();
-        Node found = super.parse(node, matched);
-        if (found == null) return null;
-        Node.revert(matched, 0);
-        if (found == node) {
-            found = found.getNextWrapped(); // ensure next rule matches the following node
+        Node node = from.getPrevOrFirst();
+        simpleCheck.set(true);
+        try {
+            super.parse(node, matched);
+            return from;
+        } finally {
+            simpleCheck.set(false);
+            Node.revert(matched, 0);
         }
-        return found;
+//        if (found == node) {
+//            found = found.getNext(); // ensure next rule matches the following node
+//        }
+//        return found;
     }
 
     @Override
