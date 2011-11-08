@@ -1,6 +1,7 @@
 package org.neo.parse;
 
 import java.util.List;
+import java.util.Set;
 
 class RuleAfter extends RuleGroup {
     
@@ -14,7 +15,7 @@ class RuleAfter extends RuleGroup {
 //    }
 
     @Override
-    public boolean findStarts(List<String> list) {
+    public boolean findStarts(Set<String> list) {
         return false;
     }
 

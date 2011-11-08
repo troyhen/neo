@@ -39,7 +39,7 @@ public class PluginBase implements Plugin {
     protected void addParser(String name, String structure) {
         final Production production = new Production(this, name, structure);
         productions.add(production);
-        Engine.engine().index(production);
+//        Engine.engine().index(production);
     }
 
     protected void addInvalidParser(String message, String structure) {
@@ -83,6 +83,14 @@ public class PluginBase implements Plugin {
     private static final Class<?>[] matchedSig = new Class<?>[] {
         Node.class
     };
+
+    @Override
+    public void indexProductions() {
+        Engine engine = Engine.engine();
+        for (Production production : productions) {
+            engine.index(production);
+        }
+    }
 
     @Override
     public Object invoke(String prefix, Node node) {

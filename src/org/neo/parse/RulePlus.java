@@ -1,6 +1,7 @@
 package org.neo.parse;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Wrapper for rules which must match one or more times.
@@ -18,7 +19,7 @@ class RulePlus extends RuleStar {
 //    }
 
     @Override
-    public boolean findStarts(List<String> list) {
+    public boolean findStarts(Set<String> list) {
         return child.findStarts(list);
     }
 

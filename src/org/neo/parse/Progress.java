@@ -75,7 +75,7 @@ class Progress {
 
     void setState(State state) {
         this.state = state;
-        Engine.engine().index(this);
+//        Engine.engine().index(this);
     }
 
     @Override

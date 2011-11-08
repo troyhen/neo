@@ -2,6 +2,7 @@ package org.neo.parse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /*public*/ class RuleOr implements OptimizedRule {
     
@@ -33,7 +34,7 @@ import java.util.List;
 
     @Override
     @Deprecated
-    public boolean findStarts(List<String> list) {
+    public boolean findStarts(Set<String> list) {
         boolean more = false;
         for (OptimizedRule rule : rules) {
             more |= rule.findStarts(list);

@@ -17,7 +17,7 @@ public interface Plugin extends Lexer, Render, Rule, Transform, Refine {
 //    Token consume(String name, int chars, Object value);
     Token consume(String name, int chars, Object value, String type);
     void collect(String name, List<Production> list);
+    void indexProductions();
     Object invoke(String prefix, Node node);
     void open();
-
 }

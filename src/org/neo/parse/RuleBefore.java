@@ -1,6 +1,7 @@
 package org.neo.parse;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -21,13 +22,14 @@ class RuleBefore extends RuleGroup {
 //    }
 
     @Override
-    public boolean findStarts(List<String> list) {
-        boolean more = super.findStarts(list);
-        if (more) {
-            list.clear();
-            list.add("*");
-        }
-        return false;
+    public boolean findStarts(Set<String> list) {
+        return true;
+//        boolean more = super.findStarts(list);
+//        if (more) {
+//            list.clear();
+//            list.add("*");
+//        }
+//        return false;
     }
 
     @Override

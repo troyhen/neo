@@ -1,6 +1,7 @@
 package org.neo.parse;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Wrapper for rules which can be matched any number of times.
@@ -21,7 +22,7 @@ class RuleStar implements OptimizedRule {
 //    }
 
     @Override
-    public boolean findStarts(List<String> list) {
+    public boolean findStarts(Set<String> list) {
         child.findStarts(list);
         return true;
     }

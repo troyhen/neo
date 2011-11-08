@@ -2,6 +2,7 @@ package org.neo.parse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Rule which matches a node by name.
@@ -42,10 +43,18 @@ class RuleIdent implements OptimizedRule {
 //    }
 
     @Override
-    @Deprecated
-    public boolean findStarts(List<String> list) {
+    public boolean findStarts(Set<String> list) {
+//        Set<String> list2 = Engine.engine().getStarts(identBase);
+//        if (list2 != null) {
+//            list.addAll(list2);
+//            return false;
+//        }
         list.add(identBase);
-        list.add(identDot);
+//        list.add(identDot);
+//        List<Production> children = Engine.engine().findProductions(identBase);
+//        for (Production production : children) {
+//            production.findStarts(list);
+//        }
         return false;
     }
 

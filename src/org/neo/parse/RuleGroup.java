@@ -1,6 +1,7 @@
 package org.neo.parse;
 
 import java.util.List;
+import java.util.Set;
 
 class RuleGroup implements OptimizedRule {
     
@@ -26,7 +27,7 @@ class RuleGroup implements OptimizedRule {
 //    }
 
     @Override
-    public boolean findStarts(List<String> list) {
+    public boolean findStarts(Set<String> list) {
         boolean more = false;
         for (OptimizedRule rule : rules) {
             more = rule.findStarts(list);

@@ -122,6 +122,7 @@ public class Compiler {
         for (Plugin plugin : plugins) {
             plugin.open();
         }
+        engine.indexPlugins();
         state = State.opened;
     }
 

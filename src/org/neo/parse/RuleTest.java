@@ -1,6 +1,7 @@
 package org.neo.parse;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * A test rule wrapper. Parse succeeds if enclosed rules are matched and fails otherwise.
@@ -23,7 +24,7 @@ class RuleTest implements OptimizedRule {
 //    }
 
     @Override
-    public boolean findStarts(List<String> list) {
+    public boolean findStarts(Set<String> list) {
         return true;
     }
 

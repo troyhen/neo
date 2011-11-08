@@ -1,6 +1,7 @@
 package org.neo.parse;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * A negative rule wrapper. Parse fails if enclosed rules are matched and succeeds otherwise.
@@ -22,7 +23,7 @@ class RuleNot implements OptimizedRule {
 //    }
 
     @Override
-    public boolean findStarts(List<String> list) {
+    public boolean findStarts(Set<String> list) {
         return true;
     }
 

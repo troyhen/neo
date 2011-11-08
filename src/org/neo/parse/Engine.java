@@ -38,12 +38,13 @@ public class Engine {
     private LinkedList<Map<String, ClassDef>> symbols = new LinkedList<Map<String, ClassDef>>();
     private LinkedList<Map<String, List<MethodDef>>> methods = new LinkedList<Map<String, List<MethodDef>>>();
     private State initial;
-    private Map<Progress, Progress> steps = new HashMap<Progress, Progress>();
+//    private Map<Progress, Progress> steps = new HashMap<Progress, Progress>();
     private String start;
 //    private Deque<List<Production>> productionStack;
     private Deque<Position> productionStack;
     private List<Map<String, Boolean>> memo = new ArrayList<Map<String, Boolean>>();
     private int tokenIndex = 0;
+    private Map<String, Set<String>> starts = new HashMap<String, Set<String>>();
 
     public Engine(Compiler compiler) {
         this.compiler = compiler;
@@ -110,11 +111,11 @@ public class Engine {
 
     public int getLine() { return line; }
 
-    public Progress getProgress(Production production, int index) {
-        Progress temp = new Progress(production, index);
-        Progress progress = steps.get(temp);
-        return progress;
-    }
+//    public Progress getProgress(Production production, int index) {
+//        Progress temp = new Progress(production, index);
+//        Progress progress = steps.get(temp);
+//        return progress;
+//    }
 
 //    public State getState(Progress progress, boolean addIfMissing) {
 //        State state = progress.getState();
@@ -159,21 +160,52 @@ public class Engine {
     }
 
     public void index(Production production) {
-        List<String> list = production.findStarts();
-        for (String name : list) {
-            List<Production> plist = index.get(name);
-            if (plist == null) {
-                plist = new ArrayList<Production>();
-                index.put(name, plist);
-            }
-            plist.add(production);
-        }
+        Set<String> list = production.findStarts();
+        String name = production.getName();
+        Set<String> list0 = starts.get(name);
+        if (list0 == null) starts.put(name, list);
+        else list0.addAll(list);
+        String name1 = production.getShortName();
+        if (name.equals(name1)) return;
+        list0 = starts.get(name1);
+        if (list0 == null) starts.put(name1, list);
+        else list0.addAll(list);
+//        for (String name : list) {
+//            List<Production> plist = index.get(name);
+//            if (plist == null) {
+//                plist = new ArrayList<Production>();
+//                index.put(name, plist);
+//            }
+//            plist.add(production);
+//        }
     }
 
-    public void index(Progress progress) {
-        /*State state = progress.getState();
-        if (state == null) steps.remove(progress);
-        else*/ steps.put(progress, progress);
+//    public void index(Progress progress) {
+//        /*State state = progress.getState();
+//        if (state == null) steps.remove(progress);
+//        else*/ steps.put(progress, progress);
+//    }
+
+    public void indexPlugins() {
+        for (Plugin plugin : compiler().plugins) {
+            plugin.indexProductions();
+        }
+        List<String> found = new ArrayList<String>();
+        boolean changed = true;
+        while (changed) {
+            changed = false;
+            for (Map.Entry<String, Set<String>> set : starts.entrySet()) {
+                final Set<String> value = set.getValue();
+                for (String ident : value) {
+                    final Set<String> more = starts.get(ident);
+                    if (more != null) {
+                        found.addAll(more);
+                    }
+                }
+                changed |= value.addAll(found);
+                found.clear();
+            }
+        }
     }
 
     public boolean isKeyword(String text) {
@@ -343,6 +375,10 @@ public class Engine {
         return tokenIndex++;
     }
 
+    public Set<String> getStarts(String name) {
+        return starts.get(name);
+    }
+
     private static class Match {
         Production production;
         Node node;
@@ -483,6 +519,11 @@ Log.info(root.getFirst().toListTree());
             throw new Mismatch(from, name);
         }
         if (memoExists(from.getIndex(), name) && !memo(from.getIndex(), name)) {
+            throw new Mismatch(from, name);
+        }
+        final Set<String> startNames = starts.get(name);
+        if (startNames != null && !startNames.contains(from.getName()) && !startNames.contains(from.getShortName())) {
+            memo(from.getIndex(), name, false);
             throw new Mismatch(from, name);
         }
         List<Production> list = findProductions(name);

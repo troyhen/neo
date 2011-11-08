@@ -1,6 +1,7 @@
 package org.neo.parse;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Rule wrapper for an optional element or group. Parse is successful whether or not the enclosed rules are matched.
@@ -22,7 +23,7 @@ class RuleOpt implements OptimizedRule {
 
     @Override
     @Deprecated
-    public boolean findStarts(List<String> list) {
+    public boolean findStarts(Set<String> list) {
         child.findStarts(list);
         return true;
     }

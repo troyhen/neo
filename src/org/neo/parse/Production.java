@@ -1,8 +1,7 @@
 package org.neo.parse;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
+
 import org.neo.parse.Node.Match;
 import org.neo.util.Log;
 
@@ -34,6 +33,14 @@ public class Production extends RuleGroup {
     public String getName() { return name; }
     public Plugin getPlugin() { return plugin; }
 
+    public String getShortName() {
+        int ix = name.indexOf('_');
+        if (ix > 0) {
+            return name.substring(0, ix);
+        }
+        return name;
+    }
+
     private static Stack<OptimizedRule> addAlternatives(Stack<OptimizedRule> local, List<List<OptimizedRule>> alternatives) {
         if (alternatives != null) {
             alternatives.add(local);
@@ -51,8 +58,8 @@ public class Production extends RuleGroup {
         }
     }
 
-    public List<String> findStarts() {
-        List<String> list = new ArrayList<String>();
+    public Set<String> findStarts() {
+        Set<String> list = new HashSet<String>();
         findStarts(list);
         return list;
     }

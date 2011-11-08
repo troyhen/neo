@@ -1,6 +1,7 @@
 package org.neo.parse;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Production element which descends one level down the AST (of the previous rule) and matches the enclosed rules at
@@ -14,8 +15,7 @@ class RuleInside extends RuleGroup {
     }
 
     @Override
-    @Deprecated
-    public boolean findStarts(List<String> list) {
+    public boolean findStarts(Set<String> list) {
         return false;
     }
 

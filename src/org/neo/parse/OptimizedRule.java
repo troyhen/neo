@@ -1,6 +1,7 @@
 package org.neo.parse;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * A rule which knows how to execute much faster.
@@ -20,7 +21,7 @@ public interface OptimizedRule extends Rule {
      * @param list the list of names being collected
      * @return true if the next rule should also be checked
      */
-    boolean findStarts(List<String> list);
+    boolean findStarts(Set<String> list);
 
     /**
      * Parse from the given node.
