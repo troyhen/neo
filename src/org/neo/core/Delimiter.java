@@ -9,7 +9,7 @@ import org.neo.lex.LexerChar;
 public class Delimiter extends CorePlugin {
 
     public static final String COMMA = "comma";
-    public static final String SEMI = "semi";
+    public static final String SEMI = "terminator_semi";
 
     @Override
     public void open() {

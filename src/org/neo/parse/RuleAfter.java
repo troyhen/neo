@@ -14,10 +14,10 @@ class RuleAfter extends RuleGroup {
 //        return super.explore(progress, true);
 //    }
 
-    @Override
-    public boolean findStarts(Set<String> list) {
-        return false;
-    }
+//    @Override
+//    public boolean findStarts(Set<String> list) {
+//        return false;
+//    }
 
     @Override
     public Node match(Node node, List<Node.Match> matched) {

@@ -29,7 +29,7 @@ public class ArrayTest {
     @Test
     public void intArray() {
         final String expr = "var a = [1 2 3 4]";
-Log.testStart();
+//Log.testStart();
         lang.compile(expr);
         Log.info(lang.toTree());
         String program = lang.get("output");

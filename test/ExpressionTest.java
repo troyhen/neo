@@ -46,9 +46,9 @@ public class ExpressionTest {
         Log.info(root.toTree());
         assertNotNull(root);
         assertEquals("Wrong number of children", 3, root.countChildren());
-        assertEquals("Top of tree should be ", "statements_compilation", root.get(1).getName());
-        assertEquals("Second level should be ", "statement_expression", root.get(1).get(0).getName());
-        assertEquals("Third level should be ", "expression_add", root.get(1).get(0).get(0).getName());
+        assertTrue("Top of tree should be ", root.get(1).isNamed("statements"));
+        assertTrue("Second level should be ", root.get(1).get(0).isNamed("statement"));
+        assertTrue("Third level should be ", root.get(1).get(0).get(0).isNamed("expression"));
     }
 
     @Test
@@ -59,9 +59,9 @@ public class ExpressionTest {
         Node root = lang.parse();
         assertNotNull(root);
         assertEquals("Wrong number of children", 3, root.countChildren());
-        assertEquals("missing statements", "statements_compilation", root.get(1).getName());
-        assertEquals("missing statement", "statement_expression", root.get(1).get(0).getName());
-        assertEquals("missing expression", "expression_add", root.get(1).get(0).get(0).getName());
+        assertTrue("missing statements", root.get(1).isNamed("statements"));
+        assertTrue("missing statement", root.get(1).get(0).isNamed("statement"));
+        assertTrue("missing expression", root.get(1).get(0).get(0).isNamed("expression"));
     }
 
     @Test

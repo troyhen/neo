@@ -55,11 +55,11 @@ public class Methods extends CorePlugin {
         addParser("arguments_paren", "!start_paren (symbol @cast (!comma? !terminator* symbol @cast)*)? !end_paren");
         addParser("arguments_noParen", "(symbol @cast ((!comma !terminator+ | !comma?) symbol @cast)*)? > terminator");
         addParser("closureTop", "!keyword_def @cast? @arguments");
-        addParser("expression0", "^closureTop (statement | !terminator @block)");
+        addParser("expression0", "^closureTop (statement | @block)");
 
         addParser("defTop", "!keyword_def symbol @cast? @arguments");
-        addParser("statement_def", "@defTop (statement | !terminator @block)");
-        addParser("statement_return", "!keyword_return @expression? > terminator | keyword_if | keyword_unless | keyword_while | keyword_until");
+        addParser("statement_def", "@defTop (statement | @block)");
+        addParser("statement_return", "!keyword_return @expression?");
     }
 
 //    public void prepare_statement_def(Node node) {

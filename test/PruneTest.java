@@ -35,7 +35,7 @@ public class PruneTest {
         assertEquals("statements", statements.getName());
         assertNull(statements.get(1));
         final Node statement = statements.get(0);
-        assertEquals("statement", statement.getName());
+        assertEquals("statement_expression", statement.getName());
         final Node operator = statement.get(0);
         assertNull(statement.get(1));
         assertEquals(OPERATOR_ADD, operator.getName());

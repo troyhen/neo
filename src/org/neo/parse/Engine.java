@@ -531,7 +531,7 @@ Log.info(root.getFirst().toListTree());
             memo(from.getIndex(), name, false);
             throw new Mismatch(from, name);
         }
-        Node next = null;
+        Node newNode = null;
         productionStack.push(position);
         try {
             Node root = from.getParent();
@@ -555,19 +555,19 @@ Log.info(root.getFirst().toListTree());
                         bestMatch = new Match(production, from, matched);
                     }
                 }
-                if (bestMatch == null && next == null) {
-                    memo(from.getIndex(), name, false);
+                if (bestMatch == null && newNode == null) {
+//                    memo(from.getIndex(), name, false);
                     throw lastError;
                 }
-                if (next != null && (bestMatch == null || bestMatch.isReduced()))
+                if (newNode != null && (bestMatch == null || bestMatch.isReduced()))
                     break;
-                from = bestMatch.reduce();
-                next = from.getNextOrLast();
+                newNode = bestMatch.reduce();
+                from = newNode;
             }
         } finally {
             productionStack.pop();
         }
-        return next;
+        return newNode;
     }
 
 //    private List<Production> pushProductions(List<Production> list) {

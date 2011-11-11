@@ -42,8 +42,12 @@ class RuleStar implements OptimizedRule {
         for (;;) {
 //            if (from.getParent() == null) break;
             try {
+                boolean last = from.getNext() == null;
                 Node next = child.parse(from, matched);
                 from = next;
+                if (last) {
+                    return from;
+                }
             } catch (Mismatch e) {
                 return from;
             }

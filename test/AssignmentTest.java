@@ -72,7 +72,7 @@ public class AssignmentTest {
     @Test
     public void compileAssignElement() {
         final String expr = "a[1] = 2";
-Log.testStart();
+//Log.testStart();
         lang.compile(expr);
         Log.info(lang.toTree());
         String program = lang.get("output");

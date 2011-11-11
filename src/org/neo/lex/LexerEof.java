@@ -9,8 +9,8 @@ import org.neo.parse.Engine;
  */
 public class LexerEof extends LexerBase {
 
-    public static final String BOF = "bof";
-    public static final String EOF = "eof";
+    public static final String BOF = "terminator_bof";
+    public static final String EOF = "terminator_eof";
     
     public LexerEof(Plugin plugin) {
         super(plugin, EOF);

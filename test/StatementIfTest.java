@@ -27,7 +27,7 @@ public class StatementIfTest {
     @Test
     public void compileIf1() {
         final String expr = "execute if 1 < 2";
-//Log.testStart();
+Log.testStart();
         lang.compile(expr);
         Log.info(lang.toTree());
         String program = lang.get("output");

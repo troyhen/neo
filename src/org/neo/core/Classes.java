@@ -12,7 +12,7 @@ public class Classes extends CorePlugin {
         addKeyword("implements");
         
         addParser("classTop", "!keyword_class symbol @cast? (!comma !terminator+ class_path | !comma? class_path)*");
-        addParser("statement_class", "@classTop !terminator+ @block");
+        addParser("statement_class", "@classTop @block");
     }
 
 //    public Node transform_statement(Node node) {

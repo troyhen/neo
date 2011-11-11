@@ -79,31 +79,32 @@ class RuleIdent implements OptimizedRule {
      */
     @Override
     public Node parse(Node from, List<Node.Match> matched) {
-//        if (from == null) throw new AtEof(identBase);
         if (from.isNamed(identBase)) {
             matched.add(from.newMatch(flags));
             Node next = from.getNextOrLast();
             return next;
         }
-//        if (from.hasMemo(identBase)) {
-//            Node node = from.memo(identBase);
-//            if (node == null) return null;
-//            matched.add(node.newMatch(flags));
-//            Node next = node.getNextWrapped();
-//            return next;
-//        }
-//        if (from.getParent() == null) return null;
         if (RuleBefore.simpleCheck.get())
             throw new Mismatch(from, identBase);
-        Node next = Engine.engine().parse(from, identBase);
-//        if (next != null) {
-            Node node = next.getPrev();
-//            from.memo(identBase, node);
-            matched.add(node.newMatch(flags));
-//        } else {
-////            from.memo(identBase, null);
-//        }
-        return next;
+        Node root = from.getParent();
+        try {
+            Node newNode = Engine.engine().parse(from, identBase);
+            matched.add(newNode.newMatch(flags));
+            return newNode.getNextOrLast();
+        } catch (Mismatch e) {
+            // It's possible to get a mismatch yet still get the desired reduction as a side effect of a partial
+            // sub-rule match. This code deals with this situation.
+            // TODO it might be better to take care of this lower down and not throw the exception
+            while (from.getParent() != root) {
+                from = from.getParent();
+            }
+            if (from.isNamed(identBase)) {
+                matched.add(from.newMatch(flags));
+                Node next = from.getNextOrLast();
+                return next;
+            }
+            throw e;
+        }
     }
 
     @Override

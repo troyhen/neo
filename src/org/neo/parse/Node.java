@@ -164,7 +164,10 @@ public class Node {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public Node getNext() { return next; }
-    public Node getNextOrLast() { return next == null ? this : next; }
+    public Node getNextOrLast() {
+        if (next == null)
+            return this;
+        return next == null ? this : next; }
 
 //    public Node getNextWrapped() {
 //        if (next == null) {

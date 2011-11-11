@@ -59,8 +59,8 @@ import java.util.Set;
         int size = matched.size();
         for (OptimizedRule rule : rules) {
             try {
-                Node node = rule.parse(from, matched);
-                return node;
+                Node next = rule.parse(from, matched);
+                return next;
             } catch (Mismatch e) {
                 Node.revert(matched, size);
                 while (from.getParent() != root) {
