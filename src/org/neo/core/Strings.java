@@ -82,7 +82,7 @@ public class Strings extends CorePlugin {
                         break;
                     case 'x':
                         if (ix + 1 < iz) {
-                            buff.append((char) Integer.parseInt(string.substring(ix - 1, ix + 1), 16));
+                            buff.append((char) Integer.parseInt(string.substring(ix, ix + 2), 16));
                             ix++;
                         } else {
                             buff.append((char) Integer.parseInt(string.substring(ix - 1), 16));
@@ -91,7 +91,7 @@ public class Strings extends CorePlugin {
                         break;
                     case 'u':
                         if (ix + 3 < iz) {
-                            buff.append((char) Integer.parseInt(string.substring(ix - 1, ix + 3), 16));
+                            buff.append((char) Integer.parseInt(string.substring(ix, ix + 4), 16));
                             ix += 2;
                         } else {
                             buff.append((char) Integer.parseInt(string.substring(ix - 1), 16));

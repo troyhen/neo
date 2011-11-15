@@ -1,3 +1,5 @@
+package test;
+
 import org.neo.NeoException;
 import org.junit.After;
 import java.util.logging.Level;

@@ -1,10 +1,11 @@
+package test;
+
 import org.junit.After;
-import java.util.logging.Level;
-import org.neo.util.Log;
-import org.neo.NeoLang;
-import org.neo.parse.Node;
 import org.junit.Before;
 import org.junit.Test;
+import org.neo.NeoLang;
+import org.neo.parse.Node;
+import org.neo.util.Log;
 
 import static org.neo.core.Operator.*;
 import static org.junit.Assert.*;

@@ -1,3 +1,5 @@
+package test;
+
 import org.junit.After;
 import org.neo.util.Log;
 import org.neo.NeoLang;

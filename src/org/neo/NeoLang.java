@@ -1,24 +1,6 @@
 package org.neo;
 
-import org.neo.core.Classes;
-import org.neo.core.Delimiter;
-import org.neo.core.Compilation;
-import org.neo.core.Control;
-import org.neo.core.CorePlugin;
-import org.neo.core.Expression;
-import org.neo.core.Group;
-import org.neo.core.Import;
-import org.neo.core.Methods;
-import org.neo.core.Numbers;
-import org.neo.core.Operator;
-import org.neo.core.Percent;
-import org.neo.core.Range;
-import org.neo.core.RegEx;
-import org.neo.core.Strings;
-import org.neo.core.Symbol;
-import org.neo.core.Variable;
-import org.neo.core.Whitespace;
-import org.neo.core.Xml;
+import org.neo.core.*;
 import org.neo.parse.Node;
 
 /**
@@ -40,6 +22,7 @@ public class NeoLang extends Compiler {
         if (full) plugins.add(new Import());  // must precede Expression
         plugins.add(new Numbers()); // must precede Expression
         plugins.add(new Strings());
+        plugins.add(new Chars());
         plugins.add(new RegEx());
         plugins.add(new Xml());  // must precede Operator
         plugins.add(new Percent()); // must precede Operator
