@@ -31,9 +31,27 @@ public class Numbers extends CorePlugin {
                 // Note, Java won't ignore the trailing 'l' here
             value = new Long(text.substring(0, text.length() - 1));
             type = "long";
+        } else if (name.equals(LONG + "Binary")) {
+            value = Long.parseLong(text.substring(2, text.length() - 1), 2);
+            type = "long";
+        } else if (name.equals(LONG + "Octal")) {
+            value = Long.parseLong(text.substring(1, text.length() - 1), 8);
+            type = "long";
+        } else if (name.equals(LONG + "Hex")) {
+            value = Long.parseLong(text.substring(2, text.length() - 1), 16);
+            type = "long";
         } else if (name.equals(INTEGER)) {
             value = new Integer(text);
             type = "int";
+        } else if (name.equals(INTEGER + "Binary")) {
+            value = Integer.parseInt(text.substring(2, text.length()), 2);
+            type = "long";
+        } else if (name.equals(INTEGER + "Octal")) {
+            value = Integer.parseInt(text.substring(1, text.length()), 8);
+            type = "long";
+        } else if (name.equals(INTEGER + "Hex")) {
+            value = Integer.parseInt(text.substring(2, text.length()), 16);
+            type = "long";
         } else {
                 // Note, Java will ignore the trailing 'f'
             if (text.toLowerCase().endsWith("f")) {
@@ -56,7 +74,13 @@ public class Numbers extends CorePlugin {
         add(new LexerString(this, NULL, "null"));
         add(new LexerPattern(this, REAL, "[0-9_]+\\.[0-9_]([eE]-?[0-9_]+)?[fF]?"));
         add(new LexerPattern(this, REAL, "[0-9_]+[fF]"));
+        add(new LexerPattern(this, LONG + "Octal", "0[0-7_]+[lL]"));
+        add(new LexerPattern(this, LONG + "Hex", "0x[0-9_]+[lL]"));
+        add(new LexerPattern(this, LONG + "Binary", "0b[01_]+[lL]"));
         add(new LexerPattern(this, LONG, "[0-9_]+[lL]"));
+        add(new LexerPattern(this, INTEGER + "Octal", "0[0-7_]+"));
+        add(new LexerPattern(this, INTEGER + "Hex", "0x[0-9_]+"));
+        add(new LexerPattern(this, INTEGER + "Binary", "0b[01_]+"));
         add(new LexerPattern(this, INTEGER, "[0-9_]+"));
         addParser("expression0", "number");
     }
