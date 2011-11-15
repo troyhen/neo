@@ -14,16 +14,16 @@ public class Token extends Node {
     
     private final int line;
 
-    public Token(Plugin plugin, String name, int index, CharSequence text, int line) {
-        this(plugin, name, index, text, line, text, null);
+    public Token(Plugin plugin, String name/*, int index*/, CharSequence text, int line) {
+        this(plugin, name/*, index*/, text, line, text, null);
     }
     
-    public Token(Plugin plugin, String name, int index, CharSequence text, int line, Object value) {
-        this(plugin, name, index, text, line, value, null);
+    public Token(Plugin plugin, String name/*, int index*/, CharSequence text, int line, Object value) {
+        this(plugin, name/*, index*/, text, line, value, null);
     }
 
-    public Token(Plugin plugin, String name, int index, CharSequence text, int line, Object value, String type) {
-        super(plugin, name, index, text, value, type);
+    public Token(Plugin plugin, String name/*, int index*/, CharSequence text, int line, Object value, String type) {
+        super(plugin, name/*, index*/, text, value, type);
         this.line = line;
     }
 

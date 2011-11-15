@@ -38,21 +38,14 @@ public class Engine {
     private LinkedList<Map<String, ClassDef>> symbols = new LinkedList<Map<String, ClassDef>>();
     private LinkedList<Map<String, List<MethodDef>>> methods = new LinkedList<Map<String, List<MethodDef>>>();
     private State initial;
-//    private Map<Progress, Progress> steps = new HashMap<Progress, Progress>();
     private String start;
-//    private Deque<List<Production>> productionStack;
     private Deque<Position> productionStack;
-    private List<Map<String, Boolean>> memo = new ArrayList<Map<String, Boolean>>();
-    private int tokenIndex = 0;
+//    private int tokenIndex = 0;
     private Map<String, Set<String>> starts = new HashMap<String, Set<String>>();
 
-    public Engine(Compiler compiler) {
-        this.compiler = compiler;
-    }
+    public Engine(Compiler compiler) { this.compiler = compiler; }
 
-    public void addKeyword(String word) {
-        keywords.add(word);
-    }
+    public void addKeyword(String word) { keywords.add(word); }
 
     public static CharSequence buffer() { return engine().buffer; }
 
@@ -60,29 +53,23 @@ public class Engine {
         return engine().getChars(chars);
     }
 
-    public void close() {
-        close(null);
-    }
+    public void close() { close(null); }
 
     public void close(Engine previous) {
         buffer = null;
         engine.set(previous);
     }
 
-    public static Compiler compiler() {
-        return engine().compiler;
-    }
+    public static Compiler compiler() { return engine().compiler; }
 
     public Token consume(Plugin plugin, String name, int chars, Object value, String type) {
         CharSequence text = getChars(chars);
-        Token token = new Token(plugin, name, tokenIndex++, text, line, value == null ? text : value, type);
+        Token token = new Token(plugin, name/*, tokenIndex++*/, text, line, value == null ? text : value, type);
         buffer.position(buffer.position() + chars);
         return token;
     }
 
-    public static ClassDef currentClass() {
-        return engine().getCurrentClass();
-    }
+    public static ClassDef currentClass() { return engine().getCurrentClass(); }
 
     public static Engine engine() { return (Engine) engine.get(); }
 
@@ -101,13 +88,9 @@ public class Engine {
         return buffer.subSequence(0, chars);
     }
 
-    public ClassDef getCurrentClass() {
-        return currentClass;
-    }
+    public ClassDef getCurrentClass() { return currentClass; }
 
-    public Token getLastToken() {
-        return lastToken;
-    }
+    public Token getLastToken() { return lastToken; }
 
     public int getLine() { return line; }
 
@@ -208,9 +191,7 @@ public class Engine {
         }
     }
 
-    public boolean isKeyword(String text) {
-        return keywords.contains(text);
-    }
+    public boolean isKeyword(String text) { return keywords.contains(text); }
 
     public CharSequence limit(CharSequence text, int limit) {
         limit = Math.min(text.length(), limit);
@@ -236,9 +217,7 @@ public class Engine {
         return file.getPath();
     }
 
-    public void load(String text) {
-        buffer = CharBuffer.wrap(text);
-    }
+    public void load(String text) { buffer = CharBuffer.wrap(text); }
 
     public Class loadClass(String name) throws ClassNotFoundException {
         /*if (name.startsWith("java."))*/ return Class.forName(name);
@@ -257,33 +236,33 @@ public class Engine {
         return reference;
     }
 
-    public boolean memoExists(int index, String name) {
-        if (memo.size() <= index) return false;
-        return memo.get(index).containsKey(name);
-    }
-
-    public boolean memo(int index, String name) {
-        if (memo.size() <= index) return false;
-        return memo.get(index).get(name);
-    }
-
-    public void memo(int index, String name, boolean recursive) {
-        while (memo.size() <= index) {
-            memo.add(new HashMap<String, Boolean>());
-        }
-        Map<String, Boolean> at = memo.get(index);
-//        if (node != null) {
-//            Iterator<Map.Entry<String, Node>> it = at.entrySet().iterator();
-//            while (it.hasNext()) {
-//                Map.Entry<String, Node> entry = it.next();
-//                if (entry.getValue() != null) {
-//                    entry.setValue(null);
-//                    break;
-//                }
-//            }
+//    public boolean memoExists(int index, String name) {
+//        if (memo.size() <= index) return false;
+//        return memo.get(index).containsKey(name);
+//    }
+//
+//    public boolean memo(int index, String name) {
+//        if (memo.size() <= index) return false;
+//        return memo.get(index).get(name);
+//    }
+//
+//    public void memo(int index, String name, boolean recursive) {
+//        while (memo.size() <= index) {
+//            memo.add(new HashMap<String, Boolean>());
 //        }
-        at.put(name, recursive);
-    }
+//        Map<String, Boolean> at = memo.get(index);
+////        if (node != null) {
+////            Iterator<Map.Entry<String, Node>> it = at.entrySet().iterator();
+////            while (it.hasNext()) {
+////                Map.Entry<String, Node> entry = it.next();
+////                if (entry.getValue() != null) {
+////                    entry.setValue(null);
+////                    break;
+////                }
+////            }
+////        }
+//        at.put(name, recursive);
+//    }
 
     public void methodAdd(String name, MethodDef type) {
         Map<String, List<MethodDef>> map = methods.peek();
@@ -356,13 +335,11 @@ public class Engine {
         }
     }
 
-    public int nextTokenIndex() {
-        return tokenIndex++;
-    }
+//    public int nextTokenIndex() {
+//        return tokenIndex++;
+//    }
 
-    public Set<String> getStarts(String name) {
-        return starts.get(name);
-    }
+    public Set<String> getStarts(String name) { return starts.get(name); }
 
     private static class Match {
         Production production;
@@ -387,9 +364,7 @@ public class Engine {
         }
 
         @Override
-        public String toString() {
-            return "matched " + production.getName();
-        }
+        public String toString() { return "matched " + production.getName(); }
 
         public boolean isReduced() {
             return node.isNamed(production.getName()) && matched.size() == 1;
@@ -401,7 +376,7 @@ public class Engine {
 
     public void open() {
         engine.set(this);
-        tokenIndex = 0;
+//        tokenIndex = 0;
         line = 1;
         offset = 0;
         symbolsPush();
@@ -427,22 +402,28 @@ Log.info(root.getFirst().toListTree());
     }
 
     public Node parse(Node from, String name) {
-        final Position position = new Position(name, from.getIndex());
+        final Position position = new Position(name, from);
         if (productionStack.contains(position)) {
 //            memo(from.getIndex(), name, true);
             throw new Mismatch(from, name);
         }
-        if (memoExists(from.getIndex(), name) && !memo(from.getIndex(), name)) {
+//        if (memoExists(from.getIndex(), name) && !memo(from.getIndex(), name)) {
+        if (from.hasFailed(name)) {
+//            if (from.getParent() != null && from.getParent().getParent() != null) {
+//                Log.info(from.getParent().getParent() + " -> " + from.getParent() + " -> " + from);
+//            }
             throw new Mismatch(from, name);
         }
         final Set<String> startNames = starts.get(name);
         if (startNames != null && !startNames.contains(from.getName()) && !startNames.contains(from.getShortName())) {
-            memo(from.getIndex(), name, false);
+//            memo(from.getIndex(), name, false);
+            from.failed(name);
             throw new Mismatch(from, name);
         }
         List<Production> list = findProductions(name);
         if (list.isEmpty()) {
-            memo(from.getIndex(), name, false);
+//            memo(from.getIndex(), name, false);
+            from.failed(name);
             throw new Mismatch(from, name);
         }
         Node newNode = null;
@@ -476,6 +457,7 @@ Log.info(root.getFirst().toListTree());
                 if (newNode != null && (bestMatch == null || bestMatch.isReduced()))
                     break;
                 newNode = bestMatch.reduce();
+                fixStack();
                 from = newNode;
             }
         } finally {
@@ -484,9 +466,13 @@ Log.info(root.getFirst().toListTree());
         return newNode;
     }
 
-    public void setNextToken(Token nextToken) {
-        this.nextToken = nextToken;
+    private void fixStack() {
+        for (Position position : productionStack) {
+            position.raise();
+        }
     }
+
+    public void setNextToken(Token nextToken) { this.nextToken = nextToken; }
 
     public void setStart(String start) {
         engine.set(this);
@@ -526,29 +512,33 @@ Log.info(root.getFirst().toListTree());
 
     private class Position {
         String name;
-        int index;
+//        int index;
+        Node node;
         boolean recursive;
 
-        private Position(String name, int index) {
+        private Position(String name, Node node/*int index*/) {
             this.name = name;
-            this.index = index;
+//            this.index = index;
+            this.node = node;
         }
 
         @Override
         public boolean equals(Object obj) {
             if (obj == null || !(obj instanceof Position)) return false;
             final Position obj1 = (Position) obj;
-            return this.name.equals(obj1.name) && this.index == obj1.index;
+            return this.name.equals(obj1.name) && this.node == obj1.node;
         }
 
         @Override
-        public int hashCode() {
-            return name.hashCode() + index;
+        public int hashCode() { return name.hashCode() + node.hashCode(); }
+
+        public void raise() {
+            while (node.getParent() != null && node.getParent().getParent() != null) {
+                node = node.getParent();
+            }
         }
 
         @Override
-        public String toString() {
-            return name + '@' + index;
-        }
+        public String toString() { return name + '@' + index; }
     }
 }

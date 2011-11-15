@@ -175,7 +175,7 @@ public class Strings extends CorePlugin {
                 if (content.length() == 0) continue;
                 if (match.start() > index || index == 0) {  // We need the first string even if empty so the Java expression will do String conversion and concatenation
                     CharSequence between = text.subSequence(index, match.start());
-                    Node string = new Node(this, STRING_SINGLE, node.getIndex(), between, between, CLASS);
+                    Node string = new Node(this, STRING_SINGLE/*, node.getIndex()*/, between, between, CLASS);
                     node.add(string);
                 }
                 Compiler current = Compiler.compiler();
@@ -193,7 +193,7 @@ public class Strings extends CorePlugin {
             int end = text.length();
             if (index > 0 && index < end) {
                 CharSequence between = text.subSequence(index, end);
-                Node string = new Node(this, STRING_SINGLE, node.getIndex(), between, between, CLASS);
+                Node string = new Node(this, STRING_SINGLE/*, node.getIndex()*/, between, between, CLASS);
                 node.add(string);
             }
         }

@@ -59,7 +59,7 @@ public class NeoLang extends Compiler {
     public void open() {
         super.open();
         setStart("compilation");
-        setRoot(new Node(main, "root", 0));
+        setRoot(new Node(main, "root"/*, 0*/));
     }
 
     @Override

@@ -14,7 +14,7 @@ import org.neo.parse.Engine;
  */
 public class CorePlugin extends PluginBase {
 
-    @SuppressWarnings("Unchecked")
+//    @SuppressWarnings("Unchecked")
     private static Class<Backend> findClass(Node node, String backend) throws ClassNotFoundException {
         String nodeName = node.getName();
         String nodeVar = "";

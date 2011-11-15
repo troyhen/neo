@@ -98,7 +98,7 @@ public class Methods extends CorePlugin {
         }
         Node lastStmt = node.getLast().getLast();
         if (!type.equals("void") && !lastStmt.isNamed("statement_return")) {
-            Node returnStmt = new Node(this, "statement_return", node.getIndex(), null, null, lastStmt.getTypeName());
+            Node returnStmt = new Node(this, "statement_return"/*, node.getIndex()*/, null, null, lastStmt.getTypeName());
             lastStmt.append(returnStmt);
             Node lastContent = lastStmt.getFirst();
             if (lastStmt.getName().startsWith("statement_va")) {

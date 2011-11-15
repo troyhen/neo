@@ -32,7 +32,7 @@ public class Percent extends CorePlugin {
         String text = (String) node.getValue();
         for (String part : text.split("\\s")) {
             if (part.length() > 0) {
-                Node n = new Node(this, "string_single", node.getIndex(), part, part, "java.lang.String");
+                Node n = new Node(this, "string_single"/*, node.getIndex()*/, part, part, "java.lang.String");
                 node.add(n);
             }
         }

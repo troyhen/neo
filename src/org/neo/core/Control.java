@@ -68,13 +68,13 @@ public class Control extends CorePlugin {
             }
             Node leg1 = node.get(1);
             Node leg2 = node.get(2) != null ? node.get(2).getLast() : null;
-            Node varStatement = new Node(this, "statement_varDeclare", node.getIndex(), null, null, typeName);
+            Node varStatement = new Node(this, "statement_varDeclare"/*, node.getIndex()*/, null, null, typeName);
             String varName = "control" + index++;
-            Node symbol1 = new Node(this, "symbol", node.getIndex(), varName, varName, typeName);
-            Node symbol2 = new Node(this, "symbol", node.getIndex(), varName, varName, typeName);
-            Node symbol3 = new Node(this, "symbol", node.getIndex(), varName, varName, typeName);
-            Node ifStatement = new Node(this, "statement", node.getIndex(), null, null, typeName);
-            Node eq1 = new Node(this, "operator_eq", node.getIndex(), "=", "=", typeName);
+            Node symbol1 = new Node(this, "symbol"/*, node.getIndex()*/, varName, varName, typeName);
+            Node symbol2 = new Node(this, "symbol"/*, node.getIndex()*/, varName, varName, typeName);
+            Node symbol3 = new Node(this, "symbol"/*, node.getIndex()*/, varName, varName, typeName);
+            Node ifStatement = new Node(this, "statement"/*, node.getIndex()*/, null, null, typeName);
+            Node eq1 = new Node(this, "operator_eq"/*, node.getIndex()*/, "=", "=", typeName);
             Engine.engine().symbolAdd(varName, ClassDef.get(typeName));
             statement.insertBefore(varStatement);
             varStatement.add(symbol1);
@@ -91,14 +91,14 @@ public class Control extends CorePlugin {
                 if (leg2.isNamed("statements")) {
                     leg2 = leg2.getLast();
                 }
-                Node eq2 = new Node(this, "operator_eq", node.getIndex(), "=", "=", typeName);
-                Node symbol4 = new Node(this, "symbol", node.getIndex(), varName, varName, typeName);
+                Node eq2 = new Node(this, "operator_eq"/*, node.getIndex()*/, "=", "=", typeName);
+                Node symbol4 = new Node(this, "symbol"/*, node.getIndex()*/, varName, varName, typeName);
                 leg2.addFirst(eq2);
                 eq2.add(symbol4);
                 eq2.add(eq2.getNext());
             }
             if (grandParent.isNamed("control") || grandParent.isNamed("elseClause")) {
-                Node statements = new Node(this, "statements", node.getIndex(), null, null, typeName);
+                Node statements = new Node(this, "statements"/*, node.getIndex()*/, null, null, typeName);
                 statements.addAll(grandParent.getFirst());
                 grandParent.add(statements);
             }

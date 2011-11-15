@@ -40,7 +40,7 @@ public class Symbol extends CorePlugin {
             MethodDef method = Engine.engine().methodFind(name);
             if (method != null) {
                 typeName = method.getReturnType().getName();
-                Node call = new Node(this, "call_this", node.getIndex(), null, method, typeName);
+                Node call = new Node(this, "call_this"/*, node.getIndex()*/, null, method, typeName);
                 node.insertBefore(call);
                 call.add(node);
                 node = call;
