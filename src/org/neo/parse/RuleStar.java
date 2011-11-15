@@ -28,16 +28,6 @@ class RuleStar implements OptimizedRule {
     }
 
     @Override
-    public Node match(Node node, List<Node.Match> matched) {
-        for (;;) {
-            Node next = child.match(node, matched);
-            if (next == null) break;
-            node = next;
-        }
-        return node;
-    }
-
-    @Override
     public Node parse(Node from, List<Node.Match> matched) {
         for (;;) {
 //            if (from.getParent() == null) break;

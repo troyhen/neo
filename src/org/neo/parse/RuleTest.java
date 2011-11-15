@@ -29,15 +29,6 @@ class RuleTest implements OptimizedRule {
     }
 
     @Override
-    public Node match(Node node, List<Node.Match> matched) {
-        int size = matched.size();
-        Node result = child.match(node, matched);
-        Node.revert(matched, size);
-        if (result == null) return null;
-        return node;
-    }
-
-    @Override
     public Node parse(Node from, List<Node.Match> matched) {
         int size = matched.size();
         try {

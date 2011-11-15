@@ -131,22 +131,6 @@ public class PluginBase implements Plugin {
     }
 
     @Override
-    public Node match(Node node, List<Node.Match> matched) {
-        Node start = node;
-        for (Production production : productions) {
-            while (node != null) {
-                Node nextNode = production.match(node, matched);
-                if (nextNode != null) {
-                    return nextNode;
-                }
-                node = node.getNext();
-            }
-            node = start;
-        }
-        return null;
-    }
-    
-    @Override
     public Token nextToken() {
         for (Lexer lexer : lexers) {
             Token token = lexer.nextToken();

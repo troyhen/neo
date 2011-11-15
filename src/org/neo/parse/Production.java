@@ -2,10 +2,8 @@ package org.neo.parse;
 
 import java.util.*;
 
-import org.neo.parse.Node.Match;
-import org.neo.util.Log;
-
 import org.neo.Plugin;
+import org.neo.util.Log;
 
 /**
  * A sequence of rules to match an incoming sequence of tokens. Productions are part of a language grammar and belong
@@ -67,23 +65,6 @@ public class Production extends RuleGroup {
     public boolean isNamed(String name) {
         return this.name.equals(name) || this.name.startsWith(name + '_');
     }
-
-    @Override
-    public Node match(Node node, List<Match> matched) {
-        matched.clear();
-        return super.match(node, matched);
-    }
-
-//    @Override
-//    public Node parse(Node from, List<Match> matched) {
-//        matched.clear();
-////        if (from.isNamed(this.getName())) {
-//////            return null;
-////            matched.add(from.newMatch(from.getFlags()));
-////            return from.getNext();
-////        }
-//        return super.parse(from, matched);
-//    }
 
     private List<OptimizedRule> parseRules() {
         Stack<OptimizedRule> local = new Stack<OptimizedRule>();
@@ -154,10 +135,6 @@ public class Production extends RuleGroup {
                         local.add(new RuleAfter(after));
                     }
                     break;
-//                case '/':
-//                    addIdent(ident, local);
-//                    local.add(new RuleEnforce(parseRules()));
-//                    break;
                 case ' ':
                     addIdent(ident, local);
                     break;

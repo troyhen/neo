@@ -11,10 +11,8 @@ import java.util.List;
  *
  * @author Troy Heninger
  */
-public interface Plugin extends Lexer, Render, Rule, Transform, Refine {
+public interface Plugin extends Lexer, Render, Transform, Refine {
 
-//    Token consume(String name, int chars);
-//    Token consume(String name, int chars, Object value);
     Token consume(String name, int chars, Object value, String type);
     void collect(String name, List<Production> list);
     void indexProductions();

@@ -245,21 +245,6 @@ public class Engine {
 //        return loader.loadClass(name);
     }
 
-    private Match matchProductions(String name, Node node, List<Node.Match> matched, Match bestMatch) {
-        List<Production> list = index.get(name);
-        if (list == null) return bestMatch;
-        for (Production production : list) {
-            Node next = production.match(node, matched);
-            if (next == null) {
-                continue;
-            }
-            if (bestMatch == null || bestMatch.isWorse(matched)) {
-                bestMatch = new Match(production, node, matched);
-            }
-        }
-        return bestMatch;
-    }
-
     public MemberDef memberFind(ClassDef type, String symbol, String assignmentType) {
         MemberDef reference = null;
         reference = methodFind(type, symbol, assignmentType);
@@ -422,77 +407,6 @@ public class Engine {
         symbolsPush();
     }
 
-//    public void parseAll(Node root) {
-//        List<Node.Match> matched = new ArrayList<Node.Match>();
-//        Node node = root.getFirst();
-//        for (;;) {
-//            Match bestMatch = null;
-//            while (node != null) {
-//                bestMatch = matchProductions("*", node, matched, bestMatch);
-//                String name = node.getName();
-//                bestMatch = matchProductions(name, node, matched, bestMatch);
-//                int ix = name.lastIndexOf('_');
-//                if (ix > 0) {
-//                    name = name.substring(0, ix + 1);
-//                    bestMatch = matchProductions(name, node, matched, bestMatch);
-//                }
-//                node = node.getNext();
-//            }
-//            if (bestMatch == null) break;
-//            bestMatch.reduce();
-////            Log.info("current state: " + root.childNames(10));
-//            node = root.getFirst();
-//        }
-//    }
-//
-//    public void parseFirst(Node root) {
-//        List<Node.Match> matched = new ArrayList<Node.Match>();
-//        Node node = root.getFirst();
-//        while (node != null) {
-//            Match bestMatch = null;
-//            bestMatch = matchProductions("*", node, matched, bestMatch);
-//            String name = node.getName();
-//            bestMatch = matchProductions(name, node, matched, bestMatch);
-//            int ix = name.lastIndexOf('_');
-//            if (ix > 0) {
-//                name = name.substring(0, ix + 1);
-//                bestMatch = matchProductions(name, node, matched, bestMatch);
-//            }
-//            if (bestMatch == null) {
-//                node = node.getNext();
-//                continue;
-//            }
-//            bestMatch.reduce();
-//            node = root.getFirst();
-//        }
-//    }
-//
-//    public void parseOld(Node root) {
-//        List<Node.Match> matched = new ArrayList<Node.Match>();
-//        Node node = root.getFirst();
-//        for (;;) {
-//            Match bestMatch = null;
-//            while (node != null) {
-//                String name = node.getName();
-//                bestMatch = matchProductions(name, node, matched, bestMatch);
-//                if (bestMatch != null) break;
-//                int ix = name.lastIndexOf('_');
-//                if (ix > 0) {
-//                    name = name.substring(0, ix + 1);
-//                    bestMatch = matchProductions(name, node, matched, bestMatch);
-//                    if (bestMatch != null) break;
-//                }
-//                bestMatch = matchProductions("*", node, matched, bestMatch);
-//                if (bestMatch != null) break;
-//                node = node.getNext();
-//            }
-//            if (bestMatch == null) break;
-//            bestMatch.reduce();
-////            Log.info("current state: " + root.childNames(10));
-//            node = root.getFirst();
-//        }
-//    }
-
     /**
      * Setup
      * Create a production stack. Each level of the stack holds multiple production possibilities.
@@ -505,7 +419,7 @@ public class Engine {
      *
      * @param root starting node
      */
-    public void parseLL(Node root) {
+    public void parse(Node root) {
         productionStack = new ArrayDeque<Position>();
         Node top = parse(root.getFirst(), start);
 Log.info(root.getFirst().toListTree());
@@ -547,7 +461,7 @@ Log.info(root.getFirst().toListTree());
                         lastError = e;
                         continue;
                     } finally {
-                        while (/*node.getParent() != null &&*/ from.getParent() != root) {
+                        while (from.getParent() != root) {
                             from = from.getParent();
                         }
                     }
@@ -569,20 +483,6 @@ Log.info(root.getFirst().toListTree());
         }
         return newNode;
     }
-
-//    private List<Production> pushProductions(List<Production> list) {
-//        for (List<Production> level : productionStack) {
-//            Iterator<Production> it = list.iterator();
-//            while (it.hasNext()) {
-//                Production production = it.next();
-//                if (level.contains(production)) {
-//                    it.remove();
-//                }
-//            }
-//        }
-//        productionStack.push(list);
-//        return list;
-//    }
 
     public void setNextToken(Token nextToken) {
         this.nextToken = nextToken;

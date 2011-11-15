@@ -24,13 +24,6 @@ class RulePlus extends RuleStar {
     }
 
     @Override
-    public Node match(Node node, List<Node.Match> matched) {
-        node = child.match(node, matched);
-        if (node == null) return null;
-        return super.match(node, matched);
-    }
-
-    @Override
     public Node parse(Node from, List<Node.Match> matched) {
         int size = matched.size();
         try {

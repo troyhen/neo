@@ -58,16 +58,6 @@ class RuleIdent implements OptimizedRule {
         return false;
     }
 
-    @Override
-    public Node match(Node node, List<Node.Match> matched) {
-        if (node.isNamed(identBase)) {
-            matched.add(node.newMatch(flags));
-            Node next = node.getNextOrLast();
-            return next;
-        }
-        return null;
-    }
-
     /**
      * Match the identifier and return the following node or null if cannot be matched. First a check is made that
      * the current node is already what the identifier specified. If not it check the previous memoised results for

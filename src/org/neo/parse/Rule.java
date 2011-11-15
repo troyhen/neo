@@ -8,11 +8,11 @@ import java.util.List;
 public interface Rule {
 
     /**
-     * Attempt to match the given token node.
-     * @param node token node to match
+     * Parse from the given node.
+     * @param from the node to start on
      * @param matched list of matched nodes (used for reduction)
-     * @return the following node or null if no match
+     * @return new node if matched or null if not
      */
-    Node match(Node node, List<Node.Match> matched);
+    public Node parse(Node from, List<Node.Match> matched);
 }
 

@@ -23,13 +23,5 @@ public interface OptimizedRule extends Rule {
      */
     boolean findStarts(Set<String> list);
 
-    /**
-     * Parse from the given node.
-     * @param from the node to start on
-     * @param matched list of matched nodes (used for reduction)
-     * @return new node if matched or null if not
-     */
-    public Node parse(Node from, List<Node.Match> matched);
-
 }
 

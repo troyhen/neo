@@ -37,19 +37,6 @@ class RuleGroup implements OptimizedRule {
     }
 
     @Override
-    public Node match(Node node, List<Node.Match> matched) {
-        int size = matched.size();
-        for (Rule rule : rules) {
-            node = rule.match(node, matched);
-            if (node == null) {
-                Node.revert(matched, size);
-                break;
-            }
-        }
-        return node;
-    }
-
-    @Override
     public Node parse(Node from, List<Node.Match> matched) {
         int size = matched.size();
         Node node = from;

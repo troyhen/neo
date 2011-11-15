@@ -29,12 +29,6 @@ class RuleOpt implements OptimizedRule {
     }
 
     @Override
-    public Node match(Node node, List<Node.Match> matched) {
-        Node next = child.match(node, matched);
-        return next != null ? next : node;
-    }
-
-    @Override
     public Node parse(Node from, List<Node.Match> matched) {
 //        if (from.getParent() == null) return from;
         try {

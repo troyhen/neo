@@ -20,12 +20,12 @@ class RuleInside extends RuleGroup {
     }
 
     @Override
-    public Node match(Node start, List<Node.Match> matched) {
+    public Node parse(Node start, List<Node.Match> matched) {
         int size = matched.size();
         if (size == 0) return null;
         Node node = matched.get(size - 1).getFirst();
         if (node == null) return null;
-        node = super.match(node, matched);
+        node = super.parse(node, matched);
         Node.revert(matched, size);
         if (node == null) return null;
         return start;

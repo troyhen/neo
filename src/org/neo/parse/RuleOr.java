@@ -43,17 +43,6 @@ import java.util.Set;
     }
 
     @Override
-    public Node match(Node start, List<Node.Match> matched) {
-        for (Rule rule : rules) {
-            int size = matched.size();
-            Node node = rule.match(start, matched);
-            if (node != null) return node;
-            Node.revert(matched, size);
-        }
-        return null;
-    }
-
-    @Override
     public Node parse(Node from, List<Node.Match> matched) {
         Node root = from.getParent();
         int size = matched.size();

@@ -1,7 +1,5 @@
 package org.neo;
 
-import org.neo.util.Log;
-import org.neo.parse.Node;
 import java.io.IOException;
 import java.io.File;
 import java.util.ArrayList;
@@ -12,7 +10,9 @@ import java.util.Map;
 import org.neo.lex.LexerEof;
 import org.neo.lex.Token;
 import org.neo.parse.Engine;
+import org.neo.parse.Node;
 //import org.neo.tool.NeoClassLoader;
+import org.neo.util.Log;
 
 /**
  *
@@ -154,7 +154,7 @@ public class Compiler {
             case loaded: tokenize();
         }
         Log.info("start: " + root.childNames());
-        engine.parseLL(root);
+        engine.parse(root);
         state = State.parsed;
         Log.info("end: " + root.childNames());
         return root.getFirst();
