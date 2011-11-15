@@ -16,7 +16,7 @@ class RuleEnforce extends RuleGroup {
     @Override
     public Node match(Node node, List<Match> matched) {
         Node found = super.match(node, matched);
-        if (found == null) throw new ParseException("invalid syntax at line " + node.getLine());
+        if (found == null) throw new ParseException("Invalid syntax", node);
         return found;
     }
 

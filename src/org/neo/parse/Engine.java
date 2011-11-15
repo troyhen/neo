@@ -509,7 +509,7 @@ public class Engine {
         productionStack = new ArrayDeque<Position>();
         Node top = parse(root.getFirst(), start);
 Log.info(root.getFirst().toListTree());
-        if (top == null) throw new ParseException("Invalid program");
+        if (top == null) throw new ParseException("Invalid program", root);
     }
 
     public Node parse(Node from, String name) {

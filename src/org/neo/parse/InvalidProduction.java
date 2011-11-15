@@ -10,15 +10,24 @@ import org.neo.Plugin;
  */
 public class InvalidProduction extends Production {
 
-    public InvalidProduction(Plugin plugin, String message, String definition) {
-        super(plugin, message, definition);
+    private String error;
+
+    public InvalidProduction(Plugin plugin, String name, String definition, String message) {
+        super(plugin, name, definition);
+        error = message;
     }
 
     @Override
     public Node match(Node node, List<Match> matched) {
         Node found = super.match(node, matched);
-        if (found != null) throw new ParseException(name + " at line " + node.getLine());
+        if (found != null) throw new ParseException(error, node);
         return null;
     }
 
+    @Override
+    public Node parse(Node from, List<Match> matched) {
+        Node next = super.parse(from, matched);
+        if (error != null) throw new ParseException(error, from);
+        return next;
+    }
 }

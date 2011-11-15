@@ -32,8 +32,8 @@ public class XmlTest {
         final String simple = "<test/>";
         lang.load(simple);
         Node tokens = lang.tokenize();
-        assertTrue("Bad name", tokens.get(0).isNamed(NAME));
-        assertEquals("Bad text", simple, tokens.get(0).getValue().toString());
+        assertTrue("Bad name", tokens.get(1).isNamed(NAME));
+        assertEquals("Bad text", simple, tokens.get(1).getValue().toString());
     }
 
     @Test
@@ -41,8 +41,8 @@ public class XmlTest {
         final String complex = "<div id=\"content\">\r\n<p class=\"main\">This is a\n<span>test</span><br/> of the xml parser</p>\r</div>";
         lang.load(complex);
         Node tokens = lang.tokenize();
-        assertEquals(NAME, tokens.get(0).getName());
-        assertEquals(complex, tokens.get(0).getValue().toString());
+        assertEquals(NAME, tokens.get(1).getName());
+        assertEquals(complex, tokens.get(1).getValue().toString());
     }
 
 }

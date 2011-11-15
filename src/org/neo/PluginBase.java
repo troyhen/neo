@@ -42,8 +42,8 @@ public class PluginBase implements Plugin {
 //        Engine.engine().index(production);
     }
 
-    protected void addInvalidParser(String message, String structure) {
-        productions.add(new InvalidProduction(this, message, structure));
+    protected void addInvalidParser(String name, String structure, String message) {
+        productions.add(new InvalidProduction(this, name, structure, message));
     }
 
     public void close() {

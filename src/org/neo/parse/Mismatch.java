@@ -9,13 +9,12 @@ import org.neo.NeoException;
  * Time: 2:45 PM
  * To change this template use File | Settings | File Templates.
  */
-public class Mismatch extends NeoException {
-    private Node node;
-    private String name;
+public class Mismatch extends ParseException {
+
+//    private String name;
 
     public Mismatch(Node node, String name) {
-        super("Expected " + name + " at " + node);
-        this.node = node;
-        this.name = name;
+        super("Expected " + name, node);
+//        this.name = name;
     }
 }

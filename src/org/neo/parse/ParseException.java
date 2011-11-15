@@ -8,8 +8,11 @@ import org.neo.NeoException;
  */
 public class ParseException extends NeoException {
 
-    public ParseException(String msg) {
-        super(msg);
+//    protected Node node;
+
+    public ParseException(String msg, Node node) {
+        super(msg + " at " + node.getName() + " (line " + node.getLine() + ')');
+//        this.node = node;
     }
 
     public ParseException(Throwable ex) {

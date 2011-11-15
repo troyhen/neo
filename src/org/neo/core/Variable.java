@@ -24,8 +24,10 @@ public class Variable extends CorePlugin {
         addParser("statement_varDeclare", "@var_symbol @cast? > operator_as-");
         addParser("statement_varAssign", "@statement_varDeclare !operator_eq expression6 > comma | terminator");
         addParser("statement_valAssign", "@val_symbol @cast? !operator_eq expression6 > comma | terminator");
-        addInvalidParser("val statement requires an initial assignment",
-                "@val_symbol cast? (comma | terminator)");
+        addInvalidParser("statement_valAssign", "@val_symbol cast? (comma | terminator)",
+                "val statement requires an initial assignment");
+        addParser("statement_varVals", "(statement_varAssign | statement_varDeclare) (statement_varAssign | statement_varDeclare)+ > terminator"); // terminator is optional only for var/val
+        addParser("statement_varVals", "statement_valAssign statement_valAssign+ > terminator");
     }
 
     public Node transform_cast(Node node) {
@@ -55,6 +57,14 @@ public class Variable extends CorePlugin {
         if (typeName != null) {
             node.setTypeName(typeName);
             Engine.engine().symbolAdd(name, ClassDef.get(typeName));
+        }
+        return node;
+    }
+
+    public Node transform_statement_varVals(Node node) {
+        final String typeName = node.getLast().getTypeName();
+        if (typeName != null) {
+            node.setTypeName(typeName);
         }
         return node;
     }

@@ -66,7 +66,7 @@ public class MethodTest {
                 + "b~String)\n"
                 + "    println a + b\n"
                 + "    0\n";
-Log.testStart();
+//Log.testStart();
         lang.compile(expr);
         Log.info(lang.toTree());
         String program = lang.get("output");

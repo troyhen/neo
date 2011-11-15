@@ -28,7 +28,7 @@ public class Range extends CorePlugin {
         final String type1 = node.get(0).getTypeName();
         final String type2 = node.get(1).getTypeName();
         if (!type1.equals(type2)) {
-            throw new ParseException("Range limit types do not match: " + type1 + " and " + type2);
+            throw new ParseException("Range limit types do not match: " + type1 + " and " + type2, node);
         }
         if (type != null) node.setTypeName(type);
         return node;
