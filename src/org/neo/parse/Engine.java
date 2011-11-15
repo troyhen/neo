@@ -73,12 +73,27 @@ public class Engine {
 
     public static Engine engine() { return (Engine) engine.get(); }
 
+    private Position findPosition(Position positionToFind) {
+        for (Position position : productionStack) {
+            if (position.equals(positionToFind) || position.startsWith(positionToFind)) {
+                return position;
+            }
+        }
+        return null;
+    }
+
     public List<Production> findProductions(String name) {
         List<Production> list = new ArrayList<Production>();
         for (Plugin plugin : Engine.compiler().plugins) {
             plugin.collect(name, list);
         }
         return list;
+    }
+
+    private void fixStack() {
+        for (Position position : productionStack) {
+            position.raise();
+        }
     }
 
     public CharSequence getBuffer() { return buffer; }
@@ -403,26 +418,21 @@ Log.info(root.getFirst().toListTree());
 
     public Node parse(Node from, String name) {
         final Position position = new Position(name, from);
-        if (productionStack.contains(position)) {
-//            memo(from.getIndex(), name, true);
+        final Position foundPosition = findPosition(position);
+        if (foundPosition != null) {
+            foundPosition.setRecursive();
             throw new Mismatch(from, name);
         }
-//        if (memoExists(from.getIndex(), name) && !memo(from.getIndex(), name)) {
         if (from.hasFailed(name)) {
-//            if (from.getParent() != null && from.getParent().getParent() != null) {
-//                Log.info(from.getParent().getParent() + " -> " + from.getParent() + " -> " + from);
-//            }
             throw new Mismatch(from, name);
         }
         final Set<String> startNames = starts.get(name);
         if (startNames != null && !startNames.contains(from.getName()) && !startNames.contains(from.getShortName())) {
-//            memo(from.getIndex(), name, false);
             from.failed(name);
             throw new Mismatch(from, name);
         }
         List<Production> list = findProductions(name);
         if (list.isEmpty()) {
-//            memo(from.getIndex(), name, false);
             from.failed(name);
             throw new Mismatch(from, name);
         }
@@ -451,12 +461,13 @@ Log.info(root.getFirst().toListTree());
                     }
                 }
                 if (bestMatch == null && newNode == null) {
-//                    memo(from.getIndex(), name, false);
+                    from.failed(name);
                     throw lastError;
                 }
                 if (newNode != null && (bestMatch == null || bestMatch.isReduced()))
                     break;
                 newNode = bestMatch.reduce();
+                if (!position.isRecursive()) break;
                 fixStack();
                 from = newNode;
             }
@@ -464,12 +475,6 @@ Log.info(root.getFirst().toListTree());
             productionStack.pop();
         }
         return newNode;
-    }
-
-    private void fixStack() {
-        for (Position position : productionStack) {
-            position.raise();
-        }
     }
 
     public void setNextToken(Token nextToken) { this.nextToken = nextToken; }
@@ -532,10 +537,22 @@ Log.info(root.getFirst().toListTree());
         @Override
         public int hashCode() { return name.hashCode() + node.hashCode(); }
 
+        public boolean isRecursive() { return recursive; }
+
         public void raise() {
             while (node.getParent() != null && node.getParent().getParent() != null) {
                 node = node.getParent();
             }
+        }
+
+        public void setRecursive() { recursive = true; }
+
+        public boolean startsWith(Position position) {
+            final int length = this.name.length();
+            return this.node == position.node
+                    && position.name.startsWith(this.name)
+                    && position.name.length() > length
+                    && position.name.charAt(length) == '_';
         }
 
         @Override
