@@ -55,6 +55,8 @@ public class CastTest {
         node = node.get(0);
         assertTrue("missing expression", node.isNamed("expression"));
         node = node.get(0);
+        assertTrue("missing expression7", node.isNamed("expression7"));
+        node = node.get(0);
         assertTrue("missing expression6", node.isNamed("expression6"));
         node = node.get(0);
         assertTrue("missing expression5", node.isNamed("expression5"));

@@ -14,6 +14,22 @@ import neo.lang.Closure.Notice;
  */
 public class N {
 
+    public static Object add(Object value, Number step) {
+        if (value instanceof Integer) {
+            return ((Number) value).intValue() + step.intValue();
+        }
+        if (value instanceof Long) {
+            return ((Number) value).longValue() + step.longValue();
+        }
+        if (value instanceof Float) {
+            return ((Number) value).floatValue() + step.floatValue();
+        }
+        if (value instanceof Double) {
+            return ((Number) value).doubleValue() + step.doubleValue();
+        }
+        throw new IllegalArgumentException("unsupported type: " + value.getClass());
+    }
+
     public static String capitalize(String word) {
         if (word == null || word.length() == 0) return word;
         return Character.toUpperCase(word.charAt(0)) + word.substring(1);
@@ -244,11 +260,20 @@ public class N {
         return obj1.doubleValue() == obj2.doubleValue();
     }
 
+    public static Object match(Range obj1, Comparable obj2) {
+        return obj1.match(obj2);
+    }
+
     public static Object match(Object obj1, Object obj2) {
         if (obj2 instanceof Class) return match(obj1, (Class) obj2);
         if (obj1 instanceof Number && obj2 instanceof Number) return match((Number) obj1, (Number) obj2);
         if (obj1 instanceof String && obj2 instanceof Pattern) return match((String) obj1, (Pattern) obj2);
+        if (obj1 instanceof Range && obj2 instanceof Comparable) return match((Range) obj1, (Comparable) obj2);
         return equal(obj1, obj2);
+    }
+
+    public static Object next(Object value) {
+        return null;
     }
 
     public static String plus(String left, Object right) {
@@ -257,6 +282,10 @@ public class N {
 
     public static String plus(Object left, String right) {
         return left + right;
+    }
+
+    public static Object prev(Object value) {
+        return null;
     }
 
     public static <T> T to(Object obj, T example) {
@@ -705,5 +734,4 @@ public class N {
     public static String toString(long val) {
         return String.valueOf(val);
     }
-
 }

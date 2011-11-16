@@ -12,6 +12,7 @@ public class Operator extends CorePlugin {
     
     public static final String OPERATOR_OTHER = "operator_other";
     public static final String OPERATOR_AS = "operator_as";
+    public static final String OPERATOR_AT = "operator_at";
     public static final String OPERATOR_COMPARE = "operator_compare";
     public static final String OPERATOR_ADD = "operator_add";
     public static final String OPERATOR_EQ = "operator_eq";
@@ -38,13 +39,14 @@ public class Operator extends CorePlugin {
         names.add("operator");
         add(new LexerPattern(this, OPERATOR_COMPARE, "(<=>|<=|>=|<|>|!=|===|==|~=)"));
         add(new LexerChar(this, OPERATOR_AS, '~'));
+        add(new LexerChar(this, OPERATOR_AT, '@'));
         add(new LexerChar(this, OPERATOR_EQ, '='));
         add(new LexerPattern(this, OPERATOR_ASSIGN, "[-+~!@$%^&*/?:|]*="));
         add(new LexerPattern(this, OPERATOR_ADD, "[-+]"));
         add(new LexerPattern(this, OPERATOR_MUL, "[*/%]"));
         add(new LexerChar(this, OPERATOR_POW, '^'));
         add(new LexerChar(this, OPERATOR_DOT, '.'));
-        add(new LexerPattern(this, OPERATOR_OTHER, "[-+~!@$%^&*/?:|]+"));
+        add(new LexerPattern(this, OPERATOR_OTHER, "[-+~!$%^&*/?:|]+"));
     }
 
     /*

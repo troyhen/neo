@@ -120,9 +120,10 @@ public class Expression extends CorePlugin {
         addParser("expression2", "@expression1 operator_dot- (^operator_pow @expression1)*");
         addParser("expression3", "@expression2 (^operator_mul @expression2)*");
         addParser("expression4", "@expression3 (^operator_add @expression3)*");
-        addParser("expression5", "@expression4 (^operator_compare @expression4)?");
-        addParser("expression6", "@expression5 (^operator_other @expression5)*");
-        addParser("expression", "(reference | symbol) ((^operator_assign | ^operator_eq) @expression)+ | @expression6");
+        // see Range for expression5
+        addParser("expression6", "@expression5 (^operator_compare @expression5)?");
+        addParser("expression7", "@expression6 (^operator_other @expression6)*");
+        addParser("expression", "(reference | symbol) ((^operator_assign | ^operator_eq) @expression)+ | @expression7");
 
         if (isMain) addParser("compilation", "!terminator_bof !terminator* expression (terminator_eof- !terminator)* !terminator_eof");
     }
